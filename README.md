@@ -1,5 +1,5 @@
 # Arduino Ble Ota App
-Simple application for upload firmware over Bluetooth.
+Mobile application for upload firmware over Bluetooth.
 
 ## Setup using snap
 ### Android studio:
