@@ -37,6 +37,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_reactive_ble: ^5.0.3
+  provider: ^6.0.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
