@@ -22,6 +22,6 @@ flutter doctor
 ### VS Code:
 Install Flutter extension
 
-## links
+## Links
 https://github.com/vovagorodok/ArduinoBleOTA \
 https://docs.flutter.dev/get-started/install/linux
