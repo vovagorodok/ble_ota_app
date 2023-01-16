@@ -1,7 +1,7 @@
 # Arduino Ble Ota App
 Mobile application for upload firmware over Bluetooth.
 
-## Setup using snap
+## Setup environment using snap
 ### Android studio:
 ```
 sudo snap install android-studio --classic
