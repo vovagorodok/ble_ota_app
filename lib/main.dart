@@ -8,29 +8,21 @@ import 'package:arduino_ble_ota_app/src/ui/ble_status_screen.dart';
 import 'package:arduino_ble_ota_app/src/ui/device_list.dart';
 import 'package:provider/provider.dart';
 
-import 'src/ble/ble_logger.dart';
-
 const _themeColor = Colors.lightGreen;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final _bleLogger = BleLogger();
   final _ble = FlutterReactiveBle();
-  final _scanner = BleScanner(ble: _ble, logMessage: _bleLogger.addToLog);
+  final _scanner = BleScanner(ble: _ble);
   final _monitor = BleStatusMonitor(_ble);
-  final _connector = BleDeviceConnector(
-    ble: _ble,
-    logMessage: _bleLogger.addToLog,
-  );
+  final _connector = BleDeviceConnector(ble: _ble);
   final _serviceDiscoverer = BleDeviceInteractor(
-    bleDiscoverServices: _ble.discoverServices,
-    readCharacteristic: _ble.readCharacteristic,
-    writeWithResponse: _ble.writeCharacteristicWithResponse,
-    writeWithOutResponse: _ble.writeCharacteristicWithoutResponse,
-    subscribeToCharacteristic: _ble.subscribeToCharacteristic,
-    logMessage: _bleLogger.addToLog,
-  );
+      bleDiscoverServices: _ble.discoverServices,
+      readCharacteristic: _ble.readCharacteristic,
+      writeWithResponse: _ble.writeCharacteristicWithResponse,
+      writeWithOutResponse: _ble.writeCharacteristicWithoutResponse,
+      subscribeToCharacteristic: _ble.subscribeToCharacteristic);
   runApp(
     MultiProvider(
       providers: [
@@ -38,7 +30,6 @@ void main() {
         Provider.value(value: _monitor),
         Provider.value(value: _connector),
         Provider.value(value: _serviceDiscoverer),
-        Provider.value(value: _bleLogger),
         StreamProvider<BleScannerState?>(
           create: (_) => _scanner.state,
           initialData: const BleScannerState(

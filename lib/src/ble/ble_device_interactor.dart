@@ -14,15 +14,13 @@ class BleDeviceInteractor {
     required Future<void> Function(QualifiedCharacteristic characteristic,
             {required List<int> value})
         writeWithOutResponse,
-    required void Function(String message) logMessage,
     required Stream<List<int>> Function(QualifiedCharacteristic characteristic)
         subscribeToCharacteristic,
   })  : _bleDiscoverServices = bleDiscoverServices,
         _readCharacteristic = readCharacteristic,
         _writeWithResponse = writeWithResponse,
         _writeWithoutResponse = writeWithOutResponse,
-        _subScribeToCharacteristic = subscribeToCharacteristic,
-        _logMessage = logMessage;
+        _subScribeToCharacteristic = subscribeToCharacteristic;
 
   final Future<List<DiscoveredService>> Function(String deviceId)
       _bleDiscoverServices;
@@ -39,16 +37,14 @@ class BleDeviceInteractor {
   final Stream<List<int>> Function(QualifiedCharacteristic characteristic)
       _subScribeToCharacteristic;
 
-  final void Function(String message) _logMessage;
-
   Future<List<DiscoveredService>> discoverServices(String deviceId) async {
     try {
-      _logMessage('Start discovering services for: $deviceId');
+      print('Start discovering services for: $deviceId');
       final result = await _bleDiscoverServices(deviceId);
-      _logMessage('Discovering services finished');
+      print('Discovering services finished');
       return result;
     } on Exception catch (e) {
-      _logMessage('Error occured when discovering services: $e');
+      print('Error occured when discovering services: $e');
       rethrow;
     }
   }
@@ -58,10 +54,10 @@ class BleDeviceInteractor {
     try {
       final result = await _readCharacteristic(characteristic);
 
-      _logMessage('Read ${characteristic.characteristicId}: value = $result');
+      print('Read ${characteristic.characteristicId}: value = $result');
       return result;
     } on Exception catch (e, s) {
-      _logMessage(
+      print(
         'Error occured when reading ${characteristic.characteristicId} : $e',
       );
       // ignore: avoid_print
@@ -73,11 +69,11 @@ class BleDeviceInteractor {
   Future<void> writeCharacterisiticWithResponse(
       QualifiedCharacteristic characteristic, List<int> value) async {
     try {
-      _logMessage(
+      print(
           'Write with response value : $value to ${characteristic.characteristicId}');
       await _writeWithResponse(characteristic, value: value);
     } on Exception catch (e, s) {
-      _logMessage(
+      print(
         'Error occured when writing ${characteristic.characteristicId} : $e',
       );
       // ignore: avoid_print
@@ -90,10 +86,10 @@ class BleDeviceInteractor {
       QualifiedCharacteristic characteristic, List<int> value) async {
     try {
       await _writeWithoutResponse(characteristic, value: value);
-      _logMessage(
+      print(
           'Write without response value: $value to ${characteristic.characteristicId}');
     } on Exception catch (e, s) {
-      _logMessage(
+      print(
         'Error occured when writing ${characteristic.characteristicId} : $e',
       );
       // ignore: avoid_print
@@ -104,7 +100,7 @@ class BleDeviceInteractor {
 
   Stream<List<int>> subScribeToCharacteristic(
       QualifiedCharacteristic characteristic) {
-    _logMessage('Subscribing to: ${characteristic.characteristicId} ');
+    print('Subscribing to: ${characteristic.characteristicId} ');
     return _subScribeToCharacteristic(characteristic);
   }
 }
