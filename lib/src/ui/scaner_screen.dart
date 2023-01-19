@@ -36,11 +36,12 @@ class ScanerScreenState extends State<ScanerScreen> {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      UploadScreen(deviceId: device.id)),
+                                builder: (context) => UploadScreen(
+                                    deviceId: device.id,
+                                    deviceName: device.name),
+                              ),
                             );
                             bleConnector.disconnect(device.id);
-                            bleScanner.startScan([serviceUuid]);
                           },
                         ),
                       )

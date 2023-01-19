@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_device_connector.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_scanner_old.dart';
 import 'package:arduino_ble_ota_app/src/ui/device_interactor_screen.dart';
-
-Uuid serviceUuid = Uuid.parse("15c155ca-36c5-11ed-adc0-9741d6a72f04");
+import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
 
 class DeviceListScreen extends StatelessWidget {
   const DeviceListScreen({Key? key}) : super(key: key);

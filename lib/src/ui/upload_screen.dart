@@ -1,20 +1,51 @@
+import 'package:arduino_ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-// import 'package:arduino_ble_ota_app/src/ble/ble.dart';
 
 class UploadScreen extends StatefulWidget {
-  const UploadScreen({required this.deviceId, Key? key}) : super(key: key);
+  UploadScreen({required this.deviceId, required this.deviceName, Key? key})
+      : bleInfoReader = BleInfoReader(deviceId: deviceId),
+        super(key: key);
+
   final String deviceId;
+  final String deviceName;
+  final BleInfoReader bleInfoReader;
 
   @override
   State<UploadScreen> createState() => UploadScreenState();
 }
 
 class UploadScreenState extends State<UploadScreen> {
+  void _onInfoReady(Info info) {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    widget.bleInfoReader.infoStream.listen(_onInfoReady);
+    widget.bleInfoReader.update();
+    super.initState();
+  }
+
+  String _buildVerStr(Version ver) => "${ver.major}.${ver.minor}.${ver.patch}";
+  String _buildHwStr(Info info) =>
+      "${info.hwName} v${_buildVerStr(info.hwVer)}";
+  String _buildSwStr(Info info) =>
+      "${info.swName} v${_buildVerStr(info.swVer)}";
+
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Center(
-          child: Text(widget.deviceId),
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(25.0, 35.0, 25.0, 25.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(widget.deviceName,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
+              Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}")
+            ],
+          ),
         ),
       );
 }

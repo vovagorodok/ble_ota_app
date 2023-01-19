@@ -31,10 +31,15 @@ class InitScreenState extends State<InitScreen> {
   void _statusChanged(BleStatus status) {
     setState(() {
       if (isBleReady(status)) {
+        final route =
+            MaterialPageRoute(builder: (context) => const ScanerScreen());
+
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ScanerScreen()),
+          route,
         );
+
+        Navigator.removeRouteBelow(context, route);
       }
     });
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:provider/provider.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_device_interactor.dart';
+import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
 
 class DeviceInteractorScreen extends StatelessWidget {
   final String deviceId;
@@ -46,11 +47,6 @@ class DeviceInteractor extends StatefulWidget {
 }
 
 class _DeviceInteractorState extends State<DeviceInteractor> {
-  final Uuid _myServiceUuid =
-      Uuid.parse("19b10000-e8f2-537e-4f6c-6969768a1214");
-  final Uuid _myCharacteristicUuid =
-      Uuid.parse("19b10001-e8f2-537e-4f6c-6969768a1214");
-
   Stream<List<int>>? subscriptionStream;
 
   @override
@@ -71,8 +67,8 @@ class _DeviceInteractorState extends State<DeviceInteractor> {
                         subscriptionStream =
                             widget.deviceInteractor.subScribeToCharacteristic(
                           QualifiedCharacteristic(
-                              characteristicId: _myCharacteristicUuid,
-                              serviceId: _myServiceUuid,
+                              characteristicId: characteristicUuidHwName,
+                              serviceId: serviceUuid,
                               deviceId: widget.deviceId),
                         );
                       });
