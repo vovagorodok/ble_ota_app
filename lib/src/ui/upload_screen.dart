@@ -1,4 +1,5 @@
 import 'package:arduino_ble_ota_app/src/ble/ble_info_reader.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class UploadScreen extends StatefulWidget {
@@ -32,18 +33,33 @@ class UploadScreenState extends State<UploadScreen> {
   String _buildSwStr(Info info) =>
       "${info.swName} v${_buildVerStr(info.swVer)}";
 
+  void _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['bin'],
+    );
+
+    if (result != null) {
+      // File file = File(result.files.single.path);
+    } else {
+      // User canceled the picker
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Padding(
           padding: const EdgeInsets.fromLTRB(25.0, 35.0, 25.0, 25.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(widget.deviceName,
                   style: const TextStyle(fontWeight: FontWeight.bold)),
               Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
-              Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}")
+              Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
+              ElevatedButton(
+                  onPressed: _pickFile, child: const Text('Upload from file'))
             ],
           ),
         ),
