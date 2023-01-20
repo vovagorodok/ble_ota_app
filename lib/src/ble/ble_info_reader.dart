@@ -34,7 +34,7 @@ class BleInfoReader {
   Version _convertToVer(List<int> data) =>
       Version(major: data[0], minor: data[1], patch: data[2]);
 
-  void update() {
+  void read() {
     () async {
       info.hwName = String.fromCharCodes(
           await ble.readCharacteristic(_characteristicHwName));

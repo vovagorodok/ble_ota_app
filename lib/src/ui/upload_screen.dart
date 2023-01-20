@@ -1,15 +1,21 @@
+import 'dart:io';
+import 'dart:async';
+
 import 'package:arduino_ble_ota_app/src/ble/ble_info_reader.dart';
+import 'package:arduino_ble_ota_app/src/ble/ble_uploader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
       : bleInfoReader = BleInfoReader(deviceId: deviceId),
+        bleUploader = BleUploader(deviceId: deviceId),
         super(key: key);
 
   final String deviceId;
   final String deviceName;
   final BleInfoReader bleInfoReader;
+  final BleUploader bleUploader;
 
   @override
   State<UploadScreen> createState() => UploadScreenState();
@@ -23,7 +29,7 @@ class UploadScreenState extends State<UploadScreen> {
   @override
   void initState() {
     widget.bleInfoReader.infoStream.listen(_onInfoReady);
-    widget.bleInfoReader.update();
+    widget.bleInfoReader.read();
     super.initState();
   }
 
@@ -33,17 +39,23 @@ class UploadScreenState extends State<UploadScreen> {
   String _buildSwStr(Info info) =>
       "${info.swName} v${_buildVerStr(info.swVer)}";
 
-  void _pickFile() async {
+  Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['bin'],
     );
 
     if (result != null) {
-      // File file = File(result.files.single.path);
+      await _uploadFile(result.files.single.path!);
     } else {
       // User canceled the picker
     }
+  }
+
+  Future<void> _uploadFile(String path) async {
+    File file = File(path);
+    var data = await file.readAsBytes();
+    widget.bleUploader.upload(data);
   }
 
   @override
