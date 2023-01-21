@@ -16,6 +16,7 @@ class BleUploader {
     ble
         .subscribeToCharacteristic(_characteristicTx)
         .listen((event) => _handleResp(Uint8List.fromList(event)));
+    ble.requestMtu(deviceId: deviceId, mtu: 512 + 4); // TODO: fix and remove
   }
 
   final QualifiedCharacteristic _characteristicRx;
@@ -43,7 +44,8 @@ class BleUploader {
   }
 
   Future<void> _sendData(List<int> data) async {
-    await ble.writeCharacteristicWithoutResponse(_characteristicRx, value: data);
+    await ble.writeCharacteristicWithoutResponse(_characteristicRx,
+        value: data);
   }
 
   Future<void> _sendBegin() async {
@@ -87,7 +89,7 @@ class BleUploader {
     while (_dataToSendPos < _dataToSend.length) {
       var packageSize = min(_dataToSend.length - _dataToSendPos, _packageSize);
       var dataToSendEndPos = _dataToSendPos + packageSize;
-      
+
       await _sendData(_uint8ToBytes(HeadCode.package) +
           _dataToSend.sublist(_dataToSendPos, dataToSendEndPos));
       _dataToSendPos = dataToSendEndPos;

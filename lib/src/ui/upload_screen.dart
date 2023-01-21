@@ -26,8 +26,13 @@ class UploadScreenState extends State<UploadScreen> {
     setState(() {});
   }
 
+  void _onUploadStateChanged(UploadState info) {
+    setState(() {});
+  }
+
   @override
   void initState() {
+    widget.bleUploader.stateStream.listen(_onUploadStateChanged);
     widget.bleInfoReader.infoStream.listen(_onInfoReady);
     widget.bleInfoReader.read();
     super.initState();
@@ -70,6 +75,7 @@ class UploadScreenState extends State<UploadScreen> {
                   style: const TextStyle(fontWeight: FontWeight.bold)),
               Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
               Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
+              LinearProgressIndicator(value: widget.bleUploader.state.progress),
               ElevatedButton(
                   onPressed: _pickFile, child: const Text('Upload from file'))
             ],
