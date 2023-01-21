@@ -1,3 +1,13 @@
+const uint8BytesNum = 1;
+const uint32BytesNum = 4;
+const headCodeBytesNum = uint8BytesNum;
+const attrSizeBytesNum = uint32BytesNum;
+const bufferSizeBytesNum = uint32BytesNum;
+const beginRespBytesNum = headCodeBytesNum + attrSizeBytesNum + bufferSizeBytesNum;
+const headCodePos = 0;
+const attrSizePos = headCodePos + headCodeBytesNum;
+const bufferSizePos = attrSizePos + attrSizeBytesNum;
+
 class HeadCode {
   static const ok = 0x00;
   static const nok = 0x01;
