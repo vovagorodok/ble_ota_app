@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:archive/archive_io.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
@@ -112,7 +113,7 @@ class BleUploader {
 
   Future<void> _sendEnd() async {
     print("VOVA: send end");
-    var crc32 = 0;
+    var crc32 = getCrc32(_dataToSend);
     await _sendData(_uint8ToBytes(HeadCode.end) + _uint32ToBytes(crc32));
     state.status = UploadStatus.end;
   }
