@@ -70,16 +70,19 @@ class ScanerScreenState extends State<ScanerScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                      onPressed: !bleScanner.state.scanIsInProgress
-                          ? () => bleScanner.startScan([serviceUuid])
-                          : null,
-                      child: const Text('Scan')),
-                  ElevatedButton(
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.search),
+                    label: const Text('Scan'),
+                    onPressed: !bleScanner.state.scanIsInProgress
+                        ? () => bleScanner.startScan([serviceUuid])
+                        : null,
+                  ),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.search_off),
+                    label: const Text('Stop'),
                     onPressed: bleScanner.state.scanIsInProgress
                         ? bleScanner.stopScan
                         : null,
-                    child: const Text('Stop'),
                   ),
                 ],
               ),
