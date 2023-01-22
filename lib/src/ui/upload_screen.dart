@@ -4,14 +4,13 @@ import 'dart:async';
 import 'package:arduino_ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_uploader.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_connector.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
-      : bleConnector = BleConnector(),
+      : bleConnector = BleConnector(deviceId: deviceId),
         bleInfoReader = BleInfoReader(deviceId: deviceId),
         bleUploader = BleUploader(deviceId: deviceId),
         super(key: key);
@@ -31,13 +30,13 @@ class UploadScreenState extends State<UploadScreen> {
 
   void _onConnectionStateChanged(ConnectionStateUpdate state) {
     if (state.connectionState == DeviceConnectionState.disconnected) {
-      widget.bleConnector.findAndConnect(widget.deviceId, [serviceUuid]);
+      widget.bleConnector.findAndConnect();
     } else if (state.connectionState == DeviceConnectionState.connected) {
       widget.bleInfoReader.read();
     }
   }
 
-  void _onInfoReady(Info info) {
+  void _onInfoChanged(Info info) {
     setState(() {});
   }
 
@@ -48,10 +47,10 @@ class UploadScreenState extends State<UploadScreen> {
   @override
   void initState() {
     widget.bleUploader.stateStream.listen(_onUploadStateChanged);
-    widget.bleInfoReader.infoStream.listen(_onInfoReady);
+    widget.bleInfoReader.infoStream.listen(_onInfoChanged);
     _connection =
         widget.bleConnector.stateStream.listen(_onConnectionStateChanged);
-    widget.bleConnector.connect(widget.deviceId);
+    widget.bleConnector.connect();
     super.initState();
   }
 
@@ -59,7 +58,7 @@ class UploadScreenState extends State<UploadScreen> {
   void dispose() {
     super.dispose();
     _connection.cancel();
-    widget.bleConnector.disconnect(widget.deviceId);
+    widget.bleConnector.disconnect();
   }
 
   bool _isUploading() => widget.bleUploader.state.status == UploadStatus.upload;
