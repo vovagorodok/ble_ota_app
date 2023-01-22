@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble.dart';
+import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class StatusScreen extends StatefulWidget {

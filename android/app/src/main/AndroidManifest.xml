@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.arduino_ble_ota_app">
+    package="com.example.ble_ota_app">
         <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
         <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="30" />
    <application
-        android:label="arduino_ble_ota_app"
+        android:label="BleOta"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,6 +1,6 @@
 {
-    "name": "arduino_ble_ota_app",
-    "short_name": "arduino_ble_ota_app",
+    "name": "ble_ota_app",
+    "short_name": "ble_ota_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

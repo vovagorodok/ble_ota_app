@@ -1,9 +1,9 @@
-import 'package:arduino_ble_ota_app/src/ble/ble.dart';
-import 'package:arduino_ble_ota_app/src/ui/status_screen.dart';
+import 'package:ble_ota_app/src/ble/ble.dart';
+import 'package:ble_ota_app/src/ui/status_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble_scanner.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
-import 'package:arduino_ble_ota_app/src/ui/upload_screen.dart';
+import 'package:ble_ota_app/src/ble/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/ui/upload_screen.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class ScanerScreen extends StatefulWidget {

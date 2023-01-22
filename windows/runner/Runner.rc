@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "arduino_ble_ota_app" "\0"
+            VALUE "FileDescription", "ble_ota_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "arduino_ble_ota_app" "\0"
+            VALUE "InternalName", "ble_ota_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "arduino_ble_ota_app.exe" "\0"
-            VALUE "ProductName", "arduino_ble_ota_app" "\0"
+            VALUE "OriginalFilename", "ble_ota_app.exe" "\0"
+            VALUE "ProductName", "ble_ota_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

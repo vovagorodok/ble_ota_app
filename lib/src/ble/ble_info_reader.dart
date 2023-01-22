@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/ble/ble.dart';
+import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 
 class BleInfoReader {
   BleInfoReader({required String deviceId})

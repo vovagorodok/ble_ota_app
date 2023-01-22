@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:async';
 
-import 'package:arduino_ble_ota_app/src/ble/ble_info_reader.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble_uploader.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble_connector.dart';
+import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
+import 'package:ble_ota_app/src/ble/ble_uploader.dart';
+import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
