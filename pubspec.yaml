@@ -39,6 +39,7 @@ dependencies:
   flutter_reactive_ble: ^5.0.3
   file_picker: ^5.2.5
   archive: ^3.3.5
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
