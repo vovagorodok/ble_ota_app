@@ -1,7 +1,10 @@
+import 'package:arduino_ble_ota_app/src/ble/ble.dart';
+import 'package:arduino_ble_ota_app/src/ui/status_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:arduino_ble_ota_app/src/ui/upload_screen.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class ScanerScreen extends StatefulWidget {
   const ScanerScreen({Key? key}) : super(key: key);
@@ -11,6 +14,24 @@ class ScanerScreen extends StatefulWidget {
 }
 
 class ScanerScreenState extends State<ScanerScreen> {
+  void _evaluateBleStatus(BleStatus status) {
+    setState(() {
+      if (status != BleStatus.ready && status != BleStatus.unknown) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const StatusScreen()),
+        );
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    ble.statusStream.listen(_evaluateBleStatus);
+    _evaluateBleStatus(ble.status);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble.dart';
-import 'package:arduino_ble_ota_app/src/ui/scaner_screen.dart';
 
-class InitScreen extends StatefulWidget {
-  const InitScreen({Key? key}) : super(key: key);
+class StatusScreen extends StatefulWidget {
+  const StatusScreen({Key? key}) : super(key: key);
 
   @override
-  State<InitScreen> createState() => InitScreenState();
+  State<StatusScreen> createState() => StatusScreenState();
 }
 
-class InitScreenState extends State<InitScreen> {
+class StatusScreenState extends State<StatusScreen> {
   String _determineText(BleStatus status) {
     switch (status) {
       case BleStatus.unsupported:
@@ -28,25 +27,18 @@ class InitScreenState extends State<InitScreen> {
     }
   }
 
-  void _statusChanged(BleStatus status) {
+  void _evaluateBleStatus(BleStatus status) {
     setState(() {
-      if (isBleReady(status)) {
-        final route =
-            MaterialPageRoute(builder: (context) => const ScanerScreen());
-
-        Navigator.push(
-          context,
-          route,
-        );
-
-        Navigator.removeRouteBelow(context, route);
+      if (status == BleStatus.ready) {
+        Navigator.pop(context);
       }
     });
   }
 
   @override
   void initState() {
-    ble.statusStream.listen(_statusChanged);
+    ble.statusStream.listen(_evaluateBleStatus);
+    _evaluateBleStatus(ble.status);
     super.initState();
   }
 

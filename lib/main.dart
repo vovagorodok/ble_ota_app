@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble.dart';
-import 'package:arduino_ble_ota_app/src/ui/init_screen.dart';
 import 'package:arduino_ble_ota_app/src/ui/scaner_screen.dart';
 
 void main() {
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Arduino BLE OTA',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home: isBleReady(ble.status) ? const ScanerScreen() : const InitScreen(),
+      home: const ScanerScreen(),
     );
   }
 }
