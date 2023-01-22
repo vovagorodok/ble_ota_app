@@ -53,8 +53,16 @@ class StatusScreenState extends State<StatusScreen> {
   Widget build(BuildContext context) => WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          body: Center(
-            child: Text(_determineText(ble.status)),
+          body: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Center(
+              child: Text(
+                _determineText(ble.status),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 30.0),
+              ),
+            ),
           ),
         ),
       );
