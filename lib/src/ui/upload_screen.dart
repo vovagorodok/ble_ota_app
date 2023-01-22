@@ -11,7 +11,8 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
-      : bleConnector = BleConnector(), bleInfoReader = BleInfoReader(deviceId: deviceId),
+      : bleConnector = BleConnector(),
+        bleInfoReader = BleInfoReader(deviceId: deviceId),
         bleUploader = BleUploader(deviceId: deviceId),
         super(key: key);
 
@@ -57,6 +58,7 @@ class UploadScreenState extends State<UploadScreen> {
     widget.bleConnector.disconnect(widget.deviceId);
   }
 
+  bool _isUploading() => widget.bleUploader.state.status == UploadStatus.upload;
   String _buildVerStr(Version ver) => "${ver.major}.${ver.minor}.${ver.patch}";
   String _buildHwStr(Info info) =>
       "${info.hwName} v${_buildVerStr(info.hwVer)}";
@@ -96,7 +98,8 @@ class UploadScreenState extends State<UploadScreen> {
               Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
               LinearProgressIndicator(value: widget.bleUploader.state.progress),
               ElevatedButton(
-                  onPressed: _pickFile, child: const Text('Upload from file'))
+                  onPressed: _isUploading() ? null : _pickFile,
+                  child: const Text('Upload from file'))
             ],
           ),
         ),
