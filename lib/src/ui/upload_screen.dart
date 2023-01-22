@@ -27,6 +27,8 @@ class UploadScreen extends StatefulWidget {
 }
 
 class UploadScreenState extends State<UploadScreen> {
+  late StreamSubscription<ConnectionStateUpdate> _connection;
+
   void _onConnectionStateChanged(ConnectionStateUpdate state) {
     if (state.connectionState == DeviceConnectionState.disconnected) {
       widget.bleConnector.findAndConnect(widget.deviceId, [serviceUuid]);
@@ -47,7 +49,8 @@ class UploadScreenState extends State<UploadScreen> {
   void initState() {
     widget.bleUploader.stateStream.listen(_onUploadStateChanged);
     widget.bleInfoReader.infoStream.listen(_onInfoReady);
-    widget.bleConnector.stateStream.listen(_onConnectionStateChanged);
+    _connection =
+        widget.bleConnector.stateStream.listen(_onConnectionStateChanged);
     widget.bleConnector.connect(widget.deviceId);
     super.initState();
   }
@@ -55,6 +58,7 @@ class UploadScreenState extends State<UploadScreen> {
   @override
   void dispose() {
     super.dispose();
+    _connection.cancel();
     widget.bleConnector.disconnect(widget.deviceId);
   }
 
