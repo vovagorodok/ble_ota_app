@@ -46,12 +46,21 @@ class ScanerScreenState extends State<ScanerScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: bleScanner.state.scanIsInProgress
-                    ? () => bleScanner.stopScan()
-                    : () => bleScanner.startScan([serviceUuid]),
-                child:
-                    Text(bleScanner.state.scanIsInProgress ? 'Stop' : 'Scan'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      onPressed: !bleScanner.state.scanIsInProgress
+                          ? () => bleScanner.startScan([serviceUuid])
+                          : null,
+                      child: const Text('Scan')),
+                  ElevatedButton(
+                    onPressed: bleScanner.state.scanIsInProgress
+                        ? bleScanner.stopScan
+                        : null,
+                    child: const Text('Stop'),
+                  ),
+                ],
               ),
               const SizedBox(height: 25),
             ],
