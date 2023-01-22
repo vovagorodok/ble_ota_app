@@ -10,6 +10,18 @@ class BleConnector {
   Stream<ConnectionStateUpdate> get stateStream =>
       _stateStreamController.stream;
 
+  Future<void> findAndConnect(String deviceId, List<Uuid> withServices) async {
+    _connection = ble
+        .connectToAdvertisingDevice(
+            id: deviceId,
+            withServices: withServices,
+            prescanDuration: const Duration(seconds: 10))
+        .listen(
+          (update) => _stateStreamController.add(update),
+          onError: (Object e) {},
+        );
+  }
+
   Future<void> connect(String deviceId) async {
     _connection = ble.connectToDevice(id: deviceId).listen(
           (update) => _stateStreamController.add(update),

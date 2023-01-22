@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_scanner.dart';
-import 'package:arduino_ble_ota_app/src/ble/ble_connector.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:arduino_ble_ota_app/src/ui/upload_screen.dart';
 
@@ -32,7 +31,6 @@ class ScanerScreenState extends State<ScanerScreen> {
                           leading: const Icon(Icons.bluetooth),
                           onTap: () async {
                             bleScanner.stopScan();
-                            bleConnector.connect(device.id);
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -41,7 +39,6 @@ class ScanerScreenState extends State<ScanerScreen> {
                                     deviceName: device.name),
                               ),
                             );
-                            bleConnector.disconnect(device.id);
                           },
                         ),
                       )

@@ -3,8 +3,11 @@ import 'dart:async';
 
 import 'package:arduino_ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_uploader.dart';
+import 'package:arduino_ble_ota_app/src/ble/ble_connector.dart';
+import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
@@ -22,11 +25,19 @@ class UploadScreen extends StatefulWidget {
 }
 
 class UploadScreenState extends State<UploadScreen> {
+  void _onConnectionStateChanged(ConnectionStateUpdate state) {
+    if (state.connectionState == DeviceConnectionState.disconnected) {
+      bleConnector.findAndConnect(widget.deviceId, [serviceUuid]);
+    } else if (state.connectionState == DeviceConnectionState.connected) {
+      widget.bleInfoReader.read();
+    }
+  }
+
   void _onInfoReady(Info info) {
     setState(() {});
   }
 
-  void _onUploadStateChanged(UploadState info) {
+  void _onUploadStateChanged(UploadState state) {
     setState(() {});
   }
 
@@ -34,8 +45,15 @@ class UploadScreenState extends State<UploadScreen> {
   void initState() {
     widget.bleUploader.stateStream.listen(_onUploadStateChanged);
     widget.bleInfoReader.infoStream.listen(_onInfoReady);
-    widget.bleInfoReader.read();
+    bleConnector.stateStream.listen(_onConnectionStateChanged);
+    bleConnector.connect(widget.deviceId);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    bleConnector.disconnect(widget.deviceId);
   }
 
   String _buildVerStr(Version ver) => "${ver.major}.${ver.minor}.${ver.patch}";
