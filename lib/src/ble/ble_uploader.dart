@@ -25,9 +25,10 @@ class BleUploader {
   final StreamController<UploadState> _stateStreamController =
       StreamController();
   Uint8List _dataToSend = Uint8List(0);
-  int _dataToSendPos = 0;
-  int _packageSize = 0;
-  int _bufferSize = 0;
+  int _currentDataPos = 0;
+  int _currentBufferSize = 0;
+  int _packageMaxSize = 0;
+  int _bufferMaxSize = 0;
 
   Stream<UploadState> get stateStream => _stateStreamController.stream;
 
@@ -37,84 +38,77 @@ class BleUploader {
     errorMsg: "",
   );
 
-  Future<void> upload(Uint8List data) async {
+  void upload(Uint8List data) {
     state.status = UploadStatus.idle;
     _stateStreamController.add(state);
     _dataToSend = data;
-    await _sendBegin();
+    _sendBegin();
   }
 
-  Future<void> _sendData(List<int> data) async {
-    await ble.writeCharacteristicWithoutResponse(_characteristicRx,
-        value: data);
+  void _sendData(List<int> data) {
+    ble.writeCharacteristicWithoutResponse(_characteristicRx, value: data);
   }
 
-  Future<void> _sendBegin() async {
-    await _sendData(
+  void _sendBegin() {
+    _sendData(
         _uint8ToBytes(HeadCode.begin) + _uint32ToBytes(_dataToSend.length));
   }
 
-  Future<void> _handleResp(Uint8List data) async {
+  void _handleResp(Uint8List data) {
     var headCode = _bytesToUint8(data, headCodePos);
     if (headCode == HeadCode.ok) {
-      print("VOVA: resp ok");
       if (state.status == UploadStatus.idle) {
-        await _handleBeginResp(data);
-        await _sendPackages();
+        _handleBeginResp(data);
+        _sendPackages();
       } else if (state.status == UploadStatus.upload) {
-        await _sendPackages();
+        _sendPackages();
       } else if (state.status == UploadStatus.end) {
         _stateStreamController.add(state);
-        print("VOVA: success");
       }
     } else {
       state.status = UploadStatus.error;
       state.errorMsg = determineErrorHeadCode(headCode);
       _stateStreamController.add(state);
-      print("VOVA: error: ${state.errorMsg}");
     }
   }
 
-  Future<void> _handleBeginResp(Uint8List data) async {
+  void _handleBeginResp(Uint8List data) {
     state.status = UploadStatus.upload;
     state.progress = 0.0;
     _stateStreamController.add(state);
-    _dataToSendPos = 0;
-    _packageSize = _bytesToUint32(data, attrSizePos) - headCodeBytesNum;
-    _bufferSize = _bytesToUint32(data, bufferSizePos);
+    _currentDataPos = 0;
+    _currentBufferSize = 0;
+    _packageMaxSize = _bytesToUint32(data, attrSizePos) - headCodeBytesNum;
+    _bufferMaxSize = _bytesToUint32(data, bufferSizePos);
   }
 
-  Future<void> _sendPackages() async {
-    var dataToSendStartingPos = _dataToSendPos;
+  void _sendPackages() {
+    while (_currentDataPos < _dataToSend.length) {
+      var packageSize =
+          min(_dataToSend.length - _currentDataPos, _packageMaxSize);
+      var packageEndPos = _currentDataPos + packageSize;
 
-    while (_dataToSendPos < _dataToSend.length) {
-      var packageSize = min(_dataToSend.length - _dataToSendPos, _packageSize);
-      var dataToSendEndPos = _dataToSendPos + packageSize;
-
-      await _sendData(_uint8ToBytes(HeadCode.package) +
-          _dataToSend.sublist(_dataToSendPos, dataToSendEndPos));
-      _dataToSendPos = dataToSendEndPos;
+      _sendData(_uint8ToBytes(HeadCode.package) +
+          _dataToSend.sublist(_currentDataPos, packageEndPos));
+      _currentDataPos = packageEndPos;
 
       state.progress =
-          _dataToSendPos.toDouble() / _dataToSend.length.toDouble();
+          _currentDataPos.toDouble() / _dataToSend.length.toDouble();
       _stateStreamController.add(state);
 
-      print("VOVA: _dataToSend.length: ${_dataToSend.length}");
-      print("VOVA: _dataToSendPos: ${_dataToSendPos}");
-      print("VOVA: progress: ${state.progress}");
-
-      if (_dataToSendPos - dataToSendStartingPos > _bufferSize) {
+      _currentBufferSize += packageSize;
+      if (_currentBufferSize > _bufferMaxSize) {
+        _currentBufferSize = packageSize;
         return;
       }
     }
 
-    await _sendEnd();
+    _sendEnd();
   }
 
-  Future<void> _sendEnd() async {
-    print("VOVA: send end");
-    var crc32 = getCrc32(_dataToSend);
-    await _sendData(_uint8ToBytes(HeadCode.end) + _uint32ToBytes(crc32));
+  void _sendEnd() {
+    _sendData(
+        _uint8ToBytes(HeadCode.end) + _uint32ToBytes(getCrc32(_dataToSend)));
     state.status = UploadStatus.end;
   }
 

@@ -60,7 +60,7 @@ class UploadScreenState extends State<UploadScreen> {
   Future<void> _uploadFile(String path) async {
     File file = File(path);
     var data = await file.readAsBytes();
-    await widget.bleUploader.upload(data);
+    widget.bleUploader.upload(data);
   }
 
   @override
