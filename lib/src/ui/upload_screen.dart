@@ -63,10 +63,10 @@ class UploadScreenState extends State<UploadScreen> {
 
   bool _isUploading() => widget.bleUploader.state.status == UploadStatus.upload;
   String _buildVerStr(Version ver) => "${ver.major}.${ver.minor}.${ver.patch}";
-  String _buildHwStr(Info info) =>
-      "${info.hwName} v${_buildVerStr(info.hwVer)}";
-  String _buildSwStr(Info info) =>
-      "${info.swName} v${_buildVerStr(info.swVer)}";
+  String _buildInfoStr(Info info, String name, Version ver) =>
+      info.ready ? "${info.hwName} v${_buildVerStr(info.hwVer)}" : "reading..";
+  String _buildHwStr(Info info) => _buildInfoStr(info, info.hwName, info.hwVer);
+  String _buildSwStr(Info info) => _buildInfoStr(info, info.swName, info.swVer);
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(

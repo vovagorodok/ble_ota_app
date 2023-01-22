@@ -29,12 +29,16 @@ class BleInfoReader {
     hwVer: const Version(major: 0, minor: 0, patch: 0),
     swName: "",
     swVer: const Version(major: 0, minor: 0, patch: 0),
+    ready: false,
   );
 
   Version _convertToVer(List<int> data) =>
       Version(major: data[0], minor: data[1], patch: data[2]);
 
   void read() {
+    info.ready = false;
+    _infoStreamController.add(info);
+
     () async {
       info.hwName = String.fromCharCodes(
           await ble.readCharacteristic(_characteristicHwName));
@@ -44,6 +48,7 @@ class BleInfoReader {
           await ble.readCharacteristic(_characteristicSwName));
       info.swVer =
           _convertToVer(await ble.readCharacteristic(_characteristicSwVer));
+      info.ready = true;
 
       _infoStreamController.add(info);
     }.call();
@@ -62,12 +67,14 @@ class Info {
     required this.hwVer,
     required this.swName,
     required this.swVer,
+    required this.ready,
   });
 
   String hwName;
   Version hwVer;
   String swName;
   Version swVer;
+  bool ready;
 }
 
 @immutable
