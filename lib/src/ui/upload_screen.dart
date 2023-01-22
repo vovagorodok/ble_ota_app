@@ -11,12 +11,13 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
-      : bleInfoReader = BleInfoReader(deviceId: deviceId),
+      : bleConnector = BleConnector(), bleInfoReader = BleInfoReader(deviceId: deviceId),
         bleUploader = BleUploader(deviceId: deviceId),
         super(key: key);
 
   final String deviceId;
   final String deviceName;
+  final BleConnector bleConnector;
   final BleInfoReader bleInfoReader;
   final BleUploader bleUploader;
 
@@ -27,7 +28,7 @@ class UploadScreen extends StatefulWidget {
 class UploadScreenState extends State<UploadScreen> {
   void _onConnectionStateChanged(ConnectionStateUpdate state) {
     if (state.connectionState == DeviceConnectionState.disconnected) {
-      bleConnector.findAndConnect(widget.deviceId, [serviceUuid]);
+      widget.bleConnector.findAndConnect(widget.deviceId, [serviceUuid]);
     } else if (state.connectionState == DeviceConnectionState.connected) {
       widget.bleInfoReader.read();
     }
@@ -45,15 +46,15 @@ class UploadScreenState extends State<UploadScreen> {
   void initState() {
     widget.bleUploader.stateStream.listen(_onUploadStateChanged);
     widget.bleInfoReader.infoStream.listen(_onInfoReady);
-    bleConnector.stateStream.listen(_onConnectionStateChanged);
-    bleConnector.connect(widget.deviceId);
+    widget.bleConnector.stateStream.listen(_onConnectionStateChanged);
+    widget.bleConnector.connect(widget.deviceId);
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    bleConnector.disconnect(widget.deviceId);
+    widget.bleConnector.disconnect(widget.deviceId);
   }
 
   String _buildVerStr(Version ver) => "${ver.major}.${ver.minor}.${ver.patch}";

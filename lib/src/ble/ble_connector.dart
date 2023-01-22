@@ -50,5 +50,3 @@ class BleConnector {
     await _stateStreamController.close();
   }
 }
-
-final bleConnector = BleConnector();
