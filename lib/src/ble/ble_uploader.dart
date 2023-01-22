@@ -9,17 +9,15 @@ import 'package:arduino_ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:arduino_ble_ota_app/src/ble/ble_consts.dart';
 
 class BleUploader {
-  BleUploader({required String deviceId})
+  BleUploader({required this.deviceId})
       : _characteristicRx =
             _crateCharacteristic(characteristicUuidRx, deviceId),
         _characteristicTx =
             _crateCharacteristic(characteristicUuidTx, deviceId) {
-    ble
-        .subscribeToCharacteristic(_characteristicTx)
-        .listen((event) => _handleResp(Uint8List.fromList(event)));
-    ble.requestMtu(deviceId: deviceId, mtu: 512 + 4); // TODO: fix and remove
+    _subscribeToCharacteristic();
   }
 
+  final String deviceId;
   final QualifiedCharacteristic _characteristicRx;
   final QualifiedCharacteristic _characteristicTx;
   final StreamController<UploadState> _stateStreamController =
@@ -39,6 +37,9 @@ class BleUploader {
   );
 
   void upload(Uint8List data) {
+    if (state.status == UploadStatus.end) {
+      _subscribeToCharacteristic();
+    }
     state.status = UploadStatus.idle;
     _stateStreamController.add(state);
     _dataToSend = data;
@@ -80,6 +81,10 @@ class BleUploader {
     _currentBufferSize = 0;
     _packageMaxSize = _bytesToUint32(data, attrSizePos) - headCodeBytesNum;
     _bufferMaxSize = _bytesToUint32(data, bufferSizePos);
+
+    // TODO: fix and remove
+    ble.requestMtu(
+        deviceId: deviceId, mtu: _packageMaxSize + headCodeBytesNum + 4);
   }
 
   void _sendPackages() {
@@ -123,6 +128,12 @@ class BleUploader {
 
   int _bytesToUint32(Uint8List data, int offset) =>
       data.buffer.asByteData().getUint32(offset, Endian.little);
+
+  void _subscribeToCharacteristic() {
+    ble
+        .subscribeToCharacteristic(_characteristicTx)
+        .listen((event) => _handleResp(Uint8List.fromList(event)));
+  }
 
   static _crateCharacteristic(Uuid charUuid, String deviceId) =>
       QualifiedCharacteristic(
