@@ -43,9 +43,12 @@ class StatusScreenState extends State<StatusScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Center(
-          child: Text(_determineText(ble.status)),
+  Widget build(BuildContext context) => WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          body: Center(
+            child: Text(_determineText(ble.status)),
+          ),
         ),
       );
 }
