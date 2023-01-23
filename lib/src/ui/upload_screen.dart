@@ -88,18 +88,18 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   String _determinateUpdateStatus() {
-  switch (widget.bleUploader.state.status) {
-    case UploadStatus.upload:
-      return "Uploading..";
-    case UploadStatus.end:
-      return "Success!";
-    case UploadStatus.error:
-      return "Error: ${widget.bleUploader.state.errorMsg}";
-    case UploadStatus.idle:
-      return "Ready";
-    default:
-      return "Unknown status";
-  }
+    switch (widget.bleUploader.state.status) {
+      case UploadStatus.upload:
+        return "Uploading..";
+      case UploadStatus.end:
+        return "Success!";
+      case UploadStatus.error:
+        return "Error: ${widget.bleUploader.state.errorMsg}";
+      case UploadStatus.idle:
+        return "Ready";
+      default:
+        return "Unknown status";
+    }
   }
 
   @override
@@ -116,6 +116,9 @@ class UploadScreenState extends State<UploadScreen> {
               Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
               Text("Status: ${_determinateUpdateStatus()}"),
               LinearProgressIndicator(value: widget.bleUploader.state.progress),
+              Flexible(
+                child: ListView(),
+              ),
               ElevatedButton.icon(
                 icon: const Icon(Icons.file_open),
                 label: const Text('Upload file'),
