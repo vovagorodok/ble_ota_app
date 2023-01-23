@@ -102,7 +102,7 @@ class UploadScreenState extends State<UploadScreen> {
               LinearProgressIndicator(value: widget.bleUploader.state.progress),
               ElevatedButton.icon(
                 icon: const Icon(Icons.file_open),
-                label: const Text('Open bin file'),
+                label: const Text('Upload file'),
                 onPressed: _isUploading() ? null : _pickFile,
               )
             ],
