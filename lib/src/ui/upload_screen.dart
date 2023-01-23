@@ -100,9 +100,11 @@ class UploadScreenState extends State<UploadScreen> {
               Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
               Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
               LinearProgressIndicator(value: widget.bleUploader.state.progress),
-              ElevatedButton(
-                  onPressed: _isUploading() ? null : _pickFile,
-                  child: const Text('Upload from file'))
+              ElevatedButton.icon(
+                icon: const Icon(Icons.file_open),
+                label: const Text('Open bin file'),
+                onPressed: _isUploading() ? null : _pickFile,
+              )
             ],
           ),
         ),
