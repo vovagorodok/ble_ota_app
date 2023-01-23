@@ -35,59 +35,62 @@ class ScanerScreenState extends State<ScanerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: StreamBuilder<BleScannerState>(
-          stream: bleScanner.stateStream,
-          builder: (context, snapshot) => Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Flexible(
-                child: ListView(
-                  children: bleScanner.state.discoveredDevices
-                      .map(
-                        (device) => ListTile(
-                          title: Text(device.name),
-                          subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                          leading: const Icon(Icons.bluetooth),
-                          onTap: () async {
-                            bleScanner.stopScan();
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UploadScreen(
-                                    deviceId: device.id,
-                                    deviceName: device.name),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                      .toList(),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: StreamBuilder<BleScannerState>(
+            stream: bleScanner.stateStream,
+            builder: (context, snapshot) => Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: ListView(
+                    children: bleScanner.state.discoveredDevices
+                        .map(
+                          (device) => ListTile(
+                            title: Text(device.name),
+                            subtitle:
+                                Text("${device.id}\nRSSI: ${device.rssi}"),
+                            leading: const Icon(Icons.bluetooth),
+                            onTap: () async {
+                              bleScanner.stopScan();
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UploadScreen(
+                                      deviceId: device.id,
+                                      deviceName: device.name),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.search),
-                    label: const Text('Scan'),
-                    onPressed: !bleScanner.state.scanIsInProgress
-                        ? () => bleScanner.startScan([serviceUuid])
-                        : null,
-                  ),
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.search_off),
-                    label: const Text('Stop'),
-                    onPressed: bleScanner.state.scanIsInProgress
-                        ? bleScanner.stopScan
-                        : null,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
-            ],
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.search),
+                      label: const Text('Scan'),
+                      onPressed: !bleScanner.state.scanIsInProgress
+                          ? () => bleScanner.startScan([serviceUuid])
+                          : null,
+                    ),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.search_off),
+                      label: const Text('Stop'),
+                      onPressed: bleScanner.state.scanIsInProgress
+                          ? bleScanner.stopScan
+                          : null,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 25),
+              ],
+            ),
           ),
         ),
       ),

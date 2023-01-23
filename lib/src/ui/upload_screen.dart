@@ -104,27 +104,30 @@ class UploadScreenState extends State<UploadScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(25.0, 35.0, 25.0, 25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(widget.deviceName,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
-              Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
-              Text("Status: ${_determinateUpdateStatus()}"),
-              LinearProgressIndicator(value: widget.bleUploader.state.progress),
-              Flexible(
-                child: ListView(),
-              ),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.file_open),
-                label: const Text('Upload file'),
-                onPressed: _isUploading() ? null : _pickFile,
-              )
-            ],
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(25.0, 35.0, 25.0, 25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(widget.deviceName,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
+                Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
+                Text("Status: ${_determinateUpdateStatus()}"),
+                LinearProgressIndicator(
+                    value: widget.bleUploader.state.progress),
+                Flexible(
+                  child: ListView(),
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.file_open),
+                  label: const Text('Upload file'),
+                  onPressed: _isUploading() ? null : _pickFile,
+                )
+              ],
+            ),
           ),
         ),
       );

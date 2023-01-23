@@ -20,9 +20,9 @@ class StatusScreenState extends State<StatusScreen> {
       case BleStatus.unauthorized:
         return "Authorize applicatin to use Bluetooth and location";
       case BleStatus.poweredOff:
-        return "Bluetooth is powered off on your device turn it on";
+        return "Bluetooth is disabled, turn it on";
       case BleStatus.locationServicesDisabled:
-        return "Enable location services";
+        return "Location services are disabled, enable it";
       case BleStatus.ready:
         return "Bluetooth is up and running";
       default:
@@ -53,14 +53,16 @@ class StatusScreenState extends State<StatusScreen> {
   Widget build(BuildContext context) => WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Center(
-              child: Text(
-                _determineText(ble.status),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 30.0),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Center(
+                child: Text(
+                  _determineText(ble.status),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 30.0),
+                ),
               ),
             ),
           ),
