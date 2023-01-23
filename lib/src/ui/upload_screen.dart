@@ -106,7 +106,7 @@ class UploadScreenState extends State<UploadScreen> {
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(25.0, 35.0, 25.0, 25.0),
+            padding: const EdgeInsets.all(25.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
