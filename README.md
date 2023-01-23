@@ -2,7 +2,7 @@
 Mobile application for upload firmware over Bluetooth.
 
 ## Setup environment using snap
-### Android studio:
+### Android Studio:
 ```
 sudo snap install android-studio --classic
 android-studio
