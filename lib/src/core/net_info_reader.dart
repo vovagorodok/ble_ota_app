@@ -21,9 +21,11 @@ class NetInfoReader {
       final body = json.decode(data);
       final hardwarePath = body[hwInfo.hwName];
 
-      // if (hardwarePath) {
+      if (hardwarePath != null) {
         print("VOVA: hardwarePath: $hardwarePath");
-      // }
+      } else {
+        print("VOVA: is NULL");
+      }
 
       infoState.ready = true;
       _infoStreamController.add(infoState);
