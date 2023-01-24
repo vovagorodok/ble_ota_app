@@ -174,7 +174,10 @@ class UploadScreenState extends State<UploadScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(widget.deviceName,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    )),
                 Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
                 Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
                 Text("Status: ${_determinateStatusText()}"),
