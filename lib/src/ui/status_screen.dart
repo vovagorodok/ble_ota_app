@@ -61,7 +61,9 @@ class StatusScreenState extends State<StatusScreen> {
                   _determineText(ble.status),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 30.0),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30.0,
+                  ),
                 ),
               ),
             ),
