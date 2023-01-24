@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ble_ota_app/src/core/hardware_info.dart';
+import 'package:ble_ota_app/src/core/version.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';

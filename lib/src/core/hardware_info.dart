@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+import 'package:ble_ota_app/src/core/version.dart';
 
 class HardwareInfo {
   HardwareInfo({
@@ -12,17 +12,4 @@ class HardwareInfo {
   Version hwVer;
   String swName;
   Version swVer;
-}
-
-@immutable
-class Version {
-  const Version({
-    required this.major,
-    required this.minor,
-    required this.patch,
-  });
-
-  final int major;
-  final int minor;
-  final int patch;
 }
