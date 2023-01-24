@@ -7,6 +7,7 @@ import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:ble_ota_app/src/core/hardware_info.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
@@ -36,7 +37,7 @@ class UploadScreenState extends State<UploadScreen> {
     }
   }
 
-  void _onInfoChanged(Info info) {
+  void _onInfoChanged(InfoState info) {
     setState(() {});
   }
 
@@ -63,10 +64,12 @@ class UploadScreenState extends State<UploadScreen> {
 
   bool _isUploading() => widget.bleUploader.state.status == UploadStatus.upload;
   String _buildVerStr(Version ver) => "${ver.major}.${ver.minor}.${ver.patch}";
-  String _buildInfoStr(Info info, String name, Version ver) =>
-      info.ready ? "${info.hwName} v${_buildVerStr(info.hwVer)}" : "reading..";
-  String _buildHwStr(Info info) => _buildInfoStr(info, info.hwName, info.hwVer);
-  String _buildSwStr(Info info) => _buildInfoStr(info, info.swName, info.swVer);
+  String _buildInfoStr(InfoState info, String name, Version ver) =>
+      info.ready ? "$name v${_buildVerStr(ver)}" : "reading..";
+  String _buildHwStr(InfoState info) =>
+      _buildInfoStr(info, info.hwInfo.hwName, info.hwInfo.hwVer);
+  String _buildSwStr(InfoState info) =>
+      _buildInfoStr(info, info.hwInfo.swName, info.hwInfo.swVer);
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -178,8 +181,10 @@ class UploadScreenState extends State<UploadScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     )),
-                Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
-                Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
+                Text(
+                    "Hardware: ${_buildHwStr(widget.bleInfoReader.infoState)}"),
+                Text(
+                    "Software: ${_buildSwStr(widget.bleInfoReader.infoState)}"),
                 Text("Status: ${_determinateStatusText()}"),
                 const SizedBox(height: 20),
                 Row(

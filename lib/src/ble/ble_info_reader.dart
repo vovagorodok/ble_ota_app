@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
+import 'package:ble_ota_app/src/core/hardware_info.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
@@ -20,15 +20,17 @@ class BleInfoReader {
   final QualifiedCharacteristic _characteristicHwVer;
   final QualifiedCharacteristic _characteristicSwName;
   final QualifiedCharacteristic _characteristicSwVer;
-  final StreamController<Info> _infoStreamController = StreamController();
+  final StreamController<InfoState> _infoStreamController = StreamController();
 
-  Stream<Info> get infoStream => _infoStreamController.stream;
+  Stream<InfoState> get infoStream => _infoStreamController.stream;
 
-  Info info = Info(
-    hwName: "",
-    hwVer: const Version(major: 0, minor: 0, patch: 0),
-    swName: "",
-    swVer: const Version(major: 0, minor: 0, patch: 0),
+  InfoState infoState = InfoState(
+    hwInfo: HardwareInfo(
+      hwName: "",
+      hwVer: const Version(major: 0, minor: 0, patch: 0),
+      swName: "",
+      swVer: const Version(major: 0, minor: 0, patch: 0),
+    ),
     ready: false,
   );
 
@@ -36,21 +38,21 @@ class BleInfoReader {
       Version(major: data[0], minor: data[1], patch: data[2]);
 
   void read() {
-    info.ready = false;
-    _infoStreamController.add(info);
+    infoState.ready = false;
+    _infoStreamController.add(infoState);
 
     () async {
-      info.hwName = String.fromCharCodes(
+      infoState.hwInfo.hwName = String.fromCharCodes(
           await ble.readCharacteristic(_characteristicHwName));
-      info.hwVer =
+      infoState.hwInfo.hwVer =
           _convertToVer(await ble.readCharacteristic(_characteristicHwVer));
-      info.swName = String.fromCharCodes(
+      infoState.hwInfo.swName = String.fromCharCodes(
           await ble.readCharacteristic(_characteristicSwName));
-      info.swVer =
+      infoState.hwInfo.swVer =
           _convertToVer(await ble.readCharacteristic(_characteristicSwVer));
-      info.ready = true;
+      infoState.ready = true;
 
-      _infoStreamController.add(info);
+      _infoStreamController.add(infoState);
     }.call();
   }
 
@@ -61,31 +63,12 @@ class BleInfoReader {
           deviceId: deviceId);
 }
 
-class Info {
-  Info({
-    required this.hwName,
-    required this.hwVer,
-    required this.swName,
-    required this.swVer,
+class InfoState {
+  InfoState({
+    required this.hwInfo,
     required this.ready,
   });
 
-  String hwName;
-  Version hwVer;
-  String swName;
-  Version swVer;
+  HardwareInfo hwInfo;
   bool ready;
-}
-
-@immutable
-class Version {
-  const Version({
-    required this.major,
-    required this.minor,
-    required this.patch,
-  });
-
-  final int major;
-  final int minor;
-  final int patch;
 }

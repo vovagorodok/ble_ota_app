@@ -16,6 +16,14 @@
     },
     {
         "hardware_name": "UNKNOWN",
+        "min_hardware_version" : [0, 0, 1],
+        "max_hardware_version" : [0, 0, 2],
+        "software_name": "UNKNOWN",
+        "software_version" : [0, 0, 2],
+        "software_path": "https://doc-0s-38-docs.googleusercontent.com/docs/securesc/3er7nu8i873frjlbqnuto6fr5n159b14/iu3lpg17afs2j99o63nlsqs2t9q112v2/1674582900000/07294865534589424737/07294865534589424737/1-3QeuuULNp6oxLB4ecpVuYaRHg54LDa7?e=download&ax=ALjR8szMZthdhBtzoshdSe4kH5p1JchkthTC1TIQ0FT6jKa2pwOdQjm78RuIe6SJx38pTMbI_gEBFI-Mze8CHotMcnayioT1fizNp1h3Snd6z-pMKn0-vHk9L6S_j6_XG4q8Sp9c9PLo6rXoz4aBwjj8ZCtBolpbRE7q8hy00ANw17KPi2IuC70bS3K9sEhP2q37U0c70-hS1323g6tADxeeN7IP1EUr2952KGudYt4yZDeOJJAfZbNSgmbFXvjyQ-ji5jsbwFXWtLJqumNGrOTb9SIpiVGdgtMQ2qsvbhA0KQ19mlV_rkbbsoCXhlgqXOmSQhoJlb3nSYn7J92hWJBV6AG_AauIXb01DxrQGXO2p-RVgwK7lKa_tnNu9bTgMJElP5wyirp9HoaHSgWnbhUVjk5bLgSB5ohwtmAa29OuwIur5NkQ2qH5OVY0NdwksFe_Nym90mTGfa55SOxqOugMMbECJdP7kTtisclt1Zdu4VRZbZDIZtbHz60OpqPvQ_B0XWneuOYoDaNpkrPnA5_BAnyxC6YcYccSWVvXjQd0XI6Vee-oFbWcQNHujQImSSliRrnciNBPbCzdJiWyPutuyjZCY07vcgEkb5GvO9JXrnIe3btxcjZ312-u6r348_JPnOuH9SXqZpMmJaimUyyHvaLr4p9UIxn6koftBnIU51t8kHSScgcAmA5Sp7EHsrpsJ6yBg5_b-inFDlF66r8OVvEpXqQ5llbo9bqs8mT-O0HzNONJB1uyURRPeYj7Z1Rsjeb1ZGT07HHOpAdfzOe4YBrzsb4LS0WcfGB_75maSx4yOG2rECIeejUd68KYHY9ocZ2cCYG6z1qXKuiHxDGnWVsFn2ju5BikrxQ8tXg_gBS_YIsHBabqnnh0oKqUBw4ctw&uuid=28c4f5d5-d7f7-4aa1-bbe2-13973e05cf15&authuser=0&nonce=8rlbeiu20c6ae&user=07294865534589424737&hash=9u9h2ia6mo0m2q8bu08kacql44aimdj1"
+    },
+    {
+        "hardware_name": "UNKNOWN",
         "hardware_version" : [0, 0, 0],
         "software_name": "New experimental soft",
         "software_version" : [0, 3, 0],
