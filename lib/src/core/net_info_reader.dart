@@ -1,35 +1,31 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:ble_ota_app/src/core/hardware_info.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
-import 'package:ble_ota_app/src/core/version.dart';
+import 'package:flutter/services.dart';
 
 class NetInfoReader {
   final StreamController<SwInfoState> _infoStreamController =
       StreamController();
 
   Stream<SwInfoState> get infoStream => _infoStreamController.stream;
+  SwInfoState infoState = SwInfoState();
 
-  SwInfoState infoState = SwInfoState(
-    swInfoList: [],
-    newest: SoftwareInfo(
-      name: "",
-      ver: const Version(major: 0, minor: 0, patch: 0),
-      path: "",
-    ),
-    hasNewest: false,
-    ready: false,
-  );
-
-  Version _convertToVer(List<int> data) =>
-      Version(major: data[0], minor: data[1], patch: data[2]);
-
-  void read() {
+  void read(HardwareInfo hwInfo) {
     infoState.ready = false;
     _infoStreamController.add(infoState);
 
     () async {
-      infoState.ready = true;
+      final data = await rootBundle.loadString("assets/hardwares.json");
+      final body = json.decode(data);
+      final hardwarePath = body[hwInfo.hwName];
 
+      // if (hardwarePath) {
+        print("VOVA: hardwarePath: $hardwarePath");
+      // }
+
+      infoState.ready = true;
       _infoStreamController.add(infoState);
     }.call();
   }
@@ -37,14 +33,12 @@ class NetInfoReader {
 
 class SwInfoState {
   SwInfoState({
-    required this.swInfoList,
-    required this.newest,
-    required this.hasNewest,
-    required this.ready,
+    this.swInfoList = const [],
+    this.newest,
+    this.ready = false,
   });
 
   List<SoftwareInfo> swInfoList;
-  SoftwareInfo newest;
-  bool hasNewest;
+  SoftwareInfo? newest;
   bool ready;
 }

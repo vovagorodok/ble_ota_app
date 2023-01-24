@@ -29,12 +29,7 @@ class BleUploader {
   int _bufferMaxSize = 0;
 
   Stream<UploadState> get stateStream => _stateStreamController.stream;
-
-  UploadState state = UploadState(
-    status: UploadStatus.idle,
-    progress: 0.0,
-    errorMsg: "",
-  );
+  UploadState state = UploadState();
 
   void upload(Uint8List data) {
     if (state.status == UploadStatus.end) {
@@ -144,9 +139,9 @@ class BleUploader {
 
 class UploadState {
   UploadState({
-    required this.status,
-    required this.progress,
-    required this.errorMsg,
+    this.status = UploadStatus.idle,
+    this.progress = 0.0,
+    this.errorMsg = "",
   });
 
   UploadStatus status;

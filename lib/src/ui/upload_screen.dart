@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
-import 'package:ble_ota_app/src/core/version.dart';
+import 'package:ble_ota_app/src/core/net_info_reader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -14,6 +14,7 @@ class UploadScreen extends StatefulWidget {
       : bleConnector = BleConnector(deviceId: deviceId),
         bleInfoReader = BleInfoReader(deviceId: deviceId),
         bleUploader = BleUploader(deviceId: deviceId),
+        netInfoReader = NetInfoReader(),
         super(key: key);
 
   final String deviceId;
@@ -21,6 +22,7 @@ class UploadScreen extends StatefulWidget {
   final BleConnector bleConnector;
   final BleInfoReader bleInfoReader;
   final BleUploader bleUploader;
+  final NetInfoReader netInfoReader;
 
   @override
   State<UploadScreen> createState() => UploadScreenState();
@@ -38,7 +40,11 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   void _onInfoChanged(HwInfoState info) {
-    setState(() {});
+    setState(() {
+      if (info.ready) {
+        widget.netInfoReader.read(info.hwInfo);
+      }
+    });
   }
 
   void _onUploadStateChanged(UploadState state) {
@@ -63,13 +69,6 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _isUploading() => widget.bleUploader.state.status == UploadStatus.upload;
-  String _buildVerStr(Version ver) => "${ver.major}.${ver.minor}.${ver.patch}";
-  String _buildInfoStr(HwInfoState info, String name, Version ver) =>
-      info.ready ? "$name v${_buildVerStr(ver)}" : "reading..";
-  String _buildHwStr(HwInfoState info) =>
-      _buildInfoStr(info, info.hwInfo.hwName, info.hwInfo.hwVer);
-  String _buildSwStr(HwInfoState info) =>
-      _buildInfoStr(info, info.hwInfo.swName, info.hwInfo.swVer);
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -182,9 +181,9 @@ class UploadScreenState extends State<UploadScreen> {
                       fontSize: 20,
                     )),
                 Text(
-                    "Hardware: ${_buildHwStr(widget.bleInfoReader.infoState)}"),
+                    "Hardware: ${widget.bleInfoReader.infoState.toHwString()}"),
                 Text(
-                    "Software: ${_buildSwStr(widget.bleInfoReader.infoState)}"),
+                    "Software: ${widget.bleInfoReader.infoState.toSwString()}"),
                 Text("Status: ${_determinateStatusText()}"),
                 const SizedBox(height: 20),
                 Row(

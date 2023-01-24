@@ -25,33 +25,23 @@ class BleInfoReader {
       StreamController();
 
   Stream<HwInfoState> get infoStream => _infoStreamController.stream;
-
-  HwInfoState infoState = HwInfoState(
-    hwInfo: HardwareInfo(
-      hwName: "",
-      hwVer: const Version(major: 0, minor: 0, patch: 0),
-      swName: "",
-      swVer: const Version(major: 0, minor: 0, patch: 0),
-    ),
-    ready: false,
-  );
-
-  Version _convertToVer(List<int> data) =>
-      Version(major: data[0], minor: data[1], patch: data[2]);
+  HwInfoState infoState = HwInfoState();
 
   void read() {
     infoState.ready = false;
     _infoStreamController.add(infoState);
 
     () async {
-      infoState.hwInfo.hwName = String.fromCharCodes(
-          await ble.readCharacteristic(_characteristicHwName));
-      infoState.hwInfo.hwVer =
-          _convertToVer(await ble.readCharacteristic(_characteristicHwVer));
-      infoState.hwInfo.swName = String.fromCharCodes(
-          await ble.readCharacteristic(_characteristicSwName));
-      infoState.hwInfo.swVer =
-          _convertToVer(await ble.readCharacteristic(_characteristicSwVer));
+      infoState.hwInfo = HardwareInfo(
+        hwName: String.fromCharCodes(
+            await ble.readCharacteristic(_characteristicHwName)),
+        hwVer: Version.fromList(
+            await ble.readCharacteristic(_characteristicHwVer)),
+        swName: String.fromCharCodes(
+            await ble.readCharacteristic(_characteristicSwName)),
+        swVer: Version.fromList(
+            await ble.readCharacteristic(_characteristicSwVer)),
+      );
       infoState.ready = true;
 
       _infoStreamController.add(infoState);
@@ -67,9 +57,13 @@ class BleInfoReader {
 
 class HwInfoState {
   HwInfoState({
-    required this.hwInfo,
-    required this.ready,
+    this.hwInfo = const HardwareInfo(),
+    this.ready = false,
   });
+
+  String _toString(name, ver) => ready ? "$name v$ver" : "reading..";
+  String toHwString() => _toString(hwInfo.hwName, hwInfo.hwVer);
+  String toSwString() => _toString(hwInfo.swName, hwInfo.swVer);
 
   HardwareInfo hwInfo;
   bool ready;
