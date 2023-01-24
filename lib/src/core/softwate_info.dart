@@ -18,9 +18,15 @@ class SoftwareInfo {
         name: json["software_name"],
         ver: Version.fromList(json["software_version"]),
         path: json["software_path"],
-        hwName: json["hardware_name"],
         icon: json["software_icon"],
+        hwName: json["hardware_name"],
+        hwVer: _getOptionalVersion(json, "hardware_version"),
+        minHwVer: _getOptionalVersion(json, "min_hardware_version"),
+        maxHwVer: _getOptionalVersion(json, "max_hardware_version"),
       );
+
+  static _getOptionalVersion(json, key) =>
+      json.containsKey(key) ? Version.fromList(json[key]) : null;
 
   final String name;
   final Version ver;
