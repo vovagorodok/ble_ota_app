@@ -87,7 +87,7 @@ class UploadScreenState extends State<UploadScreen> {
     widget.bleUploader.upload(data);
   }
 
-  String _determinateUpdateStatus() {
+  String _determinateStatusText() {
     switch (widget.bleUploader.state.status) {
       case UploadStatus.upload:
         return "Uploading..";
@@ -100,6 +100,68 @@ class UploadScreenState extends State<UploadScreen> {
       default:
         return "Unknown status";
     }
+  }
+
+  MaterialColor _determinateStatusColor() {
+    switch (widget.bleUploader.state.status) {
+      case UploadStatus.upload:
+        return Colors.blue;
+      case UploadStatus.end:
+        return Colors.green;
+      case UploadStatus.error:
+        return Colors.red;
+      case UploadStatus.idle:
+        return Colors.blue;
+      default:
+        return Colors.blue;
+    }
+  }
+
+  Widget _buildProgressInside() {
+    final state = widget.bleUploader.state;
+    if (state.status == UploadStatus.error) {
+      return const Icon(
+        Icons.error,
+        color: Colors.red,
+        size: 56,
+      );
+    } else if (state.status == UploadStatus.end) {
+      return const Icon(
+        Icons.done,
+        color: Colors.green,
+        size: 56,
+      );
+    } else {
+      return Text(
+        (state.progress * 100).toStringAsFixed(1),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: state.status == UploadStatus.upload
+              ? Colors.blue
+              : Colors.blue.shade200,
+          fontSize: 24,
+        ),
+      );
+    }
+  }
+
+  Widget _buildProgressWidget() {
+    return SizedBox(
+      width: 120,
+      height: 120,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          CircularProgressIndicator(
+            value: widget.bleUploader.state.progress,
+            color: _determinateStatusColor(),
+            strokeWidth: 10,
+            backgroundColor: _determinateStatusColor().shade200,
+          ),
+          Center(child: _buildProgressInside()),
+        ],
+      ),
+    );
   }
 
   @override
@@ -115,9 +177,12 @@ class UploadScreenState extends State<UploadScreen> {
                     style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text("Hardware: ${_buildHwStr(widget.bleInfoReader.info)}"),
                 Text("Software: ${_buildSwStr(widget.bleInfoReader.info)}"),
-                Text("Status: ${_determinateUpdateStatus()}"),
-                LinearProgressIndicator(
-                    value: widget.bleUploader.state.progress),
+                Text("Status: ${_determinateStatusText()}"),
+                const SizedBox(height: 20),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [_buildProgressWidget()]),
+                const SizedBox(height: 20),
                 Flexible(
                   child: ListView(),
                 ),
