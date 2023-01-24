@@ -21,11 +21,12 @@ class BleInfoReader {
   final QualifiedCharacteristic _characteristicHwVer;
   final QualifiedCharacteristic _characteristicSwName;
   final QualifiedCharacteristic _characteristicSwVer;
-  final StreamController<InfoState> _infoStreamController = StreamController();
+  final StreamController<HwInfoState> _infoStreamController =
+      StreamController();
 
-  Stream<InfoState> get infoStream => _infoStreamController.stream;
+  Stream<HwInfoState> get infoStream => _infoStreamController.stream;
 
-  InfoState infoState = InfoState(
+  HwInfoState infoState = HwInfoState(
     hwInfo: HardwareInfo(
       hwName: "",
       hwVer: const Version(major: 0, minor: 0, patch: 0),
@@ -64,8 +65,8 @@ class BleInfoReader {
           deviceId: deviceId);
 }
 
-class InfoState {
-  InfoState({
+class HwInfoState {
+  HwInfoState({
     required this.hwInfo,
     required this.ready,
   });
