@@ -179,7 +179,6 @@ class UploadScreenState extends State<UploadScreen> {
             child: ListTile(
               leading: CircleAvatar(
                 radius: 28,
-                
                 backgroundColor: Colors.grey,
                 backgroundImage:
                     sw.icon != null ? NetworkImage(sw.icon!) : null,
