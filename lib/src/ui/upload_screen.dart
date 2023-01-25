@@ -39,7 +39,7 @@ class UploadScreenState extends State<UploadScreen> {
     }
   }
 
-  void _onInfoChanged(HwInfoState info) {
+  void _onHwInfoStateChanged(HwInfoState info) {
     setState(() {
       if (info.ready) {
         widget.netInfoReader.read(info.hwInfo);
@@ -51,10 +51,15 @@ class UploadScreenState extends State<UploadScreen> {
     setState(() {});
   }
 
+  void _onSwInfoStateChanged(SwInfoState state) {
+    setState(() {});
+  }
+
   @override
   void initState() {
+    widget.netInfoReader.infoStream.listen(_onSwInfoStateChanged);
     widget.bleUploader.stateStream.listen(_onUploadStateChanged);
-    widget.bleInfoReader.infoStream.listen(_onInfoChanged);
+    widget.bleInfoReader.infoStream.listen(_onHwInfoStateChanged);
     _connection =
         widget.bleConnector.stateStream.listen(_onConnectionStateChanged);
     widget.bleConnector.connect();
