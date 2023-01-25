@@ -32,10 +32,10 @@ class BleUploader {
   UploadState state = UploadState();
 
   void upload(Uint8List data) {
-    if (state.status == UploadStatus.end) {
+    if (state.status == UploadStatus.success) {
       _subscribeToCharacteristic();
     }
-    state = UploadState();
+    state = UploadState(status: UploadStatus.begin);
     _stateStreamController.add(state);
     _dataToSend = data;
     _sendBegin();
@@ -53,12 +53,14 @@ class BleUploader {
   void _handleResp(Uint8List data) {
     var headCode = _bytesToUint8(data, headCodePos);
     if (headCode == HeadCode.ok) {
-      if (state.status == UploadStatus.idle) {
+      if (state.status == UploadStatus.begin) {
         _handleBeginResp(data);
         _sendPackages();
       } else if (state.status == UploadStatus.upload) {
         _sendPackages();
       } else if (state.status == UploadStatus.end) {
+        _dataToSend = Uint8List(0);
+        state.status = UploadStatus.success;
         _stateStreamController.add(state);
       }
     } else {
@@ -70,7 +72,6 @@ class BleUploader {
 
   void _handleBeginResp(Uint8List data) {
     state.status = UploadStatus.upload;
-    state.progress = 0.0;
     _stateStreamController.add(state);
     _currentDataPos = 0;
     _currentBufferSize = 0;
@@ -149,4 +150,4 @@ class UploadState {
   String errorMsg;
 }
 
-enum UploadStatus { idle, upload, end, error }
+enum UploadStatus { idle, begin, upload, end, success, error }

@@ -8,6 +8,7 @@ import 'package:ble_ota_app/src/core/net_info_reader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:wakelock/wakelock.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
@@ -48,7 +49,14 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   void _onUploadStateChanged(UploadState state) {
-    setState(() {});
+    setState(() {
+      if (state.status == UploadStatus.begin) {
+        Wakelock.enable();
+      } else if (state.status == UploadStatus.success ||
+          state.status == UploadStatus.error) {
+        Wakelock.disable();
+      }
+    });
   }
 
   void _onSwInfoStateChanged(SwInfoState state) {
@@ -71,9 +79,14 @@ class UploadScreenState extends State<UploadScreen> {
     super.dispose();
     _connection.cancel();
     widget.bleConnector.disconnect();
+    Wakelock.disable();
   }
 
-  bool _isUploading() => widget.bleUploader.state.status == UploadStatus.upload;
+  bool _isUploaderBuisy(UploadStatus status) {
+    return status == UploadStatus.begin ||
+        status == UploadStatus.upload ||
+        status == UploadStatus.end;
+  }
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -96,9 +109,13 @@ class UploadScreenState extends State<UploadScreen> {
 
   String _determinateStatusText() {
     switch (widget.bleUploader.state.status) {
+      case UploadStatus.begin:
+        return "Starting..";
       case UploadStatus.upload:
         return "Uploading..";
       case UploadStatus.end:
+        return "Ending..";
+      case UploadStatus.success:
         return "Success!";
       case UploadStatus.error:
         return "Error: ${widget.bleUploader.state.errorMsg}";
@@ -111,9 +128,13 @@ class UploadScreenState extends State<UploadScreen> {
 
   MaterialColor _determinateStatusColor() {
     switch (widget.bleUploader.state.status) {
+      case UploadStatus.begin:
+        return Colors.blue;
       case UploadStatus.upload:
         return Colors.blue;
       case UploadStatus.end:
+        return Colors.blue;
+      case UploadStatus.success:
         return Colors.green;
       case UploadStatus.error:
         return Colors.red;
@@ -132,7 +153,7 @@ class UploadScreenState extends State<UploadScreen> {
         color: Colors.red,
         size: 56,
       );
-    } else if (state.status == UploadStatus.end) {
+    } else if (state.status == UploadStatus.success) {
       return const Icon(
         Icons.done,
         color: Colors.green,
@@ -143,9 +164,9 @@ class UploadScreenState extends State<UploadScreen> {
         (state.progress * 100).toStringAsFixed(1),
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: state.status == UploadStatus.upload
-              ? Colors.blue
-              : Colors.blue.shade200,
+          color: state.status == UploadStatus.idle
+              ? Colors.blue.shade200
+              : Colors.blue,
           fontSize: 24,
         ),
       );
@@ -220,7 +241,9 @@ class UploadScreenState extends State<UploadScreen> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.file_open),
                   label: const Text('Upload file'),
-                  onPressed: _isUploading() ? null : _pickFile,
+                  onPressed: _isUploaderBuisy(widget.bleUploader.state.status)
+                      ? null
+                      : _pickFile,
                 )
               ],
             ),

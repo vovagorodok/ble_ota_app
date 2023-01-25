@@ -41,6 +41,7 @@ dependencies:
   archive: ^3.3.5
   permission_handler: ^10.2.0
   http: ^0.13.5
+  wakelock: ^0.6.2
 
 dev_dependencies:
   flutter_test:

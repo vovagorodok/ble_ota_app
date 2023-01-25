@@ -5,6 +5,7 @@ import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ui/upload_screen.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:wakelock/wakelock.dart';
 
 class ScanerScreen extends StatefulWidget {
   const ScanerScreen({Key? key}) : super(key: key);
@@ -17,6 +18,8 @@ class ScanerScreenState extends State<ScanerScreen> {
   void _evaluateBleStatus(BleStatus status) {
     setState(() {
       if (status != BleStatus.ready && status != BleStatus.unknown) {
+        Wakelock.disable();
+        bleScanner.stopScan();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const StatusScreen()),
@@ -47,22 +50,25 @@ class ScanerScreenState extends State<ScanerScreen> {
                   child: ListView(
                     children: bleScanner.state.discoveredDevices
                         .map(
-                          (device) => ListTile(
-                            title: Text(device.name),
-                            subtitle:
-                                Text("${device.id}\nRSSI: ${device.rssi}"),
-                            leading: const Icon(Icons.bluetooth),
-                            onTap: () async {
-                              bleScanner.stopScan();
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UploadScreen(
-                                      deviceId: device.id,
-                                      deviceName: device.name),
-                                ),
-                              );
-                            },
+                          (device) => Card(
+                            child: ListTile(
+                              title: Text(device.name),
+                              subtitle:
+                                  Text("${device.id}\nRSSI: ${device.rssi}"),
+                              leading: const Icon(Icons.bluetooth),
+                              onTap: () async {
+                                Wakelock.disable();
+                                bleScanner.stopScan();
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UploadScreen(
+                                        deviceId: device.id,
+                                        deviceName: device.name),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         )
                         .toList(),
@@ -76,14 +82,20 @@ class ScanerScreenState extends State<ScanerScreen> {
                       icon: const Icon(Icons.search),
                       label: const Text('Scan'),
                       onPressed: !bleScanner.state.scanIsInProgress
-                          ? () => bleScanner.startScan([serviceUuid])
+                          ? () {
+                              Wakelock.enable();
+                              bleScanner.startScan([serviceUuid]);
+                            }
                           : null,
                     ),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.search_off),
                       label: const Text('Stop'),
                       onPressed: bleScanner.state.scanIsInProgress
-                          ? bleScanner.stopScan
+                          ? () {
+                              Wakelock.disable();
+                              bleScanner.stopScan();
+                            }
                           : null,
                     ),
                   ],
