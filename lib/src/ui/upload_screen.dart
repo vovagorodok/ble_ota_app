@@ -171,6 +171,26 @@ class UploadScreenState extends State<UploadScreen> {
     );
   }
 
+  Widget _buildSoftwareList() => ListView.builder(
+        itemCount: widget.netInfoReader.infoState.swInfoList.length,
+        itemBuilder: (context, index) {
+          final sw = widget.netInfoReader.infoState.swInfoList[index];
+          return Card(
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 28,
+                
+                backgroundColor: Colors.grey,
+                backgroundImage:
+                    sw.icon != null ? NetworkImage(sw.icon!) : null,
+              ),
+              title: Text("$sw"),
+              subtitle: const Text(""),
+            ),
+          );
+        },
+      );
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
@@ -196,7 +216,7 @@ class UploadScreenState extends State<UploadScreen> {
                     children: [_buildProgressWidget()]),
                 const SizedBox(height: 20),
                 Flexible(
-                  child: ListView(),
+                  child: _buildSoftwareList(),
                 ),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.file_open),

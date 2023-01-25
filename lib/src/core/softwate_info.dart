@@ -25,6 +25,11 @@ class SoftwareInfo {
         maxHwVer: _getOptionalVersion(json, "max_hardware_version"),
       );
 
+  @override
+  String toString() {
+    return "$name v$ver";
+  }
+
   static _getOptionalVersion(json, key) =>
       json.containsKey(key) ? Version.fromList(json[key]) : null;
 
