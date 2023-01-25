@@ -35,7 +35,7 @@ class BleUploader {
     if (state.status == UploadStatus.end) {
       _subscribeToCharacteristic();
     }
-    state.status = UploadStatus.idle;
+    state = UploadState();
     _stateStreamController.add(state);
     _dataToSend = data;
     _sendBegin();
