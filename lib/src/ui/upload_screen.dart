@@ -8,6 +8,7 @@ import 'package:ble_ota_app/src/core/net_info_reader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
 
 class UploadScreen extends StatefulWidget {
@@ -195,23 +196,45 @@ class UploadScreenState extends State<UploadScreen> {
     );
   }
 
-  Widget _buildSoftwareList() => ListView.builder(
-        itemCount: widget.netInfoReader.infoState.swInfoList.length,
-        itemBuilder: (context, index) {
-          final sw = widget.netInfoReader.infoState.swInfoList[index];
-          return Card(
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 28,
-                backgroundColor: Colors.grey,
-                backgroundImage:
-                    sw.icon != null ? NetworkImage(sw.icon!) : null,
+  Widget _buildSoftwareList() => Column(
+        children: [
+          for (var sw in widget.netInfoReader.infoState.swInfoList)
+            Card(
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Colors.grey,
+                  backgroundImage:
+                      sw.icon != null ? NetworkImage(sw.icon!) : null,
+                ),
+                title: Text("$sw"),
+                subtitle: const Text(""),
               ),
-              title: Text("$sw"),
-              subtitle: const Text(""),
+            )
+        ],
+      );
+
+  Widget _buildSoftwareStatusCard() => const Card(child: Text("STATUS"));
+
+  Widget _buildExpandedSoftwareList() => ExpandableNotifier(
+        child: Column(children: [
+          _buildSoftwareStatusCard(),
+          ScrollOnExpand(
+            scrollOnExpand: true,
+            scrollOnCollapse: false,
+            child: ExpandablePanel(
+              theme: const ExpandableThemeData(
+                headerAlignment: ExpandablePanelHeaderAlignment.center,
+              ),
+              header: const Padding(
+                padding: EdgeInsets.all(10),
+                child: Text("Available softwares: "),
+              ),
+              collapsed: const SizedBox(),
+              expanded: _buildSoftwareList(),
             ),
-          );
-        },
+          ),
+        ]),
       );
 
   @override
@@ -238,8 +261,12 @@ class UploadScreenState extends State<UploadScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [_buildProgressWidget()]),
                 const SizedBox(height: 20),
-                Flexible(
-                  child: _buildSoftwareList(),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      _buildExpandedSoftwareList(),
+                    ],
+                  ),
                 ),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.file_open),
@@ -247,7 +274,7 @@ class UploadScreenState extends State<UploadScreen> {
                   onPressed: _isUploaderBuisy(widget.bleUploader.state.status)
                       ? null
                       : _pickFile,
-                )
+                ),
               ],
             ),
           ),
