@@ -5,6 +5,7 @@ import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/core/net_info_reader.dart';
+import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -196,29 +197,64 @@ class UploadScreenState extends State<UploadScreen> {
     );
   }
 
+  Widget _buildSoftwareCard(SoftwareInfo sw) => Card(
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 28,
+            backgroundColor: Colors.grey,
+            backgroundImage: sw.icon != null ? NetworkImage(sw.icon!) : null,
+          ),
+          title: Text(sw.name),
+          subtitle: Text("v${sw.ver}"),
+        ),
+      );
+
   Widget _buildSoftwareList() => Column(
         children: [
           for (var sw in widget.netInfoReader.infoState.swInfoList)
-            Card(
-              child: ListTile(
-                leading: CircleAvatar(
-                  radius: 28,
-                  backgroundColor: Colors.grey,
-                  backgroundImage:
-                      sw.icon != null ? NetworkImage(sw.icon!) : null,
-                ),
-                title: Text("$sw"),
-                subtitle: const Text(""),
-              ),
-            )
+            _buildSoftwareCard(sw)
         ],
       );
 
-  Widget _buildSoftwareStatusCard() => const Card(child: Text("STATUS"));
+  Widget _buildStatusText(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Text(text,
+          style: const TextStyle(
+            fontSize: 24,
+          )),
+    );
+  }
+
+  Widget _buildSoftwareStatus() {
+    final state = widget.netInfoReader.infoState;
+    if (!state.ready) {
+      return _buildStatusText("Loading..");
+    } else if (state.swInfoList.isEmpty) {
+      return _buildStatusText("No available softwares");
+    } else if (state.newest == null) {
+      return _buildStatusText("Newest software already installed");
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              "New software available:",
+              textAlign: TextAlign.left,
+            ),
+          ),
+          _buildSoftwareCard(state.newest!),
+        ],
+      );
+    }
+  }
 
   Widget _buildExpandedSoftwareList() => ExpandableNotifier(
         child: Column(children: [
-          _buildSoftwareStatusCard(),
+          _buildSoftwareStatus(),
           ScrollOnExpand(
             scrollOnExpand: true,
             scrollOnCollapse: false,
@@ -228,7 +264,7 @@ class UploadScreenState extends State<UploadScreen> {
               ),
               header: const Padding(
                 padding: EdgeInsets.all(10),
-                child: Text("Available softwares: "),
+                child: Text("All available softwares: "),
               ),
               collapsed: const SizedBox(),
               expanded: _buildSoftwareList(),
