@@ -36,7 +36,7 @@ class BleConnector {
   Future<void> disconnect() async {
     try {
       await _connection.cancel();
-    } on Exception catch (e, _) {
+    } catch (e) {
       // TODO: handle exception
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated

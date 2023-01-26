@@ -18,14 +18,23 @@ class ScanerScreenState extends State<ScanerScreen> {
   void _evaluateBleStatus(BleStatus status) {
     setState(() {
       if (status != BleStatus.ready && status != BleStatus.unknown) {
-        Wakelock.disable();
-        bleScanner.stopScan();
+        _stopScan();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const StatusScreen()),
         );
       }
     });
+  }
+
+  void _startScan() {
+    Wakelock.enable();
+    bleScanner.startScan([serviceUuid]);
+  }
+
+  void _stopScan() {
+    Wakelock.disable();
+    bleScanner.stopScan();
   }
 
   @override
@@ -57,8 +66,7 @@ class ScanerScreenState extends State<ScanerScreen> {
                                   Text("${device.id}\nRSSI: ${device.rssi}"),
                               leading: const Icon(Icons.bluetooth),
                               onTap: () async {
-                                Wakelock.disable();
-                                bleScanner.stopScan();
+                                _stopScan();
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -82,21 +90,14 @@ class ScanerScreenState extends State<ScanerScreen> {
                       icon: const Icon(Icons.search),
                       label: const Text('Scan'),
                       onPressed: !bleScanner.state.scanIsInProgress
-                          ? () {
-                              Wakelock.enable();
-                              bleScanner.startScan([serviceUuid]);
-                            }
+                          ? _startScan
                           : null,
                     ),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.search_off),
                       label: const Text('Stop'),
-                      onPressed: bleScanner.state.scanIsInProgress
-                          ? () {
-                              Wakelock.disable();
-                              bleScanner.stopScan();
-                            }
-                          : null,
+                      onPressed:
+                          bleScanner.state.scanIsInProgress ? _stopScan : null,
                     ),
                   ],
                 ),

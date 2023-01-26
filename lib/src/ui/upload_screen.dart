@@ -30,7 +30,7 @@ class UploadScreen extends StatefulWidget {
 }
 
 class UploadScreenState extends State<UploadScreen> {
-  late StreamSubscription<ConnectionStateUpdate> _connection;
+  late List<StreamSubscription> _subscriptions;
 
   void _onConnectionStateChanged(ConnectionStateUpdate state) {
     if (state.connectionState == DeviceConnectionState.disconnected) {
@@ -65,11 +65,12 @@ class UploadScreenState extends State<UploadScreen> {
 
   @override
   void initState() {
-    widget.netInfoReader.infoStream.listen(_onSwInfoStateChanged);
-    widget.bleUploader.stateStream.listen(_onUploadStateChanged);
-    widget.bleInfoReader.infoStream.listen(_onHwInfoStateChanged);
-    _connection =
-        widget.bleConnector.stateStream.listen(_onConnectionStateChanged);
+    _subscriptions = [
+      widget.netInfoReader.infoStream.listen(_onSwInfoStateChanged),
+      widget.bleUploader.stateStream.listen(_onUploadStateChanged),
+      widget.bleInfoReader.infoStream.listen(_onHwInfoStateChanged),
+      widget.bleConnector.stateStream.listen(_onConnectionStateChanged),
+    ];
     widget.bleConnector.connect();
     super.initState();
   }
@@ -77,7 +78,9 @@ class UploadScreenState extends State<UploadScreen> {
   @override
   void dispose() {
     super.dispose();
-    _connection.cancel();
+    for (var subscription in _subscriptions) {
+      subscription.cancel();
+    }
     widget.bleConnector.disconnect();
     Wakelock.disable();
   }
