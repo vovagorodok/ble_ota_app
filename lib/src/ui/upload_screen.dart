@@ -57,6 +57,7 @@ class UploadScreenState extends State<UploadScreen> {
         Wakelock.enable();
       } else if (state.status == BleUploadStatus.success ||
           state.status == BleUploadStatus.error) {
+        widget.bleConnector.disconnect();
         Wakelock.disable();
       }
     });
