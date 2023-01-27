@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
-import 'package:ble_ota_app/src/core/net_info_reader.dart';
+import 'package:ble_ota_app/src/core/http_info_reader.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class UploadScreen extends StatefulWidget {
       : bleConnector = BleConnector(deviceId: deviceId),
         bleInfoReader = BleInfoReader(deviceId: deviceId),
         bleUploader = BleUploader(deviceId: deviceId),
-        netInfoReader = NetInfoReader(),
+        httpInfoReader = HttpInfoReader(),
         super(key: key);
 
   final String deviceId;
@@ -26,7 +26,7 @@ class UploadScreen extends StatefulWidget {
   final BleConnector bleConnector;
   final BleInfoReader bleInfoReader;
   final BleUploader bleUploader;
-  final NetInfoReader netInfoReader;
+  final HttpInfoReader httpInfoReader;
 
   @override
   State<UploadScreen> createState() => UploadScreenState();
@@ -43,10 +43,10 @@ class UploadScreenState extends State<UploadScreen> {
     }
   }
 
-  void _onHwInfoStateChanged(HwInfoState info) {
+  void _onHardwareInfoStateChanged(HardwareInfoState info) {
     setState(() {
       if (info.ready) {
-        widget.netInfoReader.read(info.hwInfo);
+        widget.httpInfoReader.read(info.hwInfo);
       }
     });
   }
@@ -62,16 +62,16 @@ class UploadScreenState extends State<UploadScreen> {
     });
   }
 
-  void _onSwInfoStateChanged(SwInfoState state) {
+  void _onSoftwareInfoStateChanged(SoftwareInfoState state) {
     setState(() {});
   }
 
   @override
   void initState() {
     _subscriptions = [
-      widget.netInfoReader.stateStream.listen(_onSwInfoStateChanged),
+      widget.httpInfoReader.stateStream.listen(_onSoftwareInfoStateChanged),
       widget.bleUploader.stateStream.listen(_onBleUploadStateChanged),
-      widget.bleInfoReader.stateStream.listen(_onHwInfoStateChanged),
+      widget.bleInfoReader.stateStream.listen(_onHardwareInfoStateChanged),
       widget.bleConnector.stateStream.listen(_onConnectionStateChanged),
     ];
     widget.bleConnector.connect();
@@ -206,7 +206,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildSoftwareList() => Column(
         children: [
-          for (var sw in widget.netInfoReader.state.swInfoList)
+          for (var sw in widget.httpInfoReader.state.softwareInfoList)
             _buildSoftwareCard(sw)
         ],
       );
@@ -223,15 +223,15 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildSoftwareStatus() {
-    final uploaderState = widget.bleUploader.state;
-    final swInfoState = widget.netInfoReader.state;
-    if (uploaderState.status == BleUploadStatus.error) {
-      return _buildStatusText(uploaderState.errorMsg);
-    } else if (!swInfoState.ready) {
+    final bleUploadState = widget.bleUploader.state;
+    final softwareInfoState = widget.httpInfoReader.state;
+    if (bleUploadState.status == BleUploadStatus.error) {
+      return _buildStatusText(bleUploadState.errorMsg);
+    } else if (!softwareInfoState.ready) {
       return _buildStatusText("Loading..");
-    } else if (swInfoState.swInfoList.isEmpty) {
+    } else if (softwareInfoState.softwareInfoList.isEmpty) {
       return _buildStatusText("No available softwares");
-    } else if (swInfoState.newest == null) {
+    } else if (softwareInfoState.newest == null) {
       return _buildStatusText("Newest software already installed");
     } else {
       return Column(
@@ -245,7 +245,7 @@ class UploadScreenState extends State<UploadScreen> {
               textAlign: TextAlign.left,
             ),
           ),
-          _buildSoftwareCard(swInfoState.newest!),
+          _buildSoftwareCard(softwareInfoState.newest!),
         ],
       );
     }
@@ -286,10 +286,8 @@ class UploadScreenState extends State<UploadScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     )),
-                Text(
-                    "Hardware: ${widget.bleInfoReader.state.toHwString()}"),
-                Text(
-                    "Software: ${widget.bleInfoReader.state.toSwString()}"),
+                Text("Hardware: ${widget.bleInfoReader.state.toHwString()}"),
+                Text("Software: ${widget.bleInfoReader.state.toSwString()}"),
                 const SizedBox(height: 25),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,

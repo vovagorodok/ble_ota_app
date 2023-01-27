@@ -7,11 +7,11 @@ import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
-class NetInfoReader extends StatefulStream<SwInfoState> {
-  SwInfoState _state = SwInfoState();
+class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
+  SoftwareInfoState _state = SoftwareInfoState();
 
   @override
-  SwInfoState get state => _state;
+  SoftwareInfoState get state => _state;
 
   Future<void> _readSoftware(HardwareInfo hwInfo, String hardwarePath) async {
     try {
@@ -32,7 +32,7 @@ class NetInfoReader extends StatefulStream<SwInfoState> {
         return info.name == hwInfo.swName;
       }).toList();
 
-      state.swInfoList = filteredByHwList;
+      state.softwareInfoList = filteredByHwList;
       if (filteredBySwList.isEmpty) {
         return;
       }
@@ -47,7 +47,7 @@ class NetInfoReader extends StatefulStream<SwInfoState> {
   }
 
   void read(HardwareInfo hwInfo) {
-    _state = SwInfoState();
+    _state = SoftwareInfoState();
     addStateToStream(state);
 
     () async {
@@ -65,14 +65,14 @@ class NetInfoReader extends StatefulStream<SwInfoState> {
   }
 }
 
-class SwInfoState {
-  SwInfoState({
-    this.swInfoList = const [],
+class SoftwareInfoState {
+  SoftwareInfoState({
+    this.softwareInfoList = const [],
     this.newest,
     this.ready = false,
   });
 
-  List<SoftwareInfo> swInfoList;
+  List<SoftwareInfo> softwareInfoList;
   SoftwareInfo? newest;
   bool ready;
 }

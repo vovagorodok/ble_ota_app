@@ -5,7 +5,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 
-class BleInfoReader extends StatefulStream<HwInfoState> {
+class BleInfoReader extends StatefulStream<HardwareInfoState> {
   BleInfoReader({required String deviceId})
       : _characteristicHwName =
             _crateCharacteristic(characteristicUuidHwName, deviceId),
@@ -20,10 +20,10 @@ class BleInfoReader extends StatefulStream<HwInfoState> {
   final QualifiedCharacteristic _characteristicHwVer;
   final QualifiedCharacteristic _characteristicSwName;
   final QualifiedCharacteristic _characteristicSwVer;
-  final HwInfoState _state = HwInfoState();
+  final HardwareInfoState _state = HardwareInfoState();
 
   @override
-  HwInfoState get state => _state;
+  HardwareInfoState get state => _state;
 
   void read() {
     state.ready = false;
@@ -53,8 +53,8 @@ class BleInfoReader extends StatefulStream<HwInfoState> {
           deviceId: deviceId);
 }
 
-class HwInfoState {
-  HwInfoState({
+class HardwareInfoState {
+  HardwareInfoState({
     this.hwInfo = const HardwareInfo(),
     this.ready = false,
   });
