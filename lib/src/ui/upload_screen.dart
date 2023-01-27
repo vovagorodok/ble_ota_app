@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
-import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/http/http_info_reader.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/uploader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -34,18 +32,18 @@ class UploadScreen extends StatefulWidget {
 class UploadScreenState extends State<UploadScreen> {
   late List<StreamSubscription> _subscriptions;
 
-  void _onConnectionStateChanged(ConnectionStateUpdate state) {
-    if (state.connectionState == DeviceConnectionState.disconnected) {
+  void _onConnectionStateChanged(BleConnectionState state) {
+    if (state == BleConnectionState.disconnected) {
       widget.bleConnector.findAndConnect();
-    } else if (state.connectionState == DeviceConnectionState.connected) {
+    } else if (state == BleConnectionState.connected) {
       widget.bleInfoReader.read();
     }
   }
 
-  void _onHardwareInfoStateChanged(HardwareInfoState info) {
+  void _onHardwareInfoStateChanged(HardwareInfoState state) {
     setState(() {
-      if (info.ready) {
-        widget.httpInfoReader.read(info.hwInfo);
+      if (state.ready) {
+        widget.httpInfoReader.read(state.hwInfo);
       }
     });
   }
@@ -84,6 +82,11 @@ class UploadScreenState extends State<UploadScreen> {
     }
     widget.bleConnector.disconnect();
     Wakelock.disable();
+  }
+
+  bool _canUpload() {
+    return widget.bleConnector.state == BleConnectionState.connected &&
+        widget.uploader.state.status != UploadStatus.upload;
   }
 
   Future<void> _pickFile() async {
@@ -184,7 +187,7 @@ class UploadScreenState extends State<UploadScreen> {
           title: Text(sw.name),
           subtitle: Text("v${sw.ver}"),
           onTap: () => _uploadHttpFile(sw.path),
-          enabled: widget.uploader.state.status != UploadStatus.upload,
+          enabled: _canUpload(),
         ),
       );
 
@@ -207,9 +210,12 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildSoftwareStatus() {
+    final bleConnectionState = widget.bleConnector.state;
     final uploadState = widget.uploader.state;
     final softwareInfoState = widget.httpInfoReader.state;
-    if (uploadState.status == UploadStatus.error) {
+    if (bleConnectionState == BleConnectionState.disconnected) {
+      return _buildStatusText("Connecting..");
+    } else if (uploadState.status == UploadStatus.error) {
       return _buildStatusText(uploadState.errorMsg);
     } else if (!softwareInfoState.ready) {
       return _buildStatusText("Loading..");
@@ -287,9 +293,7 @@ class UploadScreenState extends State<UploadScreen> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.file_open),
                   label: const Text('Upload file'),
-                  onPressed: widget.uploader.state.status == UploadStatus.upload
-                      ? null
-                      : _pickFile,
+                  onPressed: _canUpload() ? _pickFile : null,
                 ),
               ],
             ),
