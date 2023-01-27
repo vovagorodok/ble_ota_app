@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:ble_ota_app/src/ui/scaner_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.blue,
     statusBarIconBrightness: Brightness.light,
