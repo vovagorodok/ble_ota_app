@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:http/http.dart' as http;
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
@@ -112,22 +113,20 @@ class UploadScreenState extends State<UploadScreen> {
     widget.bleUploader.upload(data);
   }
 
-  String _determinateStatusText() {
-    switch (widget.bleUploader.state.status) {
-      case UploadStatus.begin:
-        return "Starting..";
-      case UploadStatus.upload:
-        return "Uploading..";
-      case UploadStatus.end:
-        return "Ending..";
-      case UploadStatus.success:
-        return "Success!";
-      case UploadStatus.error:
-        return "Error: ${widget.bleUploader.state.errorMsg}";
-      case UploadStatus.idle:
-        return "Ready";
-      default:
-        return "Unknown status";
+  Future<void> _uploadHttpFile(String softwarePath) async {
+    try {
+      print("VOVA: tap: $softwarePath");
+      final response = await http.get(Uri.parse(softwarePath));
+      print("VOVA: resp: ${response.statusCode}");
+      if (response.statusCode != 200) {
+        return;
+      }
+
+      print("VOVA: size: ${response.bodyBytes.length}");
+      // widget.bleUploader.upload(response.bodyBytes);
+
+    } catch (e) {
+      print("VOVA: execp: ${e}");
     }
   }
 
@@ -206,6 +205,8 @@ class UploadScreenState extends State<UploadScreen> {
           ),
           title: Text(sw.name),
           subtitle: Text("v${sw.ver}"),
+          onTap: () => _uploadHttpFile(sw.path),
+          enabled: !_isUploaderBuisy(widget.bleUploader.state.status),
         ),
       );
 
@@ -227,12 +228,15 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildSoftwareStatus() {
-    final state = widget.netInfoReader.infoState;
-    if (!state.ready) {
+    final uploaderState = widget.bleUploader.state;
+    final swInfoState = widget.netInfoReader.infoState;
+    if (uploaderState.status == UploadStatus.error) {
+      return _buildStatusText(uploaderState.errorMsg);
+    } else if (!swInfoState.ready) {
       return _buildStatusText("Loading..");
-    } else if (state.swInfoList.isEmpty) {
+    } else if (swInfoState.swInfoList.isEmpty) {
       return _buildStatusText("No available softwares");
-    } else if (state.newest == null) {
+    } else if (swInfoState.newest == null) {
       return _buildStatusText("Newest software already installed");
     } else {
       return Column(
@@ -246,7 +250,7 @@ class UploadScreenState extends State<UploadScreen> {
               textAlign: TextAlign.left,
             ),
           ),
-          _buildSoftwareCard(state.newest!),
+          _buildSoftwareCard(swInfoState.newest!),
         ],
       );
     }
@@ -291,8 +295,7 @@ class UploadScreenState extends State<UploadScreen> {
                     "Hardware: ${widget.bleInfoReader.infoState.toHwString()}"),
                 Text(
                     "Software: ${widget.bleInfoReader.infoState.toSwString()}"),
-                Text("Status: ${_determinateStatusText()}"),
-                const SizedBox(height: 20),
+                const SizedBox(height: 25),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [_buildProgressWidget()]),
