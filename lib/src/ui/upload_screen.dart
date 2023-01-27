@@ -215,10 +215,10 @@ class UploadScreenState extends State<UploadScreen> {
     final hardwareInfoState = widget.bleInfoReader.state;
     final softwareInfoState = widget.httpInfoReader.state;
 
-    if (bleConnectionState == BleConnectionState.disconnected) {
-      return _buildStatusText("Connecting..");
-    } else if (uploadState.status == UploadStatus.error) {
+    if (uploadState.status == UploadStatus.error) {
       return _buildStatusText(uploadState.errorMsg);
+    } else if (bleConnectionState == BleConnectionState.disconnected) {
+      return _buildStatusText("Connecting..");
     } else if (!hardwareInfoState.ready || !softwareInfoState.ready) {
       return _buildStatusText("Loading..");
     } else if (softwareInfoState.softwareInfoList.isEmpty) {
