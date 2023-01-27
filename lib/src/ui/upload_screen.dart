@@ -149,7 +149,7 @@ class UploadScreenState extends State<UploadScreen> {
     if (bleUploadState.status == BleUploadStatus.idle) {
       return CircleAvatar(
         radius: 55,
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.transparent,
         backgroundImage: softwareInfoState.hardwareIcon != null
             ? NetworkImage(softwareInfoState.hardwareIcon!)
             : null,
