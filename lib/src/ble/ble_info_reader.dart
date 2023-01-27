@@ -1,12 +1,11 @@
-import 'dart:async';
-
 import 'package:ble_ota_app/src/core/hardware_info.dart';
+import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/core/version.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 
-class BleInfoReader {
+class BleInfoReader extends StatefulStream<HwInfoState> {
   BleInfoReader({required String deviceId})
       : _characteristicHwName =
             _crateCharacteristic(characteristicUuidHwName, deviceId),
@@ -21,18 +20,17 @@ class BleInfoReader {
   final QualifiedCharacteristic _characteristicHwVer;
   final QualifiedCharacteristic _characteristicSwName;
   final QualifiedCharacteristic _characteristicSwVer;
-  final StreamController<HwInfoState> _infoStreamController =
-      StreamController();
+  final HwInfoState _state = HwInfoState();
 
-  Stream<HwInfoState> get infoStream => _infoStreamController.stream;
-  HwInfoState infoState = HwInfoState();
+  @override
+  HwInfoState get state => _state;
 
   void read() {
-    infoState.ready = false;
-    _infoStreamController.add(infoState);
+    state.ready = false;
+    addStateToStream(state);
 
     () async {
-      infoState.hwInfo = HardwareInfo(
+      state.hwInfo = HardwareInfo(
         hwName: String.fromCharCodes(
             await ble.readCharacteristic(_characteristicHwName)),
         hwVer: Version.fromList(
@@ -42,9 +40,9 @@ class BleInfoReader {
         swVer: Version.fromList(
             await ble.readCharacteristic(_characteristicSwVer)),
       );
-      infoState.ready = true;
+      state.ready = true;
 
-      _infoStreamController.add(infoState);
+      addStateToStream(state);
     }.call();
   }
 

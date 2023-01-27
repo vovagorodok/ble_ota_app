@@ -3,15 +3,15 @@ import 'dart:convert';
 
 import 'package:ble_ota_app/src/core/hardware_info.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
+import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
-class NetInfoReader {
-  final StreamController<SwInfoState> _infoStreamController =
-      StreamController();
+class NetInfoReader extends StatefulStream<SwInfoState> {
+  SwInfoState _state = SwInfoState();
 
-  Stream<SwInfoState> get infoStream => _infoStreamController.stream;
-  SwInfoState infoState = SwInfoState();
+  @override
+  SwInfoState get state => _state;
 
   Future<void> _readSoftware(HardwareInfo hwInfo, String hardwarePath) async {
     try {
@@ -32,7 +32,7 @@ class NetInfoReader {
         return info.name == hwInfo.swName;
       }).toList();
 
-      infoState.swInfoList = filteredByHwList;
+      state.swInfoList = filteredByHwList;
       if (filteredBySwList.isEmpty) {
         return;
       }
@@ -42,13 +42,13 @@ class NetInfoReader {
       if (max.ver <= hwInfo.swVer) {
         return;
       }
-      infoState.newest = max;
+      state.newest = max;
     } catch (_) {}
   }
 
   void read(HardwareInfo hwInfo) {
-    infoState = SwInfoState();
-    _infoStreamController.add(infoState);
+    _state = SwInfoState();
+    addStateToStream(state);
 
     () async {
       final data = await rootBundle.loadString("assets/hardwares.json");
@@ -59,8 +59,8 @@ class NetInfoReader {
         await _readSoftware(hwInfo, hardwarePath);
       }
 
-      infoState.ready = true;
-      _infoStreamController.add(infoState);
+      state.ready = true;
+      addStateToStream(state);
     }.call();
   }
 }

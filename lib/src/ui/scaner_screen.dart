@@ -50,7 +50,7 @@ class ScanerScreenState extends State<ScanerScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
-          child: StreamBuilder<BleScannerState>(
+          child: StreamBuilder<BleScanState>(
             stream: bleScanner.stateStream,
             builder: (context, snapshot) => Column(
               mainAxisAlignment: MainAxisAlignment.end,

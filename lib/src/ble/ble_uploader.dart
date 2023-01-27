@@ -1,14 +1,14 @@
-import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
+import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 
-class BleUploader {
+class BleUploader extends StatefulStream<BleUploadState> {
   BleUploader({required this.deviceId})
       : _characteristicRx =
             _crateCharacteristic(characteristicUuidRx, deviceId),
@@ -20,23 +20,22 @@ class BleUploader {
   final String deviceId;
   final QualifiedCharacteristic _characteristicRx;
   final QualifiedCharacteristic _characteristicTx;
-  final StreamController<UploadState> _stateStreamController =
-      StreamController();
+  BleUploadState _state = BleUploadState();
   Uint8List _dataToSend = Uint8List(0);
   int _currentDataPos = 0;
   int _currentBufferSize = 0;
   int _packageMaxSize = 0;
   int _bufferMaxSize = 0;
 
-  Stream<UploadState> get stateStream => _stateStreamController.stream;
-  UploadState state = UploadState();
+  @override
+  BleUploadState get state => _state;
 
   void upload(Uint8List data) {
-    if (state.status == UploadStatus.success) {
+    if (state.status == BleUploadStatus.success) {
       _subscribeToCharacteristic();
     }
-    state = UploadState(status: UploadStatus.begin);
-    _stateStreamController.add(state);
+    _state = BleUploadState(status: BleUploadStatus.begin);
+    addStateToStream(state);
     _dataToSend = data;
     _sendBegin();
   }
@@ -53,26 +52,26 @@ class BleUploader {
   void _handleResp(Uint8List data) {
     var headCode = _bytesToUint8(data, headCodePos);
     if (headCode == HeadCode.ok) {
-      if (state.status == UploadStatus.begin) {
+      if (state.status == BleUploadStatus.begin) {
         _handleBeginResp(data);
         _sendPackages();
-      } else if (state.status == UploadStatus.upload) {
+      } else if (state.status == BleUploadStatus.upload) {
         _sendPackages();
-      } else if (state.status == UploadStatus.end) {
+      } else if (state.status == BleUploadStatus.end) {
         _dataToSend = Uint8List(0);
-        state.status = UploadStatus.success;
-        _stateStreamController.add(state);
+        state.status = BleUploadStatus.success;
+        addStateToStream(state);
       }
     } else {
-      state.status = UploadStatus.error;
+      state.status = BleUploadStatus.error;
       state.errorMsg = determineErrorHeadCode(headCode);
-      _stateStreamController.add(state);
+      addStateToStream(state);
     }
   }
 
   void _handleBeginResp(Uint8List data) {
-    state.status = UploadStatus.upload;
-    _stateStreamController.add(state);
+    state.status = BleUploadStatus.upload;
+    addStateToStream(state);
     _currentDataPos = 0;
     _currentBufferSize = 0;
     _packageMaxSize = _bytesToUint32(data, attrSizePos) - headCodeBytesNum;
@@ -95,7 +94,7 @@ class BleUploader {
 
       state.progress =
           _currentDataPos.toDouble() / _dataToSend.length.toDouble();
-      _stateStreamController.add(state);
+      addStateToStream(state);
 
       _currentBufferSize += packageSize;
       if (_currentBufferSize > _bufferMaxSize) {
@@ -110,7 +109,7 @@ class BleUploader {
   void _sendEnd() {
     _sendData(
         _uint8ToBytes(HeadCode.end) + _uint32ToBytes(getCrc32(_dataToSend)));
-    state.status = UploadStatus.end;
+    state.status = BleUploadStatus.end;
   }
 
   Uint8List _uint8ToBytes(int value) =>
@@ -138,16 +137,16 @@ class BleUploader {
           deviceId: deviceId);
 }
 
-class UploadState {
-  UploadState({
-    this.status = UploadStatus.idle,
+class BleUploadState {
+  BleUploadState({
+    this.status = BleUploadStatus.idle,
     this.progress = 0.0,
     this.errorMsg = "",
   });
 
-  UploadStatus status;
+  BleUploadStatus status;
   double progress;
   String errorMsg;
 }
 
-enum UploadStatus { idle, begin, upload, end, success, error }
+enum BleUploadStatus { idle, begin, upload, end, success, error }

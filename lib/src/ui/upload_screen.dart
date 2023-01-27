@@ -51,12 +51,12 @@ class UploadScreenState extends State<UploadScreen> {
     });
   }
 
-  void _onUploadStateChanged(UploadState state) {
+  void _onBleUploadStateChanged(BleUploadState state) {
     setState(() {
-      if (state.status == UploadStatus.begin) {
+      if (state.status == BleUploadStatus.begin) {
         Wakelock.enable();
-      } else if (state.status == UploadStatus.success ||
-          state.status == UploadStatus.error) {
+      } else if (state.status == BleUploadStatus.success ||
+          state.status == BleUploadStatus.error) {
         Wakelock.disable();
       }
     });
@@ -69,9 +69,9 @@ class UploadScreenState extends State<UploadScreen> {
   @override
   void initState() {
     _subscriptions = [
-      widget.netInfoReader.infoStream.listen(_onSwInfoStateChanged),
-      widget.bleUploader.stateStream.listen(_onUploadStateChanged),
-      widget.bleInfoReader.infoStream.listen(_onHwInfoStateChanged),
+      widget.netInfoReader.stateStream.listen(_onSwInfoStateChanged),
+      widget.bleUploader.stateStream.listen(_onBleUploadStateChanged),
+      widget.bleInfoReader.stateStream.listen(_onHwInfoStateChanged),
       widget.bleConnector.stateStream.listen(_onConnectionStateChanged),
     ];
     widget.bleConnector.connect();
@@ -88,10 +88,10 @@ class UploadScreenState extends State<UploadScreen> {
     Wakelock.disable();
   }
 
-  bool _isUploaderBuisy(UploadStatus status) {
-    return status == UploadStatus.begin ||
-        status == UploadStatus.upload ||
-        status == UploadStatus.end;
+  bool _isUploaderBuisy(BleUploadStatus status) {
+    return status == BleUploadStatus.begin ||
+        status == BleUploadStatus.upload ||
+        status == BleUploadStatus.end;
   }
 
   Future<void> _pickFile() async {
@@ -126,17 +126,17 @@ class UploadScreenState extends State<UploadScreen> {
 
   MaterialColor _determinateStatusColor() {
     switch (widget.bleUploader.state.status) {
-      case UploadStatus.begin:
+      case BleUploadStatus.begin:
         return Colors.blue;
-      case UploadStatus.upload:
+      case BleUploadStatus.upload:
         return Colors.blue;
-      case UploadStatus.end:
+      case BleUploadStatus.end:
         return Colors.blue;
-      case UploadStatus.success:
+      case BleUploadStatus.success:
         return Colors.green;
-      case UploadStatus.error:
+      case BleUploadStatus.error:
         return Colors.red;
-      case UploadStatus.idle:
+      case BleUploadStatus.idle:
         return Colors.blue;
       default:
         return Colors.blue;
@@ -145,13 +145,13 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildProgressInside() {
     final state = widget.bleUploader.state;
-    if (state.status == UploadStatus.error) {
+    if (state.status == BleUploadStatus.error) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 56,
       );
-    } else if (state.status == UploadStatus.success) {
+    } else if (state.status == BleUploadStatus.success) {
       return const Icon(
         Icons.done,
         color: Colors.green,
@@ -162,7 +162,7 @@ class UploadScreenState extends State<UploadScreen> {
         (state.progress * 100).toStringAsFixed(1),
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: state.status == UploadStatus.idle
+          color: state.status == BleUploadStatus.idle
               ? Colors.blue.shade200
               : Colors.blue,
           fontSize: 24,
@@ -206,7 +206,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildSoftwareList() => Column(
         children: [
-          for (var sw in widget.netInfoReader.infoState.swInfoList)
+          for (var sw in widget.netInfoReader.state.swInfoList)
             _buildSoftwareCard(sw)
         ],
       );
@@ -224,8 +224,8 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildSoftwareStatus() {
     final uploaderState = widget.bleUploader.state;
-    final swInfoState = widget.netInfoReader.infoState;
-    if (uploaderState.status == UploadStatus.error) {
+    final swInfoState = widget.netInfoReader.state;
+    if (uploaderState.status == BleUploadStatus.error) {
       return _buildStatusText(uploaderState.errorMsg);
     } else if (!swInfoState.ready) {
       return _buildStatusText("Loading..");
@@ -287,9 +287,9 @@ class UploadScreenState extends State<UploadScreen> {
                       fontSize: 20,
                     )),
                 Text(
-                    "Hardware: ${widget.bleInfoReader.infoState.toHwString()}"),
+                    "Hardware: ${widget.bleInfoReader.state.toHwString()}"),
                 Text(
-                    "Software: ${widget.bleInfoReader.infoState.toSwString()}"),
+                    "Software: ${widget.bleInfoReader.state.toSwString()}"),
                 const SizedBox(height: 25),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,

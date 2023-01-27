@@ -1,22 +1,20 @@
 import 'dart:async';
 
+import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 
-class BleScanner {
+class BleScanner extends StatefulStream<BleScanState> {
 
-  final StreamController<BleScannerState> _stateStreamController =
-      StreamController();
   final _devices = <DiscoveredDevice>[];
   StreamSubscription? _subscription;
 
-  BleScannerState get state => BleScannerState(
+  @override
+  BleScanState get state => BleScanState(
         discoveredDevices: _devices,
         scanIsInProgress: _subscription != null,
       );
-
-  Stream<BleScannerState> get stateStream => _stateStreamController.stream;
 
   void startScan(List<Uuid> serviceIds) {
     _devices.clear();
@@ -29,25 +27,21 @@ class BleScanner {
       } else {
         _devices.add(device);
       }
-      _stateStreamController.add(state);
+      addStateToStream(state);
     }, onError: (Object e) {});
-    _stateStreamController.add(state);
+    addStateToStream(state);
   }
 
   Future<void> stopScan() async {
     await _subscription?.cancel();
     _subscription = null;
-    _stateStreamController.add(state);
-  }
-
-  Future<void> dispose() async {
-    await _stateStreamController.close();
+    addStateToStream(state);
   }
 }
 
 @immutable
-class BleScannerState {
-  const BleScannerState({
+class BleScanState {
+  const BleScanState({
     required this.discoveredDevices,
     required this.scanIsInProgress,
   });
