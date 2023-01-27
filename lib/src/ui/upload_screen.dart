@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
-import 'package:ble_ota_app/src/core/http_info_reader.dart';
+import 'package:ble_ota_app/src/http/http_info_reader.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
