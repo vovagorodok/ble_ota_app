@@ -8,7 +8,6 @@ class SoftwareInfo {
     this.ver = const Version(),
     this.path = "",
     this.icon,
-    this.hwName = "",
     this.hwVer,
     this.minHwVer,
     this.maxHwVer,
@@ -19,7 +18,6 @@ class SoftwareInfo {
         ver: Version.fromList(json["software_version"]),
         path: json["software_path"],
         icon: json["software_icon"],
-        hwName: json["hardware_name"],
         hwVer: _getOptionalVersion(json, "hardware_version"),
         minHwVer: _getOptionalVersion(json, "min_hardware_version"),
         maxHwVer: _getOptionalVersion(json, "max_hardware_version"),
@@ -37,7 +35,6 @@ class SoftwareInfo {
   final Version ver;
   final String path;
   final String? icon;
-  final String hwName;
   final Version? hwVer;
   final Version? minHwVer;
   final Version? maxHwVer;

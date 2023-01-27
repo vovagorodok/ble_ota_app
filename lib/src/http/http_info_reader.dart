@@ -21,10 +21,21 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
       }
 
       final body = json.decode(response.body);
-      final fullList = body.map<SoftwareInfo>(SoftwareInfo.fromJson).toList();
+      if (!body.containsKey("hardware_name") ||
+          !body.containsKey("softwares")) {
+        return;
+      }
+      _state.hardwareName = body["hardware_name"];
+      if (_state.hardwareName != hwInfo.hwName) {
+        return;
+      }
+      _state.hardwareIcon = body["hardware_icon"];
+
+      final softwares = body["softwares"];
+      final fullList =
+          softwares.map<SoftwareInfo>(SoftwareInfo.fromJson).toList();
       final filteredByHwList = fullList.where((SoftwareInfo info) {
-        return info.hwName == hwInfo.hwName &&
-            (info.hwVer != null ? info.hwVer == hwInfo.hwVer : true) &&
+        return (info.hwVer != null ? info.hwVer == hwInfo.hwVer : true) &&
             (info.minHwVer != null ? info.minHwVer! <= hwInfo.hwVer : true) &&
             (info.maxHwVer != null ? info.maxHwVer! >= hwInfo.hwVer : true);
       }).toList();
@@ -67,11 +78,15 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
 
 class SoftwareInfoState {
   SoftwareInfoState({
+    this.hardwareName = "",
+    this.hardwareIcon,
     this.softwareInfoList = const [],
     this.newest,
     this.ready = false,
   });
 
+  String hardwareName;
+  String? hardwareIcon;
   List<SoftwareInfo> softwareInfoList;
   SoftwareInfo? newest;
   bool ready;

@@ -144,14 +144,23 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildProgressInside() {
-    final state = widget.bleUploader.state;
-    if (state.status == BleUploadStatus.error) {
+    final bleUploadState = widget.bleUploader.state;
+    final softwareInfoState = widget.httpInfoReader.state;
+    if (bleUploadState.status == BleUploadStatus.idle) {
+      return CircleAvatar(
+        radius: 55,
+        backgroundColor: Colors.grey,
+        backgroundImage: softwareInfoState.hardwareIcon != null
+            ? NetworkImage(softwareInfoState.hardwareIcon!)
+            : null,
+      );
+    } else if (bleUploadState.status == BleUploadStatus.error) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 56,
       );
-    } else if (state.status == BleUploadStatus.success) {
+    } else if (bleUploadState.status == BleUploadStatus.success) {
       return const Icon(
         Icons.done,
         color: Colors.green,
@@ -159,12 +168,10 @@ class UploadScreenState extends State<UploadScreen> {
       );
     } else {
       return Text(
-        (state.progress * 100).toStringAsFixed(1),
-        style: TextStyle(
+        (bleUploadState.progress * 100).toStringAsFixed(1),
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
-          color: state.status == BleUploadStatus.idle
-              ? Colors.blue.shade200
-              : Colors.blue,
+          color: Colors.blue,
           fontSize: 24,
         ),
       );
