@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:async';
 
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
@@ -6,26 +5,26 @@ import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/http/http_info_reader.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
+import 'package:ble_ota_app/src/core/uploader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
-import 'package:http/http.dart' as http;
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
-      : bleConnector = BleConnector(deviceId: deviceId),
+      : uploader = Uploader(deviceId: deviceId),
+        bleConnector = BleConnector(deviceId: deviceId),
         bleInfoReader = BleInfoReader(deviceId: deviceId),
-        bleUploader = BleUploader(deviceId: deviceId),
         httpInfoReader = HttpInfoReader(),
         super(key: key);
 
   final String deviceId;
   final String deviceName;
+  final Uploader uploader;
   final BleConnector bleConnector;
   final BleInfoReader bleInfoReader;
-  final BleUploader bleUploader;
   final HttpInfoReader httpInfoReader;
 
   @override
@@ -51,27 +50,25 @@ class UploadScreenState extends State<UploadScreen> {
     });
   }
 
-  void _onBleUploadStateChanged(BleUploadState state) {
+  void _onSoftwareInfoStateChanged(SoftwareInfoState state) {
+    setState(() {});
+  }
+
+  void _onUploadStateChanged(UploadState state) {
     setState(() {
-      if (state.status == BleUploadStatus.begin) {
-        Wakelock.enable();
-      } else if (state.status == BleUploadStatus.success ||
-          state.status == BleUploadStatus.error) {
+      if (state.status == UploadStatus.success ||
+          state.status == UploadStatus.error) {
         widget.bleConnector.disconnect();
         Wakelock.disable();
       }
     });
   }
 
-  void _onSoftwareInfoStateChanged(SoftwareInfoState state) {
-    setState(() {});
-  }
-
   @override
   void initState() {
     _subscriptions = [
+      widget.uploader.stateStream.listen(_onUploadStateChanged),
       widget.httpInfoReader.stateStream.listen(_onSoftwareInfoStateChanged),
-      widget.bleUploader.stateStream.listen(_onBleUploadStateChanged),
       widget.bleInfoReader.stateStream.listen(_onHardwareInfoStateChanged),
       widget.bleConnector.stateStream.listen(_onConnectionStateChanged),
     ];
@@ -89,12 +86,6 @@ class UploadScreenState extends State<UploadScreen> {
     Wakelock.disable();
   }
 
-  bool _isUploaderBuisy(BleUploadStatus status) {
-    return status == BleUploadStatus.begin ||
-        status == BleUploadStatus.upload ||
-        status == BleUploadStatus.end;
-  }
-
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -102,42 +93,27 @@ class UploadScreenState extends State<UploadScreen> {
     );
 
     if (result != null) {
-      await _uploadLocalFile(result.files.single.path!);
+      Wakelock.enable();
+      await widget.uploader.uploadLocalFile(result.files.single.path!);
     } else {
       // User canceled the picker
     }
   }
 
-  Future<void> _uploadLocalFile(String path) async {
-    File file = File(path);
-    var data = await file.readAsBytes();
-    widget.bleUploader.upload(data);
-  }
-
-  Future<void> _uploadHttpFile(String softwarePath) async {
-    try {
-      final response = await http.get(Uri.parse(softwarePath));
-      if (response.statusCode != 200) {
-        return;
-      }
-
-      widget.bleUploader.upload(response.bodyBytes);
-    } catch (_) {} // TODO: handle
+  Future<void> _uploadHttpFile(String url) async {
+    Wakelock.enable();
+    await widget.uploader.uploadHttpFile(url);
   }
 
   MaterialColor _determinateStatusColor() {
-    switch (widget.bleUploader.state.status) {
-      case BleUploadStatus.begin:
+    switch (widget.uploader.state.status) {
+      case UploadStatus.upload:
         return Colors.blue;
-      case BleUploadStatus.upload:
-        return Colors.blue;
-      case BleUploadStatus.end:
-        return Colors.blue;
-      case BleUploadStatus.success:
+      case UploadStatus.success:
         return Colors.green;
-      case BleUploadStatus.error:
+      case UploadStatus.error:
         return Colors.red;
-      case BleUploadStatus.idle:
+      case UploadStatus.idle:
         return Colors.blue;
       default:
         return Colors.blue;
@@ -145,9 +121,9 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildProgressInside() {
-    final bleUploadState = widget.bleUploader.state;
+    final uploadState = widget.uploader.state;
     final softwareInfoState = widget.httpInfoReader.state;
-    if (bleUploadState.status == BleUploadStatus.idle) {
+    if (uploadState.status == UploadStatus.idle) {
       return CircleAvatar(
         radius: 55,
         backgroundColor: Colors.transparent,
@@ -155,13 +131,13 @@ class UploadScreenState extends State<UploadScreen> {
             ? NetworkImage(softwareInfoState.hardwareIcon!)
             : null,
       );
-    } else if (bleUploadState.status == BleUploadStatus.error) {
+    } else if (uploadState.status == UploadStatus.error) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 56,
       );
-    } else if (bleUploadState.status == BleUploadStatus.success) {
+    } else if (uploadState.status == UploadStatus.success) {
       return const Icon(
         Icons.done,
         color: Colors.green,
@@ -169,7 +145,7 @@ class UploadScreenState extends State<UploadScreen> {
       );
     } else {
       return Text(
-        (bleUploadState.progress * 100).toStringAsFixed(1),
+        (uploadState.progress * 100).toStringAsFixed(1),
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.blue,
@@ -187,7 +163,7 @@ class UploadScreenState extends State<UploadScreen> {
         fit: StackFit.expand,
         children: [
           CircularProgressIndicator(
-            value: widget.bleUploader.state.progress,
+            value: widget.uploader.state.progress,
             color: _determinateStatusColor(),
             strokeWidth: 10,
             backgroundColor: _determinateStatusColor().shade200,
@@ -208,7 +184,7 @@ class UploadScreenState extends State<UploadScreen> {
           title: Text(sw.name),
           subtitle: Text("v${sw.ver}"),
           onTap: () => _uploadHttpFile(sw.path),
-          enabled: !_isUploaderBuisy(widget.bleUploader.state.status),
+          enabled: widget.uploader.state.status != UploadStatus.upload,
         ),
       );
 
@@ -231,10 +207,10 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildSoftwareStatus() {
-    final bleUploadState = widget.bleUploader.state;
+    final uploadState = widget.uploader.state;
     final softwareInfoState = widget.httpInfoReader.state;
-    if (bleUploadState.status == BleUploadStatus.error) {
-      return _buildStatusText(bleUploadState.errorMsg);
+    if (uploadState.status == UploadStatus.error) {
+      return _buildStatusText(uploadState.errorMsg);
     } else if (!softwareInfoState.ready) {
       return _buildStatusText("Loading..");
     } else if (softwareInfoState.softwareInfoList.isEmpty) {
@@ -311,7 +287,7 @@ class UploadScreenState extends State<UploadScreen> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.file_open),
                   label: const Text('Upload file'),
-                  onPressed: _isUploaderBuisy(widget.bleUploader.state.status)
+                  onPressed: widget.uploader.state.status == UploadStatus.upload
                       ? null
                       : _pickFile,
                 ),
