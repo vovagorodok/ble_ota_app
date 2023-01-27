@@ -102,13 +102,13 @@ class UploadScreenState extends State<UploadScreen> {
     );
 
     if (result != null) {
-      await _uploadFile(result.files.single.path!);
+      await _uploadLocalFile(result.files.single.path!);
     } else {
       // User canceled the picker
     }
   }
 
-  Future<void> _uploadFile(String path) async {
+  Future<void> _uploadLocalFile(String path) async {
     File file = File(path);
     var data = await file.readAsBytes();
     widget.bleUploader.upload(data);
