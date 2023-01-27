@@ -215,6 +215,7 @@ class UploadScreenState extends State<UploadScreen> {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Text(text,
+          textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 24,
           )),
