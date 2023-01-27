@@ -115,19 +115,13 @@ class UploadScreenState extends State<UploadScreen> {
 
   Future<void> _uploadHttpFile(String softwarePath) async {
     try {
-      print("VOVA: tap: $softwarePath");
       final response = await http.get(Uri.parse(softwarePath));
-      print("VOVA: resp: ${response.statusCode}");
       if (response.statusCode != 200) {
         return;
       }
 
-      print("VOVA: size: ${response.bodyBytes.length}");
-      // widget.bleUploader.upload(response.bodyBytes);
-
-    } catch (e) {
-      print("VOVA: execp: ${e}");
-    }
+      widget.bleUploader.upload(response.bodyBytes);
+    } catch (_) {} // TODO: handle
   }
 
   MaterialColor _determinateStatusColor() {
