@@ -271,7 +271,8 @@ class UploadScreenState extends State<UploadScreen> {
     final showStatusOnly =
         bleConnectionState == BleConnectionState.disconnected ||
             !hardwareInfoState.ready ||
-            !softwareInfoState.ready;
+            !softwareInfoState.ready ||
+            softwareInfoState.softwareInfoList.isEmpty;
     return showStatusOnly
         ? _buildSoftwareStatus()
         : _buildExpandedSoftwareList();
