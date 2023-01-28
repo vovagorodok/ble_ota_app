@@ -43,6 +43,7 @@ dependencies:
   http: ^0.13.5
   wakelock: ^0.6.2
   expandable: ^5.0.1
+  meta: ^1.8.0
 
 dev_dependencies:
   flutter_test:
