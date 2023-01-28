@@ -77,7 +77,6 @@ class BleUploader extends StatefulStream<BleUploadState> {
     _packageMaxSize = _bytesToUint32(data, attrSizePos) - headCodeBytesNum;
     _bufferMaxSize = _bytesToUint32(data, bufferSizePos);
 
-    // TODO: fix and remove
     ble.requestMtu(
         deviceId: deviceId, mtu: _packageMaxSize + headCodeBytesNum + 4);
   }
