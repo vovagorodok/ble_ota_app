@@ -1,11 +1,11 @@
-import 'package:ble_ota_app/src/ble/ble.dart';
-import 'package:ble_ota_app/src/ui/status_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:ble_ota_app/src/ble/ble_scanner.dart';
-import 'package:ble_ota_app/src/ble/ble_uuids.dart';
-import 'package:ble_ota_app/src/ui/upload_screen.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:ble_ota_app/src/ble/ble.dart';
+import 'package:ble_ota_app/src/ble/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/ui/status_screen.dart';
+import 'package:ble_ota_app/src/ui/upload_screen.dart';
 
 class ScanerScreen extends StatefulWidget {
   const ScanerScreen({Key? key}) : super(key: key);

@@ -2,8 +2,8 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';

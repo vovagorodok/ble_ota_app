@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
-import 'package:ble_ota_app/src/ble/ble_connector.dart';
-import 'package:ble_ota_app/src/http/http_info_reader.dart';
-import 'package:ble_ota_app/src/core/softwate_info.dart';
-import 'package:ble_ota_app/src/core/uploader.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:ble_ota_app/src/core/softwate_info.dart';
+import 'package:ble_ota_app/src/core/uploader.dart';
+import 'package:ble_ota_app/src/http/http_info_reader.dart';
+import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
+import 'package:ble_ota_app/src/ble/ble_connector.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})

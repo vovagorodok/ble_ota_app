@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
-import 'package:http/http.dart' as http;
 
 class Uploader extends StatefulStream<UploadState> {
   Uploader({required deviceId})
@@ -45,7 +45,8 @@ class Uploader extends StatefulStream<UploadState> {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode != 200) {
         _state.status = UploadStatus.error;
-        _state.errorMsg = "Unexpected network response code ${response.statusCode}";
+        _state.errorMsg =
+            "Unexpected network response code ${response.statusCode}";
         addStateToStream(state);
         return;
       }

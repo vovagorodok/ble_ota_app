@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/hardware_info.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
 class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
   SoftwareInfoState _state = SoftwareInfoState();

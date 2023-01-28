@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ble_ota_app/src/ble/ble.dart';
 
 class StatusScreen extends StatefulWidget {
   const StatusScreen({Key? key}) : super(key: key);
