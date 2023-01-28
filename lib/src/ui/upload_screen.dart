@@ -264,6 +264,19 @@ class UploadScreenState extends State<UploadScreen> {
         ]),
       );
 
+  Widget _buildSoftwareStatusOrList() {
+    final bleConnectionState = widget.bleConnector.state;
+    final hardwareInfoState = widget.bleInfoReader.state;
+    final softwareInfoState = widget.httpInfoReader.state;
+    final showStatusOnly =
+        bleConnectionState == BleConnectionState.disconnected ||
+            !hardwareInfoState.ready ||
+            !softwareInfoState.ready;
+    return showStatusOnly
+        ? _buildSoftwareStatus()
+        : _buildExpandedSoftwareList();
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
@@ -288,7 +301,7 @@ class UploadScreenState extends State<UploadScreen> {
                 Expanded(
                   child: ListView(
                     children: [
-                      _buildExpandedSoftwareList(),
+                      _buildSoftwareStatusOrList(),
                     ],
                   ),
                 ),
