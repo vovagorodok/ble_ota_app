@@ -7,6 +7,7 @@ import 'package:ble_ota_app/src/ble/ble.dart';
 
 class BleScanner extends StatefulStream<BleScanState> {
   final _devices = <DiscoveredDevice>[];
+  final _scanDuration = const Duration(seconds: 10);
   StreamSubscription? _subscription;
 
   @override
@@ -29,6 +30,10 @@ class BleScanner extends StatefulStream<BleScanState> {
       addStateToStream(state);
     }, onError: (Object e) {});
     addStateToStream(state);
+
+    Future.delayed(_scanDuration, () {
+      stopScan();
+    });
   }
 
   Future<void> stopScan() async {

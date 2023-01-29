@@ -57,6 +57,8 @@ class ScanerScreenState extends State<ScanerScreen> {
             builder: (context, snapshot) => Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                if (bleScanner.state.discoveredDevices.isNotEmpty)
+                  const Text("Device list"),
                 Flexible(
                   child: ListView(
                     children: bleScanner.state.discoveredDevices
@@ -84,6 +86,8 @@ class ScanerScreenState extends State<ScanerScreen> {
                         .toList(),
                   ),
                 ),
+                if (bleScanner.state.scanIsInProgress)
+                  const CircularProgressIndicator(),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
