@@ -17,7 +17,9 @@ class ScanerScreen extends StatefulWidget {
 class ScanerScreenState extends State<ScanerScreen> {
   void _evaluateBleStatus(BleStatus status) {
     setState(() {
-      if (status != BleStatus.ready && status != BleStatus.unknown) {
+      if (status == BleStatus.ready) {
+        _startScan();
+      } else if (status != BleStatus.unknown) {
         _stopScan();
         Navigator.push(
           context,
