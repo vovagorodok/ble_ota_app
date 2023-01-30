@@ -63,7 +63,7 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
     () async {
       try {
         const path =
-            "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/assets/hardwares.json";
+            "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json";
         final response = await http.get(Uri.parse(path));
         if (response.statusCode != 200) {
           return;
