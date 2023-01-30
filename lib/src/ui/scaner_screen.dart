@@ -32,6 +32,10 @@ class ScanerScreenState extends State<ScanerScreen> {
   void _startScan() {
     Wakelock.enable();
     bleScanner.startScan([serviceUuid]);
+
+    Future.delayed(const Duration(seconds: 10), () {
+      _stopScan();
+    });
   }
 
   void _stopScan() {
@@ -94,6 +98,8 @@ class ScanerScreenState extends State<ScanerScreen> {
                         .toList(),
                   ),
                 ),
+                if (bleScanner.state.scanIsInProgress)
+                  const CircularProgressIndicator(),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
