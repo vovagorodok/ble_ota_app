@@ -56,15 +56,13 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
     } catch (_) {}
   }
 
-  void read(HardwareInfo hwInfo) {
+  void read(HardwareInfo hwInfo, String hardwaresDictParh) {
     _state = SoftwareInfoState();
     addStateToStream(state);
 
     () async {
       try {
-        const path =
-            "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json";
-        final response = await http.get(Uri.parse(path));
+        final response = await http.get(Uri.parse(hardwaresDictParh));
         if (response.statusCode != 200) {
           return;
         }

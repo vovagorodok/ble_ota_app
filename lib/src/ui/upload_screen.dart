@@ -43,7 +43,10 @@ class UploadScreenState extends State<UploadScreen> {
   void _onHardwareInfoStateChanged(HardwareInfoState state) {
     setState(() {
       if (state.ready) {
-        widget.httpInfoReader.read(state.hwInfo);
+        // TODO: Chenge to perf.hardwaresDictParh
+        const hardwaresDictParh =
+            "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json";
+        widget.httpInfoReader.read(state.hwInfo, hardwaresDictParh);
       }
     });
   }
@@ -92,6 +95,7 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUploadLocalFile() {
+    // TODO: Add perf.alwaysAllowLocalFileUpload && ..
     return widget.httpInfoReader.state.unregistered;
   }
 
