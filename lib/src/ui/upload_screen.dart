@@ -89,6 +89,10 @@ class UploadScreenState extends State<UploadScreen> {
         widget.uploader.state.status != UploadStatus.upload;
   }
 
+  bool _canUploadLocalFile() {
+    return _canUpload() && widget.httpInfoReader.state.unregistered;
+  }
+
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -313,7 +317,7 @@ class UploadScreenState extends State<UploadScreen> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.file_open),
                   label: const Text('Upload file'),
-                  onPressed: _canUpload() ? _pickFile : null,
+                  onPressed: _canUploadLocalFile() ? _pickFile : null,
                 ),
               ],
             ),

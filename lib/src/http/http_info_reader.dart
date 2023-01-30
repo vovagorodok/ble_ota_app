@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/hardware_info.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
@@ -62,13 +61,22 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
     addStateToStream(state);
 
     () async {
-      final data = await rootBundle.loadString("assets/hardwares.json");
-      final body = json.decode(data);
-      final hardwarePath = body[hwInfo.hwName];
+      try {
+        const path =
+            "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/assets/hardwares.json";
+        final response = await http.get(Uri.parse(path));
+        if (response.statusCode != 200) {
+          return;
+        }
 
-      if (hardwarePath != null) {
-        await _readSoftware(hwInfo, hardwarePath);
-      }
+        final body = json.decode(response.body);
+        final hardwarePath = body[hwInfo.hwName];
+        if (hardwarePath != null) {
+          await _readSoftware(hwInfo, hardwarePath);
+        } else {
+          state.unregistered = true;
+        }
+      } catch (_) {}
 
       state.ready = true;
       addStateToStream(state);
@@ -82,6 +90,7 @@ class SoftwareInfoState {
     this.hardwareIcon,
     this.softwareInfoList = const [],
     this.newest,
+    this.unregistered = false,
     this.ready = false,
   });
 
@@ -89,5 +98,6 @@ class SoftwareInfoState {
   String? hardwareIcon;
   List<SoftwareInfo> softwareInfoList;
   SoftwareInfo? newest;
+  bool unregistered;
   bool ready;
 }
