@@ -86,7 +86,9 @@ class UploadScreenState extends State<UploadScreen> {
 
   bool _canUpload() {
     return widget.bleConnector.state == BleConnectionState.connected &&
-        widget.uploader.state.status != UploadStatus.upload;
+        widget.uploader.state.status != UploadStatus.upload &&
+        widget.bleInfoReader.state.ready &&
+        widget.httpInfoReader.state.ready;
   }
 
   bool _canUploadLocalFile() {
@@ -318,7 +320,7 @@ class UploadScreenState extends State<UploadScreen> {
                   ElevatedButton.icon(
                     icon: const Icon(Icons.file_open),
                     label: const Text('Upload file'),
-                    onPressed: _canUploadLocalFile() ? _pickFile : null,
+                    onPressed: _canUpload() ? _pickFile : null,
                   ),
               ],
             ),
