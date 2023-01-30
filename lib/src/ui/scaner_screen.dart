@@ -57,8 +57,6 @@ class ScanerScreenState extends State<ScanerScreen> {
             builder: (context, snapshot) => Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (bleScanner.state.discoveredDevices.isNotEmpty)
-                  const Text("Device list"),
                 Flexible(
                   child: ListView(
                     children: bleScanner.state.discoveredDevices
