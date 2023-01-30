@@ -59,10 +59,6 @@ class HardwareInfoState {
     this.ready = false,
   });
 
-  String _toString(name, ver) => ready ? "$name v$ver" : "reading..";
-  String toHwString() => _toString(hwInfo.hwName, hwInfo.hwVer);
-  String toSwString() => _toString(hwInfo.swName, hwInfo.swVer);
-
   HardwareInfo hwInfo;
   bool ready;
 }

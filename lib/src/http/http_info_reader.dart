@@ -56,13 +56,13 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
     } catch (_) {}
   }
 
-  void read(HardwareInfo hwInfo, String hardwaresDictParh) {
+  void read(HardwareInfo hwInfo, String hardwaresDictUrl) {
     _state = SoftwareInfoState();
     addStateToStream(state);
 
     () async {
       try {
-        final response = await http.get(Uri.parse(hardwaresDictParh));
+        final response = await http.get(Uri.parse(hardwaresDictUrl));
         if (response.statusCode != 200) {
           return;
         }

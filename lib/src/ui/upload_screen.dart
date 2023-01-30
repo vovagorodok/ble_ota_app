@@ -6,24 +6,21 @@ import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/uploader.dart';
-import 'package:ble_ota_app/src/http/http_info_reader.dart';
-import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
+import 'package:ble_ota_app/src/core/info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, Key? key})
       : uploader = Uploader(deviceId: deviceId),
+        infoReader = InfoReader(deviceId: deviceId),
         bleConnector = BleConnector(deviceId: deviceId),
-        bleInfoReader = BleInfoReader(deviceId: deviceId),
-        httpInfoReader = HttpInfoReader(),
         super(key: key);
 
   final String deviceId;
   final String deviceName;
   final Uploader uploader;
+  final InfoReader infoReader;
   final BleConnector bleConnector;
-  final BleInfoReader bleInfoReader;
-  final HttpInfoReader httpInfoReader;
 
   @override
   State<UploadScreen> createState() => UploadScreenState();
@@ -36,22 +33,14 @@ class UploadScreenState extends State<UploadScreen> {
     if (state == BleConnectionState.disconnected) {
       widget.bleConnector.findAndConnect();
     } else if (state == BleConnectionState.connected) {
-      widget.bleInfoReader.read();
+      // TODO: Chenge to perf.hardwaresDictUrl
+      const hardwaresDictUrl =
+          "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json";
+      widget.infoReader.read(hardwaresDictUrl);
     }
   }
 
-  void _onHardwareInfoStateChanged(HardwareInfoState state) {
-    setState(() {
-      if (state.ready) {
-        // TODO: Chenge to perf.hardwaresDictParh
-        const hardwaresDictParh =
-            "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json";
-        widget.httpInfoReader.read(state.hwInfo, hardwaresDictParh);
-      }
-    });
-  }
-
-  void _onSoftwareInfoStateChanged(SoftwareInfoState state) {
+  void _onInfoStateChanged(InfoState state) {
     setState(() {});
   }
 
@@ -69,8 +58,7 @@ class UploadScreenState extends State<UploadScreen> {
   void initState() {
     _subscriptions = [
       widget.uploader.stateStream.listen(_onUploadStateChanged),
-      widget.httpInfoReader.stateStream.listen(_onSoftwareInfoStateChanged),
-      widget.bleInfoReader.stateStream.listen(_onHardwareInfoStateChanged),
+      widget.infoReader.stateStream.listen(_onInfoStateChanged),
       widget.bleConnector.stateStream.listen(_onConnectionStateChanged),
     ];
     widget.bleConnector.connect();
@@ -90,13 +78,12 @@ class UploadScreenState extends State<UploadScreen> {
   bool _canUpload() {
     return widget.bleConnector.state == BleConnectionState.connected &&
         widget.uploader.state.status != UploadStatus.upload &&
-        widget.bleInfoReader.state.ready &&
-        widget.httpInfoReader.state.ready;
+        widget.infoReader.state.ready;
   }
 
   bool _canUploadLocalFile() {
     // TODO: Add perf.alwaysAllowLocalFileUpload && ..
-    return widget.httpInfoReader.state.unregistered;
+    return widget.infoReader.state.unregistered;
   }
 
   Future<void> _pickFile() async {
@@ -135,13 +122,13 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildProgressInside() {
     final uploadState = widget.uploader.state;
-    final softwareInfoState = widget.httpInfoReader.state;
+    final infoState = widget.infoReader.state;
     if (uploadState.status == UploadStatus.idle) {
       return CircleAvatar(
         radius: 55,
         backgroundColor: Colors.transparent,
-        backgroundImage: softwareInfoState.hardwareIcon != null
-            ? NetworkImage(softwareInfoState.hardwareIcon!)
+        backgroundImage: infoState.hardwareIcon != null
+            ? NetworkImage(infoState.hardwareIcon!)
             : null,
       );
     } else if (uploadState.status == UploadStatus.error) {
@@ -203,7 +190,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildSoftwareList() => Column(
         children: [
-          for (var sw in widget.httpInfoReader.state.softwareInfoList)
+          for (var sw in widget.infoReader.state.softwareInfoList)
             _buildSoftwareCard(sw)
         ],
       );
@@ -222,20 +209,19 @@ class UploadScreenState extends State<UploadScreen> {
   Widget _buildSoftwareStatus() {
     final bleConnectionState = widget.bleConnector.state;
     final uploadState = widget.uploader.state;
-    final hardwareInfoState = widget.bleInfoReader.state;
-    final softwareInfoState = widget.httpInfoReader.state;
+    final infoState = widget.infoReader.state;
 
     if (uploadState.status == UploadStatus.error) {
       return _buildStatusText(uploadState.errorMsg);
     } else if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText("Connecting..");
-    } else if (!hardwareInfoState.ready || !softwareInfoState.ready) {
+    } else if (!infoState.ready) {
       return _buildStatusText("Loading..");
     } else if (uploadState.status == UploadStatus.upload) {
       return _buildStatusText("Uploading..");
-    } else if (softwareInfoState.softwareInfoList.isEmpty) {
+    } else if (infoState.softwareInfoList.isEmpty) {
       return _buildStatusText("No available softwares");
-    } else if (softwareInfoState.newest == null) {
+    } else if (infoState.newest == null) {
       return _buildStatusText("Newest software already installed");
     } else {
       return Column(
@@ -249,7 +235,7 @@ class UploadScreenState extends State<UploadScreen> {
               textAlign: TextAlign.left,
             ),
           ),
-          _buildSoftwareCard(softwareInfoState.newest!),
+          _buildSoftwareCard(infoState.newest!),
         ],
       );
     }
@@ -279,14 +265,12 @@ class UploadScreenState extends State<UploadScreen> {
   Widget _buildSoftwareStatusOrList() {
     final bleConnectionState = widget.bleConnector.state;
     final uploadState = widget.uploader.state;
-    final hardwareInfoState = widget.bleInfoReader.state;
-    final softwareInfoState = widget.httpInfoReader.state;
+    final infoState = widget.infoReader.state;
     final showStatusOnly =
         bleConnectionState == BleConnectionState.disconnected ||
-            !hardwareInfoState.ready ||
-            !softwareInfoState.ready ||
+            !infoState.ready ||
             uploadState.status == UploadStatus.upload ||
-            softwareInfoState.softwareInfoList.isEmpty;
+            infoState.softwareInfoList.isEmpty;
     return showStatusOnly
         ? _buildSoftwareStatus()
         : _buildExpandedSoftwareList();
@@ -306,8 +290,8 @@ class UploadScreenState extends State<UploadScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     )),
-                Text("Hardware: ${widget.bleInfoReader.state.toHwString()}"),
-                Text("Software: ${widget.bleInfoReader.state.toSwString()}"),
+                Text("Hardware: ${widget.infoReader.state.toHwString()}"),
+                Text("Software: ${widget.infoReader.state.toSwString()}"),
                 const SizedBox(height: 25),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
