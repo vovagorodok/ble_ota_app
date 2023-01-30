@@ -248,9 +248,6 @@ class UploadScreenState extends State<UploadScreen> {
             scrollOnExpand: true,
             scrollOnCollapse: false,
             child: ExpandablePanel(
-              theme: const ExpandableThemeData(
-                headerAlignment: ExpandablePanelHeaderAlignment.center,
-              ),
               header: const Padding(
                 padding: EdgeInsets.all(10),
                 child: Text("All available softwares: "),
@@ -278,6 +275,10 @@ class UploadScreenState extends State<UploadScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(widget.deviceName),
+          centerTitle: true,
+        ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(25.0),
@@ -285,11 +286,6 @@ class UploadScreenState extends State<UploadScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(widget.deviceName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    )),
                 Text("Hardware: ${widget.infoReader.state.toHwString()}"),
                 Text("Software: ${widget.infoReader.state.toSwString()}"),
                 const SizedBox(height: 25),
