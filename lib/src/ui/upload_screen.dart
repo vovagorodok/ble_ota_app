@@ -90,7 +90,7 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUploadLocalFile() {
-    return _canUpload() && widget.httpInfoReader.state.unregistered;
+    return widget.httpInfoReader.state.unregistered;
   }
 
   Future<void> _pickFile() async {
@@ -314,11 +314,12 @@ class UploadScreenState extends State<UploadScreen> {
                     ],
                   ),
                 ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.file_open),
-                  label: const Text('Upload file'),
-                  onPressed: _canUploadLocalFile() ? _pickFile : null,
-                ),
+                if (_canUploadLocalFile())
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.file_open),
+                    label: const Text('Upload file'),
+                    onPressed: _canUploadLocalFile() ? _pickFile : null,
+                  ),
               ],
             ),
           ),
