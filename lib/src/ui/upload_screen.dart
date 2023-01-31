@@ -35,7 +35,7 @@ class UploadScreenState extends State<UploadScreen> {
     } else if (state == BleConnectionState.connected) {
       final hardwaresDictUrl =
           getSettingsValue<String>(keyHardwaresDictUrl, valueHardwaresDictUrl);
-      widget.infoReader.read(hardwaresDictUrl!);
+      widget.infoReader.read(hardwaresDictUrl);
     }
   }
 
