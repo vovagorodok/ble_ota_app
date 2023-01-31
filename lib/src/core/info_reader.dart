@@ -1,4 +1,4 @@
-import 'package:ble_ota_app/src/core/hardware_info.dart';
+import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
@@ -8,7 +8,7 @@ class InfoReader extends StatefulStream<InfoState> {
   InfoReader({required deviceId})
       : _bleInfoReader = BleInfoReader(deviceId: deviceId),
         _httpInfoReader = HttpInfoReader() {
-    _bleInfoReader.stateStream.listen(_onHardwareInfoStateChanged);
+    _bleInfoReader.stateStream.listen(_onDeviceInfoStateChanged);
     _httpInfoReader.stateStream.listen(_onSoftwareInfoStateChanged);
   }
 
@@ -20,10 +20,10 @@ class InfoReader extends StatefulStream<InfoState> {
   @override
   InfoState get state => _state;
 
-  void _onHardwareInfoStateChanged(HardwareInfoState hardwareInfoState) {
-    if (hardwareInfoState.ready) {
-      state.hardwareInfo = hardwareInfoState.hwInfo;
-      _httpInfoReader.read(state.hardwareInfo, _hardwaresDictUrl);
+  void _onDeviceInfoStateChanged(DeviceInfoState deviceInfoState) {
+    if (deviceInfoState.ready) {
+      state.deviceInfo = deviceInfoState.info;
+      _httpInfoReader.read(state.deviceInfo, _hardwaresDictUrl);
     }
   }
 
@@ -49,7 +49,7 @@ class InfoReader extends StatefulStream<InfoState> {
 
 class InfoState {
   InfoState({
-    this.hardwareInfo = const HardwareInfo(),
+    this.deviceInfo = const DeviceInfo(),
     this.hardwareIcon,
     this.softwareInfoList = const [],
     this.newest,
@@ -58,10 +58,12 @@ class InfoState {
   });
 
   String _toString(name, ver) => ready ? "$name v$ver" : "reading..";
-  String toHwString() => _toString(hardwareInfo.hwName, hardwareInfo.hwVer);
-  String toSwString() => _toString(hardwareInfo.swName, hardwareInfo.swVer);
+  String toHwString() =>
+      _toString(deviceInfo.hardwareName, deviceInfo.hardwareVersion);
+  String toSwString() =>
+      _toString(deviceInfo.softwareName, deviceInfo.softwareVersion);
 
-  HardwareInfo hardwareInfo;
+  DeviceInfo deviceInfo;
   String? hardwareIcon;
   List<SoftwareInfo> softwareInfoList;
   SoftwareInfo? newest;

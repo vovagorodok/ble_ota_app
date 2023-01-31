@@ -1,11 +1,11 @@
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:ble_ota_app/src/core/hardware_info.dart';
+import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/core/version.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 
-class BleInfoReader extends StatefulStream<HardwareInfoState> {
+class BleInfoReader extends StatefulStream<DeviceInfoState> {
   BleInfoReader({required String deviceId})
       : _characteristicHwName =
             _crateCharacteristic(characteristicUuidHwName, deviceId),
@@ -20,24 +20,24 @@ class BleInfoReader extends StatefulStream<HardwareInfoState> {
   final QualifiedCharacteristic _characteristicHwVer;
   final QualifiedCharacteristic _characteristicSwName;
   final QualifiedCharacteristic _characteristicSwVer;
-  final HardwareInfoState _state = HardwareInfoState();
+  final DeviceInfoState _state = DeviceInfoState();
 
   @override
-  HardwareInfoState get state => _state;
+  DeviceInfoState get state => _state;
 
   void read() {
     state.ready = false;
     addStateToStream(state);
 
     () async {
-      state.hwInfo = HardwareInfo(
-        hwName: String.fromCharCodes(
+      state.info = DeviceInfo(
+        hardwareName: String.fromCharCodes(
             await ble.readCharacteristic(_characteristicHwName)),
-        hwVer: Version.fromList(
+        hardwareVersion: Version.fromList(
             await ble.readCharacteristic(_characteristicHwVer)),
-        swName: String.fromCharCodes(
+        softwareName: String.fromCharCodes(
             await ble.readCharacteristic(_characteristicSwName)),
-        swVer: Version.fromList(
+        softwareVersion: Version.fromList(
             await ble.readCharacteristic(_characteristicSwVer)),
       );
       state.ready = true;
@@ -53,12 +53,12 @@ class BleInfoReader extends StatefulStream<HardwareInfoState> {
           deviceId: deviceId);
 }
 
-class HardwareInfoState {
-  HardwareInfoState({
-    this.hwInfo = const HardwareInfo(),
+class DeviceInfoState {
+  DeviceInfoState({
+    this.info = const DeviceInfo(),
     this.ready = false,
   });
 
-  HardwareInfo hwInfo;
+  DeviceInfo info;
   bool ready;
 }
