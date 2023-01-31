@@ -26,7 +26,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
   DeviceInfoState get state => _state;
 
   void read() {
-    state.ready = false;
+    state.isReady = false;
     addStateToStream(state);
 
     () async {
@@ -40,7 +40,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
         softwareVersion: Version.fromList(
             await ble.readCharacteristic(_characteristicSoftwareVersion)),
       );
-      state.ready = true;
+      state.isReady = true;
 
       addStateToStream(state);
     }.call();
@@ -56,9 +56,9 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
 class DeviceInfoState {
   DeviceInfoState({
     this.info = const DeviceInfo(),
-    this.ready = false,
+    this.isReady = false,
   });
 
   DeviceInfo info;
-  bool ready;
+  bool isReady;
 }

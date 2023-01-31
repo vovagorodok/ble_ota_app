@@ -83,7 +83,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         }
       } catch (_) {}
 
-      state.ready = true;
+      state.isReady = true;
       addStateToStream(state);
     }.call();
   }
@@ -92,9 +92,9 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
 class RemoteInfoState {
   RemoteInfoState({
     required this.info,
-    this.ready = false,
+    this.isReady = false,
   });
 
   RemoteInfo info;
-  bool ready;
+  bool isReady;
 }

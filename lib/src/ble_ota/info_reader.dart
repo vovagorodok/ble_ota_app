@@ -21,16 +21,16 @@ class InfoReader extends StatefulStream<InfoState> {
   InfoState get state => _state;
 
   void _onDeviceInfoStateChanged(DeviceInfoState deviceInfoState) {
-    if (deviceInfoState.ready) {
+    if (deviceInfoState.isReady) {
       state.deviceInfo = deviceInfoState.info;
       _httpInfoReader.read(state.deviceInfo, _hardwaresDictUrl);
     }
   }
 
   void _onRemoteInfoStateChanged(RemoteInfoState remoteInfoState) {
-    if (remoteInfoState.ready) {
+    if (remoteInfoState.isReady) {
       state.remoteInfo = remoteInfoState.info;
-      state.ready = true;
+      state.isReady = true;
       addStateToStream(state);
     }
   }
@@ -48,10 +48,10 @@ class InfoState {
   InfoState({
     this.deviceInfo = const DeviceInfo(),
     required this.remoteInfo,
-    this.ready = false,
+    this.isReady = false,
   });
 
-  String _toString(name, ver) => ready ? "$name v$ver" : "reading..";
+  String _toString(name, ver) => isReady ? "$name v$ver" : "reading..";
   String toHardwareString() =>
       _toString(deviceInfo.hardwareName, deviceInfo.hardwareVersion);
   String toSoftwareString() =>
@@ -59,5 +59,5 @@ class InfoState {
 
   DeviceInfo deviceInfo;
   RemoteInfo remoteInfo;
-  bool ready;
+  bool isReady;
 }
