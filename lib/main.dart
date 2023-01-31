@@ -10,11 +10,11 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
-  runApp(const MyApp());
+  runApp(const BleOtaApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BleOtaApp extends StatelessWidget {
+  const BleOtaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
