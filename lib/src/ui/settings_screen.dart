@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:ble_ota_app/src/settings/settings_pairs.dart';
+import 'package:ble_ota_app/src/settings/settings.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -28,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
                 CheckboxSettingsTile(
                   title: 'Infinite scan:',
                   settingKey: infiniteScan.key,
-                  defaultValue: infiniteScan.value,
+                  defaultValue: infiniteScan.defaultValue,
                 ),
               ],
             ),
@@ -38,12 +38,12 @@ class SettingsScreen extends StatelessWidget {
                 CheckboxSettingsTile(
                   title: 'Always allow local file upload:',
                   settingKey: alwaysAllowLocalFileUpload.key,
-                  defaultValue: alwaysAllowLocalFileUpload.value,
+                  defaultValue: alwaysAllowLocalFileUpload.defaultValue,
                 ),
                 TextInputSettingsTile(
                   title: 'Hardwares dict url:',
                   settingKey: hardwaresDictUrl.key,
-                  initialValue: hardwaresDictUrl.value,
+                  initialValue: hardwaresDictUrl.defaultValue,
                 ),
               ],
             ),

@@ -7,7 +7,7 @@ import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ui/status_screen.dart';
 import 'package:ble_ota_app/src/ui/settings_screen.dart';
 import 'package:ble_ota_app/src/ui/upload_screen.dart';
-import 'package:ble_ota_app/src/settings/settings_pairs.dart';
+import 'package:ble_ota_app/src/settings/settings.dart';
 
 class ScanerScreen extends StatefulWidget {
   const ScanerScreen({super.key});
@@ -35,7 +35,7 @@ class ScanerScreenState extends State<ScanerScreen> {
     Wakelock.enable();
     bleScanner.startScan([serviceUuid]);
 
-    if (!getSettingsValue(infiniteScan)) {
+    if (!infiniteScan.value) {
       Future.delayed(const Duration(seconds: 10), _stopScan);
     }
   }

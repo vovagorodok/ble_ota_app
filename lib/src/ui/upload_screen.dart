@@ -8,7 +8,7 @@ import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/uploader.dart';
 import 'package:ble_ota_app/src/core/info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
-import 'package:ble_ota_app/src/settings/settings_pairs.dart';
+import 'package:ble_ota_app/src/settings/settings.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, super.key})
@@ -33,7 +33,7 @@ class UploadScreenState extends State<UploadScreen> {
     if (state == BleConnectionState.disconnected) {
       widget.bleConnector.findAndConnect();
     } else if (state == BleConnectionState.connected) {
-      widget.infoReader.read(getSettingsValue(hardwaresDictUrl));
+      widget.infoReader.read(hardwaresDictUrl.value);
     }
   }
 
@@ -79,7 +79,7 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUploadLocalFile() {
-    return getSettingsValue(alwaysAllowLocalFileUpload) ||
+    return alwaysAllowLocalFileUpload.value ||
         widget.infoReader.state.unregistered;
   }
 
