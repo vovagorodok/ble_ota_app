@@ -75,4 +75,9 @@ class UploadState {
   int errorCode;
 }
 
-enum UploadStatus { idle, upload, success, error }
+enum UploadStatus {
+  idle,
+  upload,
+  success,
+  error,
+}

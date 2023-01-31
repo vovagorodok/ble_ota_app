@@ -60,4 +60,7 @@ class BleConnector extends StatefulStream<BleConnectionState> {
   }
 }
 
-enum BleConnectionState { connected, disconnected }
+enum BleConnectionState {
+  connected,
+  disconnected,
+}

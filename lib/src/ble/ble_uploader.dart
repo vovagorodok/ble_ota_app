@@ -153,4 +153,11 @@ class BleUploadState {
   int errorCode;
 }
 
-enum BleUploadStatus { idle, begin, upload, end, success, error }
+enum BleUploadStatus {
+  idle,
+  begin,
+  upload,
+  end,
+  success,
+  error,
+}
