@@ -23,6 +23,16 @@ class SettingsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(25.0),
           child: ListView(children: [
             SettingsGroup(
+              title: "General",
+              children: [
+                CheckboxSettingsTile(
+                  title: 'Infinite scan:',
+                  settingKey: keyInfiniteScan,
+                  defaultValue: valueInfiniteScan,
+                ),
+              ],
+            ),
+            SettingsGroup(
               title: "Develoers options",
               children: [
                 CheckboxSettingsTile(

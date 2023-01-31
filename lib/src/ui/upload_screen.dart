@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/uploader.dart';
 import 'package:ble_ota_app/src/core/info_reader.dart';
@@ -34,8 +33,8 @@ class UploadScreenState extends State<UploadScreen> {
     if (state == BleConnectionState.disconnected) {
       widget.bleConnector.findAndConnect();
     } else if (state == BleConnectionState.connected) {
-      final hardwaresDictUrl = Settings.getValue<String>(keyHardwaresDictUrl,
-          defaultValue: valueHardwaresDictUrl);
+      final hardwaresDictUrl =
+          getSettingsValue<String>(keyHardwaresDictUrl, valueHardwaresDictUrl);
       widget.infoReader.read(hardwaresDictUrl!);
     }
   }
@@ -82,10 +81,9 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUploadLocalFile() {
-    final alwaysAllowLocalFileUpload = Settings.getValue<bool>(
-        keyAlwaysAllowLocalFileUpload,
-        defaultValue: valueAlwaysAllowLocalFileUpload);
-    return alwaysAllowLocalFileUpload! || widget.infoReader.state.unregistered;
+    final alwaysAllowLocalFileUpload = getSettingsValue<bool>(
+        keyAlwaysAllowLocalFileUpload, valueAlwaysAllowLocalFileUpload);
+    return alwaysAllowLocalFileUpload || widget.infoReader.state.unregistered;
   }
 
   Future<void> _pickFile() async {
