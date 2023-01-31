@@ -204,7 +204,7 @@ class UploadScreenState extends State<UploadScreen> {
     );
   }
 
-  Widget _buildSoftwareStatus() {
+  Widget _buildStatusWidget() {
     final bleConnectionState = widget.bleConnector.state;
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
@@ -240,9 +240,9 @@ class UploadScreenState extends State<UploadScreen> {
     }
   }
 
-  Widget _buildExpandedSoftwareList() => ExpandableNotifier(
+  Widget _buildStatusWithSoftwareList() => ExpandableNotifier(
         child: Column(children: [
-          _buildSoftwareStatus(),
+          _buildStatusWidget(),
           ScrollOnExpand(
             scrollOnExpand: true,
             scrollOnCollapse: false,
@@ -258,18 +258,18 @@ class UploadScreenState extends State<UploadScreen> {
         ]),
       );
 
-  Widget _buildSoftwareStatusOrList() {
+  Widget _buildStatusWithOptionallySoftwareList() {
     final bleConnectionState = widget.bleConnector.state;
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
-    final showStatusOnly =
+    final buildStatusOnly =
         bleConnectionState == BleConnectionState.disconnected ||
             !infoState.isReady ||
             uploadState.status == UploadStatus.upload ||
             infoState.remoteInfo.softwareList.isEmpty;
-    return showStatusOnly
-        ? _buildSoftwareStatus()
-        : _buildExpandedSoftwareList();
+    return buildStatusOnly
+        ? _buildStatusWidget()
+        : _buildStatusWithSoftwareList();
   }
 
   @override
@@ -300,7 +300,7 @@ class UploadScreenState extends State<UploadScreen> {
                 Expanded(
                   child: ListView(
                     children: [
-                      _buildSoftwareStatusOrList(),
+                      _buildStatusWithOptionallySoftwareList(),
                     ],
                   ),
                 ),
