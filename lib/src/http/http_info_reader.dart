@@ -56,7 +56,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       final max = filteredBySoftwareList.reduce((Software a, Software b) {
         return a.version >= b.version ? a : b;
       });
-      if (max.ver <= deviceInfo.softwareVersion) {
+      if (max.version <= deviceInfo.softwareVersion) {
         return;
       }
       state.info.newestSoftware = max;
