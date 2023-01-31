@@ -36,7 +36,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
           SettingsGroup(
-            title: "Developers options",
+            title: "Developer options",
             children: [
               CheckboxSettingsTile(
                 title: 'Always allow local file upload:',
