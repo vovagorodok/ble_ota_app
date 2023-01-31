@@ -2,8 +2,8 @@ import 'package:meta/meta.dart';
 import 'package:ble_ota_app/src/core/version.dart';
 
 @immutable
-class SoftwareInfo {
-  const SoftwareInfo({
+class Software {
+  const Software({
     this.name = "",
     this.version = const Version(),
     this.path = "",
@@ -13,7 +13,7 @@ class SoftwareInfo {
     this.maxHardwareVersion,
   });
 
-  static SoftwareInfo fromJson(json) => SoftwareInfo(
+  static Software fromJson(json) => Software(
         name: json["software_name"],
         version: Version.fromList(json["software_version"]),
         path: json["software_path"],

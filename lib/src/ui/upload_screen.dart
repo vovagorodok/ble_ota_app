@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
-import 'package:ble_ota_app/src/core/softwate_info.dart';
+import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ble_ota/uploader.dart';
 import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
@@ -172,7 +172,7 @@ class UploadScreenState extends State<UploadScreen> {
     );
   }
 
-  Widget _buildSoftwareCard(SoftwareInfo sw) => Card(
+  Widget _buildSoftwareCard(Software sw) => Card(
         child: ListTile(
           leading: CircleAvatar(
             radius: 28,
@@ -188,7 +188,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildSoftwareList() => Column(
         children: [
-          for (var sw in widget.infoReader.state.remoteInfo.softwareInfoList)
+          for (var sw in widget.infoReader.state.remoteInfo.softwareList)
             _buildSoftwareCard(sw)
         ],
       );
@@ -218,7 +218,7 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText("Loading..");
     } else if (uploadState.status == UploadStatus.upload) {
       return _buildStatusText("Uploading..");
-    } else if (infoState.remoteInfo.softwareInfoList.isEmpty) {
+    } else if (infoState.remoteInfo.softwareList.isEmpty) {
       return _buildStatusText("No available softwares");
     } else if (infoState.remoteInfo.newestSoftware == null) {
       return _buildStatusText("Newest software already installed");
@@ -266,7 +266,7 @@ class UploadScreenState extends State<UploadScreen> {
         bleConnectionState == BleConnectionState.disconnected ||
             !infoState.ready ||
             uploadState.status == UploadStatus.upload ||
-            infoState.remoteInfo.softwareInfoList.isEmpty;
+            infoState.remoteInfo.softwareList.isEmpty;
     return showStatusOnly
         ? _buildSoftwareStatus()
         : _buildExpandedSoftwareList();

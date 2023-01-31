@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
-import 'package:ble_ota_app/src/core/softwate_info.dart';
+import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 
 class HttpInfoReader extends StatefulStream<RemoteInfoState> {
@@ -32,31 +32,28 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       _state.info.hardwareIcon = body["hardware_icon"];
 
       final softwares = body["softwares"];
-      final fullList =
-          softwares.map<SoftwareInfo>(SoftwareInfo.fromJson).toList();
-      final filteredByHardwareList =
-          fullList.where((SoftwareInfo softwareInfo) {
-        return (softwareInfo.hardwareVersion != null
-                ? softwareInfo.hardwareVersion == deviceInfo.hardwareVersion
+      final fullList = softwares.map<Software>(Software.fromJson).toList();
+      final filteredByHardwareList = fullList.where((Software software) {
+        return (software.hardwareVersion != null
+                ? software.hardwareVersion == deviceInfo.hardwareVersion
                 : true) &&
-            (softwareInfo.minHardwareVersion != null
-                ? softwareInfo.minHardwareVersion! <= deviceInfo.hardwareVersion
+            (software.minHardwareVersion != null
+                ? software.minHardwareVersion! <= deviceInfo.hardwareVersion
                 : true) &&
-            (softwareInfo.maxHardwareVersion != null
-                ? softwareInfo.maxHardwareVersion! >= deviceInfo.hardwareVersion
+            (software.maxHardwareVersion != null
+                ? software.maxHardwareVersion! >= deviceInfo.hardwareVersion
                 : true);
       }).toList();
       final filteredBySoftwareList =
-          filteredByHardwareList.where((SoftwareInfo softwareInfo) {
-        return softwareInfo.name == deviceInfo.softwareName;
+          filteredByHardwareList.where((Software software) {
+        return software.name == deviceInfo.softwareName;
       }).toList();
 
-      state.info.softwareInfoList = filteredByHardwareList;
+      state.info.softwareList = filteredByHardwareList;
       if (filteredBySoftwareList.isEmpty) {
         return;
       }
-      final max =
-          filteredBySoftwareList.reduce((SoftwareInfo a, SoftwareInfo b) {
+      final max = filteredBySoftwareList.reduce((Software a, Software b) {
         return a.version >= b.version ? a : b;
       });
       if (max.ver <= deviceInfo.softwareVersion) {
