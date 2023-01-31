@@ -51,12 +51,6 @@ class InfoState {
     this.isReady = false,
   });
 
-  String _toString(name, ver) => isReady ? "$name v$ver" : "reading..";
-  String toHardwareString() =>
-      _toString(deviceInfo.hardwareName, deviceInfo.hardwareVersion);
-  String toSoftwareString() =>
-      _toString(deviceInfo.softwareName, deviceInfo.softwareVersion);
-
   DeviceInfo deviceInfo;
   RemoteInfo remoteInfo;
   bool isReady;

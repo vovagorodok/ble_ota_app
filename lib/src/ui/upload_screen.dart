@@ -285,12 +285,17 @@ class UploadScreenState extends State<UploadScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Hardware: ${widget.infoReader.state.toHardwareString()}"),
-                Text("Software: ${widget.infoReader.state.toSoftwareString()}"),
+                Text(
+                  "Hardware: ${createHardwareString(widget.infoReader.state)}",
+                ),
+                Text(
+                  "Software: ${createSoftwareString(widget.infoReader.state)}",
+                ),
                 const SizedBox(height: 25),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [_buildProgressWidget()]),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [_buildProgressWidget()],
+                ),
                 const SizedBox(height: 20),
                 Expanded(
                   child: ListView(
