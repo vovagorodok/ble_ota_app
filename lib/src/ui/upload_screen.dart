@@ -33,9 +33,7 @@ class UploadScreenState extends State<UploadScreen> {
     if (state == BleConnectionState.disconnected) {
       widget.bleConnector.findAndConnect();
     } else if (state == BleConnectionState.connected) {
-      final hardwaresDictUrl =
-          getSettingsValue<String>(keyHardwaresDictUrl, valueHardwaresDictUrl);
-      widget.infoReader.read(hardwaresDictUrl);
+      widget.infoReader.read(getSettingsValue(hardwaresDictUrl));
     }
   }
 
@@ -81,9 +79,8 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUploadLocalFile() {
-    final alwaysAllowLocalFileUpload = getSettingsValue<bool>(
-        keyAlwaysAllowLocalFileUpload, valueAlwaysAllowLocalFileUpload);
-    return alwaysAllowLocalFileUpload || widget.infoReader.state.unregistered;
+    return getSettingsValue(alwaysAllowLocalFileUpload) ||
+        widget.infoReader.state.unregistered;
   }
 
   Future<void> _pickFile() async {

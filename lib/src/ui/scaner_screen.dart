@@ -35,7 +35,7 @@ class ScanerScreenState extends State<ScanerScreen> {
     Wakelock.enable();
     bleScanner.startScan([serviceUuid]);
 
-    if (!getSettingsValue<bool>(keyInfiniteScan, valueInfiniteScan)) {
+    if (!getSettingsValue(infiniteScan)) {
       Future.delayed(const Duration(seconds: 10), _stopScan);
     }
   }

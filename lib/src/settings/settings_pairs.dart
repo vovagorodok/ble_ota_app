@@ -1,15 +1,32 @@
+import 'package:meta/meta.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
-const keyInfiniteScan = 'key-infinite-scan';
-const valueInfiniteScan = false;
+@immutable
+class SettingsPair<T> {
+  const SettingsPair({
+    required this.key,
+    required this.value,
+  });
+  final String key;
+  final T value;
+}
 
-const keyAlwaysAllowLocalFileUpload = 'key-allow-local-upload';
-const valueAlwaysAllowLocalFileUpload = false;
+const infiniteScan = SettingsPair<bool>(
+  key: 'key-infinite-scan',
+  value: false,
+);
 
-const keyHardwaresDictUrl = 'key-dict-url';
-const valueHardwaresDictUrl =
-    "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json";
+const alwaysAllowLocalFileUpload = SettingsPair<bool>(
+  key: 'key-allow-local-upload',
+  value: false,
+);
 
-T getSettingsValue<T>(String key, T defaultValue) {
-  return Settings.getValue<T>(key, defaultValue: defaultValue) as T;
+const hardwaresDictUrl = SettingsPair<String>(
+  key: 'key-dict-url',
+  value:
+      "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json",
+);
+
+T getSettingsValue<T>(SettingsPair<T> pair) {
+  return Settings.getValue<T>(pair.key, defaultValue: pair.value) as T;
 }

@@ -27,8 +27,8 @@ class SettingsScreen extends StatelessWidget {
               children: [
                 CheckboxSettingsTile(
                   title: 'Infinite scan:',
-                  settingKey: keyInfiniteScan,
-                  defaultValue: valueInfiniteScan,
+                  settingKey: infiniteScan.key,
+                  defaultValue: infiniteScan.value,
                 ),
               ],
             ),
@@ -37,13 +37,13 @@ class SettingsScreen extends StatelessWidget {
               children: [
                 CheckboxSettingsTile(
                   title: 'Always allow local file upload:',
-                  settingKey: keyAlwaysAllowLocalFileUpload,
-                  defaultValue: valueAlwaysAllowLocalFileUpload,
+                  settingKey: alwaysAllowLocalFileUpload.key,
+                  defaultValue: alwaysAllowLocalFileUpload.value,
                 ),
                 TextInputSettingsTile(
                   title: 'Hardwares dict url:',
-                  settingKey: keyHardwaresDictUrl,
-                  initialValue: valueHardwaresDictUrl,
+                  settingKey: hardwaresDictUrl.key,
+                  initialValue: hardwaresDictUrl.value,
                 ),
               ],
             ),
