@@ -29,7 +29,7 @@ class SettingsScreenState extends State<SettingsScreen> {
             title: "General",
             children: [
               CheckboxSettingsTile(
-                title: 'Infinite scan:',
+                title: 'Infinite scan',
                 settingKey: infiniteScan.key,
                 defaultValue: infiniteScan.defaultValue,
               ),
@@ -39,12 +39,12 @@ class SettingsScreenState extends State<SettingsScreen> {
             title: "Developer options",
             children: [
               CheckboxSettingsTile(
-                title: 'Always allow local file upload:',
+                title: 'Always allow local file upload',
                 settingKey: alwaysAllowLocalFileUpload.key,
                 defaultValue: alwaysAllowLocalFileUpload.defaultValue,
               ),
               TextInputSettingsTile(
-                title: 'Hardwares dict url:',
+                title: 'Hardwares dict url',
                 settingKey: hardwaresDictUrl.key,
                 initialValue: hardwaresDictUrl.defaultValue,
               ),
