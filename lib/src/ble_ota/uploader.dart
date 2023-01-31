@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/state_stream.dart';
-import 'package:ble_ota_app/src/core/ble_ota_upload_error.dart';
+import 'package:ble_ota_app/src/ble_ota/ble_ota_upload_error.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 
 class Uploader extends StatefulStream<UploadState> {

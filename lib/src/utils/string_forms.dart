@@ -1,4 +1,4 @@
-import 'package:ble_ota_app/src/core/ble_ota_upload_error.dart';
+import 'package:ble_ota_app/src/ble_ota/ble_ota_upload_error.dart';
 
 String determineBleOtaUploadError(BleOtaUploadError error, int code) {
   switch (error) {
