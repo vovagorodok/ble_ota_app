@@ -5,6 +5,7 @@ import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ui/status_screen.dart';
+import 'package:ble_ota_app/src/ui/settings_screen.dart';
 import 'package:ble_ota_app/src/ui/upload_screen.dart';
 
 class ScanerScreen extends StatefulWidget {
@@ -57,7 +58,15 @@ class ScanerScreenState extends State<ScanerScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () {},
+            onPressed: () async {
+              _stopScan();
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),
