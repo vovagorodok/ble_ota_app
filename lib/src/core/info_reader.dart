@@ -1,5 +1,5 @@
 import 'package:ble_ota_app/src/core/device_info.dart';
-import 'package:ble_ota_app/src/core/softwate_info.dart';
+import 'package:ble_ota_app/src/core/remote_info.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/http/http_info_reader.dart';
@@ -15,7 +15,7 @@ class InfoReader extends StatefulStream<InfoState> {
   final BleInfoReader _bleInfoReader;
   final HttpInfoReader _httpInfoReader;
   late String _hardwaresDictUrl;
-  InfoState _state = InfoState();
+  InfoState _state = InfoState(remoteInfo: RemoteInfo());
 
   @override
   InfoState get state => _state;
@@ -29,10 +29,7 @@ class InfoReader extends StatefulStream<InfoState> {
 
   void _onRemoteInfoStateChanged(RemoteInfoState remoteInfoState) {
     if (remoteInfoState.ready) {
-      state.hardwareIcon = remoteInfoState.hardwareIcon;
-      state.softwareInfoList = remoteInfoState.softwareInfoList;
-      state.newestSoftware = remoteInfoState.newestSoftware;
-      state.unregisteredHardware = remoteInfoState.unregisteredHardware;
+      state.remoteInfo = remoteInfoState.info;
       state.ready = true;
       addStateToStream(state);
     }
@@ -40,7 +37,7 @@ class InfoReader extends StatefulStream<InfoState> {
 
   void read(String hardwaresDictUrl) {
     _hardwaresDictUrl = hardwaresDictUrl;
-    _state = InfoState();
+    _state = InfoState(remoteInfo: RemoteInfo());
     addStateToStream(state);
 
     _bleInfoReader.read();
@@ -50,10 +47,7 @@ class InfoReader extends StatefulStream<InfoState> {
 class InfoState {
   InfoState({
     this.deviceInfo = const DeviceInfo(),
-    this.hardwareIcon,
-    this.softwareInfoList = const [],
-    this.newestSoftware,
-    this.unregisteredHardware = false,
+    required this.remoteInfo,
     this.ready = false,
   });
 
@@ -64,9 +58,6 @@ class InfoState {
       _toString(deviceInfo.softwareName, deviceInfo.softwareVersion);
 
   DeviceInfo deviceInfo;
-  String? hardwareIcon;
-  List<SoftwareInfo> softwareInfoList;
-  SoftwareInfo? newestSoftware;
-  bool unregisteredHardware;
+  RemoteInfo remoteInfo;
   bool ready;
 }

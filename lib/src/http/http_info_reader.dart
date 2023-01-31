@@ -3,11 +3,12 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/device_info.dart';
+import 'package:ble_ota_app/src/core/remote_info.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 
 class HttpInfoReader extends StatefulStream<RemoteInfoState> {
-  RemoteInfoState _state = RemoteInfoState();
+  RemoteInfoState _state = RemoteInfoState(info: RemoteInfo());
 
   @override
   RemoteInfoState get state => _state;
@@ -24,11 +25,11 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
           !body.containsKey("softwares")) {
         return;
       }
-      _state.hardwareName = body["hardware_name"];
-      if (_state.hardwareName != deviceInfo.hardwareName) {
+      _state.info.hardwareName = body["hardware_name"];
+      if (_state.info.hardwareName != deviceInfo.hardwareName) {
         return;
       }
-      _state.hardwareIcon = body["hardware_icon"];
+      _state.info.hardwareIcon = body["hardware_icon"];
 
       final softwares = body["softwares"];
       final fullList =
@@ -50,7 +51,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         return softwareInfo.name == deviceInfo.softwareName;
       }).toList();
 
-      state.softwareInfoList = filteredByHardwareList;
+      state.info.softwareInfoList = filteredByHardwareList;
       if (filteredBySoftwareList.isEmpty) {
         return;
       }
@@ -61,12 +62,12 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       if (max.ver <= deviceInfo.softwareVersion) {
         return;
       }
-      state.newestSoftware = max;
+      state.info.newestSoftware = max;
     } catch (_) {}
   }
 
   void read(DeviceInfo deviceInfo, String hardwaresDictUrl) {
-    _state = RemoteInfoState();
+    _state = RemoteInfoState(info: RemoteInfo());
     addStateToStream(state);
 
     () async {
@@ -81,7 +82,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         if (hardwareUrl != null) {
           await _readSoftware(deviceInfo, hardwareUrl);
         } else {
-          state.unregisteredHardware = true;
+          state.info.unregisteredHardware = true;
         }
       } catch (_) {}
 
@@ -93,18 +94,10 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
 
 class RemoteInfoState {
   RemoteInfoState({
-    this.hardwareName = "",
-    this.hardwareIcon,
-    this.softwareInfoList = const [],
-    this.newestSoftware,
-    this.unregisteredHardware = false,
+    required this.info,
     this.ready = false,
   });
 
-  String hardwareName;
-  String? hardwareIcon;
-  List<SoftwareInfo> softwareInfoList;
-  SoftwareInfo? newestSoftware;
-  bool unregisteredHardware;
+  RemoteInfo info;
   bool ready;
 }

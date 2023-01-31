@@ -81,7 +81,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   bool _canUploadLocalFile() {
     return alwaysAllowLocalFileUpload.value ||
-        widget.infoReader.state.unregisteredHardware;
+        widget.infoReader.state.remoteInfo.unregisteredHardware;
   }
 
   Future<void> _pickFile() async {
@@ -125,8 +125,8 @@ class UploadScreenState extends State<UploadScreen> {
       return CircleAvatar(
         radius: 55,
         backgroundColor: Colors.transparent,
-        backgroundImage: infoState.hardwareIcon != null
-            ? NetworkImage(infoState.hardwareIcon!)
+        backgroundImage: infoState.remoteInfo.hardwareIcon != null
+            ? NetworkImage(infoState.remoteInfo.hardwareIcon!)
             : null,
       );
     } else if (uploadState.status == UploadStatus.error) {
@@ -188,7 +188,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildSoftwareList() => Column(
         children: [
-          for (var sw in widget.infoReader.state.softwareInfoList)
+          for (var sw in widget.infoReader.state.remoteInfo.softwareInfoList)
             _buildSoftwareCard(sw)
         ],
       );
@@ -218,9 +218,9 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText("Loading..");
     } else if (uploadState.status == UploadStatus.upload) {
       return _buildStatusText("Uploading..");
-    } else if (infoState.softwareInfoList.isEmpty) {
+    } else if (infoState.remoteInfo.softwareInfoList.isEmpty) {
       return _buildStatusText("No available softwares");
-    } else if (infoState.newestSoftware == null) {
+    } else if (infoState.remoteInfo.newestSoftware == null) {
       return _buildStatusText("Newest software already installed");
     } else {
       return Column(
@@ -234,7 +234,7 @@ class UploadScreenState extends State<UploadScreen> {
               textAlign: TextAlign.left,
             ),
           ),
-          _buildSoftwareCard(infoState.newestSoftware!),
+          _buildSoftwareCard(infoState.remoteInfo.newestSoftware!),
         ],
       );
     }
@@ -266,7 +266,7 @@ class UploadScreenState extends State<UploadScreen> {
         bleConnectionState == BleConnectionState.disconnected ||
             !infoState.ready ||
             uploadState.status == UploadStatus.upload ||
-            infoState.softwareInfoList.isEmpty;
+            infoState.remoteInfo.softwareInfoList.isEmpty;
     return showStatusOnly
         ? _buildSoftwareStatus()
         : _buildExpandedSoftwareList();
