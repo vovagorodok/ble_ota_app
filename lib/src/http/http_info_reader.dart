@@ -33,7 +33,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       final softwares = body["softwares"];
       final fullList =
           softwares.map<SoftwareInfo>(SoftwareInfo.fromJson).toList();
-      final filteredByHwList = fullList.where((SoftwareInfo info) {
+      final filteredByHardwareList = fullList.where((SoftwareInfo info) {
         return (info.hardwareVersion != null
                 ? info.hardwareVersion == deviceInfo.hardwareVersion
                 : true) &&
@@ -44,15 +44,17 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
                 ? info.maxHardwareVersion! >= deviceInfo.hardwareVersion
                 : true);
       }).toList();
-      final filteredBySwList = filteredByHwList.where((SoftwareInfo info) {
+      final filteredBySoftwareList =
+          filteredByHardwareList.where((SoftwareInfo info) {
         return info.name == deviceInfo.softwareName;
       }).toList();
 
-      state.softwareInfoList = filteredByHwList;
-      if (filteredBySwList.isEmpty) {
+      state.softwareInfoList = filteredByHardwareList;
+      if (filteredBySoftwareList.isEmpty) {
         return;
       }
-      final max = filteredBySwList.reduce((SoftwareInfo a, SoftwareInfo b) {
+      final max =
+          filteredBySoftwareList.reduce((SoftwareInfo a, SoftwareInfo b) {
         return a.version >= b.version ? a : b;
       });
       if (max.ver <= deviceInfo.softwareVersion) {

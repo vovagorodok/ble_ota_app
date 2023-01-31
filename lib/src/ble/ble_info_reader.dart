@@ -7,19 +7,19 @@ import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 
 class BleInfoReader extends StatefulStream<DeviceInfoState> {
   BleInfoReader({required String deviceId})
-      : _characteristicHwName =
-            _crateCharacteristic(characteristicUuidHwName, deviceId),
-        _characteristicHwVer =
-            _crateCharacteristic(characteristicUuidHwVer, deviceId),
-        _characteristicSwName =
-            _crateCharacteristic(characteristicUuidSwName, deviceId),
-        _characteristicSwVer =
-            _crateCharacteristic(characteristicUuidSwVer, deviceId);
+      : _characteristicHardwareName =
+            _crateCharacteristic(characteristicUuidHardwareName, deviceId),
+        _characteristicHardwareVersion =
+            _crateCharacteristic(characteristicUuidHardwareVersion, deviceId),
+        _characteristicSoftwareName =
+            _crateCharacteristic(characteristicUuidSoftwareName, deviceId),
+        _characteristicSoftwareVersion =
+            _crateCharacteristic(characteristicUuidSoftwareVersion, deviceId);
 
-  final QualifiedCharacteristic _characteristicHwName;
-  final QualifiedCharacteristic _characteristicHwVer;
-  final QualifiedCharacteristic _characteristicSwName;
-  final QualifiedCharacteristic _characteristicSwVer;
+  final QualifiedCharacteristic _characteristicHardwareName;
+  final QualifiedCharacteristic _characteristicHardwareVersion;
+  final QualifiedCharacteristic _characteristicSoftwareName;
+  final QualifiedCharacteristic _characteristicSoftwareVersion;
   final DeviceInfoState _state = DeviceInfoState();
 
   @override
@@ -32,13 +32,13 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
     () async {
       state.info = DeviceInfo(
         hardwareName: String.fromCharCodes(
-            await ble.readCharacteristic(_characteristicHwName)),
+            await ble.readCharacteristic(_characteristicHardwareName)),
         hardwareVersion: Version.fromList(
-            await ble.readCharacteristic(_characteristicHwVer)),
+            await ble.readCharacteristic(_characteristicHardwareVersion)),
         softwareName: String.fromCharCodes(
-            await ble.readCharacteristic(_characteristicSwName)),
+            await ble.readCharacteristic(_characteristicSoftwareName)),
         softwareVersion: Version.fromList(
-            await ble.readCharacteristic(_characteristicSwVer)),
+            await ble.readCharacteristic(_characteristicSoftwareVersion)),
       );
       state.ready = true;
 

@@ -58,9 +58,9 @@ class InfoState {
   });
 
   String _toString(name, ver) => ready ? "$name v$ver" : "reading..";
-  String toHwString() =>
+  String toHardwareString() =>
       _toString(deviceInfo.hardwareName, deviceInfo.hardwareVersion);
-  String toSwString() =>
+  String toSoftwareString() =>
       _toString(deviceInfo.softwareName, deviceInfo.softwareVersion);
 
   DeviceInfo deviceInfo;
