@@ -9,7 +9,7 @@ import 'package:ble_ota_app/src/ui/settings_screen.dart';
 import 'package:ble_ota_app/src/ui/upload_screen.dart';
 
 class ScanerScreen extends StatefulWidget {
-  const ScanerScreen({Key? key}) : super(key: key);
+  const ScanerScreen({super.key});
 
   @override
   State<ScanerScreen> createState() => ScanerScreenState();
@@ -63,7 +63,7 @@ class ScanerScreenState extends State<ScanerScreen> {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SettingsScreen(),
+                  builder: (context) => SettingsScreen(),
                 ),
               );
             },

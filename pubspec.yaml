@@ -44,6 +44,7 @@ dependencies:
   wakelock: ^0.6.2
   expandable: ^5.0.1
   meta: ^1.8.0
+  flutter_settings_screens: ^0.3.3-null-safety+2
 
 dev_dependencies:
   flutter_test:

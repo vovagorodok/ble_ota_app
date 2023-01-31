@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 
 class StatusScreen extends StatefulWidget {
-  const StatusScreen({Key? key}) : super(key: key);
+  const StatusScreen({super.key});
 
   @override
   State<StatusScreen> createState() => StatusScreenState();

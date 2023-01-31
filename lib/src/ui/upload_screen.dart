@@ -4,17 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/uploader.dart';
 import 'package:ble_ota_app/src/core/info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
+import 'package:ble_ota_app/src/settings/settings_pairs.dart';
 
 class UploadScreen extends StatefulWidget {
-  UploadScreen({required this.deviceId, required this.deviceName, Key? key})
+  UploadScreen({required this.deviceId, required this.deviceName, super.key})
       : uploader = Uploader(deviceId: deviceId),
         infoReader = InfoReader(deviceId: deviceId),
-        bleConnector = BleConnector(deviceId: deviceId),
-        super(key: key);
+        bleConnector = BleConnector(deviceId: deviceId);
 
   final String deviceId;
   final String deviceName;
@@ -33,10 +34,9 @@ class UploadScreenState extends State<UploadScreen> {
     if (state == BleConnectionState.disconnected) {
       widget.bleConnector.findAndConnect();
     } else if (state == BleConnectionState.connected) {
-      // TODO: Chenge to perf.hardwaresDictUrl
-      const hardwaresDictUrl =
-          "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json";
-      widget.infoReader.read(hardwaresDictUrl);
+      final hardwaresDictUrl = Settings.getValue<String>(keyHardwaresDictUrl,
+          defaultValue: valueHardwaresDictUrl);
+      widget.infoReader.read(hardwaresDictUrl!);
     }
   }
 
@@ -82,8 +82,10 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUploadLocalFile() {
-    // TODO: Add perf.alwaysAllowLocalFileUpload && ..
-    return widget.infoReader.state.unregistered;
+    final alwaysAllowLocalFileUpload = Settings.getValue<bool>(
+        keyAlwaysAllowLocalFileUpload,
+        defaultValue: valueAlwaysAllowLocalFileUpload);
+    return alwaysAllowLocalFileUpload! || widget.infoReader.state.unregistered;
   }
 
   Future<void> _pickFile() async {

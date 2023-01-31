@@ -1,31 +1,43 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:ble_ota_app/src/settings/settings_pairs.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
-  @override
-  State<SettingsScreen> createState() => SettingsScreenState();
-}
-
-class SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
         centerTitle: true,
-        actions: [
+        actions: const [
           IconButton(
-            icon: const Icon(Icons.cached),
-            onPressed: () {},
+            icon: Icon(Icons.cached),
+            onPressed: Settings.clearCache,
           ),
         ],
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(25.0),
-          child: Center(),
+          padding: const EdgeInsets.all(25.0),
+          child: ListView(children: [
+            SettingsGroup(
+              title: "Develoers options",
+              children: [
+                CheckboxSettingsTile(
+                  title: 'Always allow local file upload:',
+                  settingKey: keyAlwaysAllowLocalFileUpload,
+                  defaultValue: valueAlwaysAllowLocalFileUpload,
+                ),
+                TextInputSettingsTile(
+                  title: 'Hardwares dict url:',
+                  settingKey: keyHardwaresDictUrl,
+                  initialValue: valueHardwaresDictUrl,
+                ),
+              ],
+            ),
+          ]),
         ),
       ),
     );
