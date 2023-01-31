@@ -66,7 +66,7 @@ class ScanerScreenState extends State<ScanerScreen> {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SettingsScreen(),
+                  builder: (context) => const SettingsScreen(),
                 ),
               );
             },

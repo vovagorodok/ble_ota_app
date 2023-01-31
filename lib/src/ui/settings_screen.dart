@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
+  @override
+  State<SettingsScreen> createState() => SettingsScreenState();
+}
+
+class SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
         centerTitle: true,
-        actions: const [
+        actions: [
           IconButton(
-            icon: Icon(Icons.cached),
-            onPressed: Settings.clearCache,
+            icon: const Icon(Icons.cached),
+            onPressed: () => setState(Settings.clearCache),
           ),
         ],
       ),
