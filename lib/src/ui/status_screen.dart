@@ -22,7 +22,7 @@ class StatusScreenState extends State<StatusScreen> {
       case BleStatus.poweredOff:
         return "Bluetooth is disabled, turn it on";
       case BleStatus.locationServicesDisabled:
-        return "Location services are disabled, enable it";
+        return "Location services are disabled, enable them";
       case BleStatus.ready:
         return "Bluetooth is up and running";
       default:
