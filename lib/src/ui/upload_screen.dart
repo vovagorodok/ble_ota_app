@@ -6,6 +6,7 @@ import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/uploader.dart';
+import 'package:ble_ota_app/src/core/string_forms.dart';
 import 'package:ble_ota_app/src/core/info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
@@ -209,7 +210,8 @@ class UploadScreenState extends State<UploadScreen> {
     final infoState = widget.infoReader.state;
 
     if (uploadState.status == UploadStatus.error) {
-      return _buildStatusText(uploadState.errorMsg);
+      return _buildStatusText(
+          determineBleOtaUploadError(uploadState.error, uploadState.errorCode));
     } else if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText("Connecting..");
     } else if (!infoState.ready) {

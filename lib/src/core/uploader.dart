@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/ble_ota_upload_error.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 
 class Uploader extends StatefulStream<UploadState> {
@@ -21,7 +22,8 @@ class Uploader extends StatefulStream<UploadState> {
       state.status = UploadStatus.success;
     } else if (bleUploadState.status == BleUploadStatus.error) {
       state.status = UploadStatus.error;
-      state.errorMsg = bleUploadState.errorMsg;
+      state.error = bleUploadState.error;
+      state.errorCode = bleUploadState.errorCode;
     }
     state.progress = bleUploadState.progress;
     addStateToStream(state);
@@ -44,8 +46,8 @@ class Uploader extends StatefulStream<UploadState> {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode != 200) {
         _state.status = UploadStatus.error;
-        _state.errorMsg =
-            "Unexpected network response code ${response.statusCode}";
+        _state.error = BleOtaUploadError.unexpectedNetworkResponce;
+        _state.errorCode = response.statusCode;
         addStateToStream(state);
         return;
       }
@@ -53,7 +55,7 @@ class Uploader extends StatefulStream<UploadState> {
       _bleUploader.upload(response.bodyBytes);
     } catch (_) {
       _state.status = UploadStatus.error;
-      _state.errorMsg = "Network error";
+      _state.error = BleOtaUploadError.generalNetworkError;
       addStateToStream(state);
     }
   }
@@ -63,12 +65,14 @@ class UploadState {
   UploadState({
     this.status = UploadStatus.idle,
     this.progress = 0.0,
-    this.errorMsg = "",
+    this.error = BleOtaUploadError.unknown,
+    this.errorCode = 0,
   });
 
   UploadStatus status;
   double progress;
-  String errorMsg;
+  BleOtaUploadError error;
+  int errorCode;
 }
 
 enum UploadStatus { idle, upload, success, error }
