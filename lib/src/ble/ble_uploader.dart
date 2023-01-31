@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
-import 'package:ble_ota_app/src/ble_ota/ble_ota_upload_error.dart';
+import 'package:ble_ota_app/src/core/upload_error.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
@@ -143,13 +143,13 @@ class BleUploadState {
   BleUploadState({
     this.status = BleUploadStatus.idle,
     this.progress = 0.0,
-    this.error = BleOtaUploadError.unknown,
+    this.error = UploadError.unknown,
     this.errorCode = 0,
   });
 
   BleUploadStatus status;
   double progress;
-  BleOtaUploadError error;
+  UploadError error;
   int errorCode;
 }
 

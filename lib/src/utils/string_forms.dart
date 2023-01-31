@@ -1,22 +1,22 @@
-import 'package:ble_ota_app/src/ble_ota/ble_ota_upload_error.dart';
+import 'package:ble_ota_app/src/core/upload_error.dart';
 
-String determineBleOtaUploadError(BleOtaUploadError error, int code) {
+String determineUploadError(UploadError error, int code) {
   switch (error) {
-    case BleOtaUploadError.generalDeviceError:
+    case UploadError.generalDeviceError:
       return "Upload error";
-    case BleOtaUploadError.incorrectPackageFormat:
+    case UploadError.incorrectPackageFormat:
       return "Incorrect package format";
-    case BleOtaUploadError.incorrectFirmwareSize:
+    case UploadError.incorrectFirmwareSize:
       return "Incorrect firmware size";
-    case BleOtaUploadError.incorrectChecksum:
+    case UploadError.incorrectChecksum:
       return "Checksum error";
-    case BleOtaUploadError.internalSrorageError:
+    case UploadError.internalSrorageError:
       return "Internal storage error";
-    case BleOtaUploadError.unexpectedDeviceResponce:
+    case UploadError.unexpectedDeviceResponce:
       return "Unexpected device responce: $code";
-    case BleOtaUploadError.unexpectedNetworkResponce:
+    case UploadError.unexpectedNetworkResponce:
       return "Unexpected network responce: $code";
-    case BleOtaUploadError.generalNetworkError:
+    case UploadError.generalNetworkError:
       return "Network error";
     default:
       return "Unknown error: $code";

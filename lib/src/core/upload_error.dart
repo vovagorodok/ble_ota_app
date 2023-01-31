@@ -1,4 +1,4 @@
-enum BleOtaUploadError {
+enum UploadError {
   unknown,
   generalDeviceError,
   incorrectPackageFormat,

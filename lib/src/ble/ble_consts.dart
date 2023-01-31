@@ -1,4 +1,4 @@
-import 'package:ble_ota_app/src/ble_ota/ble_ota_upload_error.dart';
+import 'package:ble_ota_app/src/core/upload_error.dart';
 
 const uint8BytesNum = 1;
 const uint32BytesNum = 4;
@@ -25,19 +25,19 @@ class HeadCode {
   static const end = 0x12;
 }
 
-BleOtaUploadError determineErrorHeadCode(int code) {
+UploadError determineErrorHeadCode(int code) {
   switch (code) {
     case HeadCode.nok:
-      return BleOtaUploadError.generalDeviceError;
+      return UploadError.generalDeviceError;
     case HeadCode.incorrectFormat:
-      return BleOtaUploadError.incorrectPackageFormat;
+      return UploadError.incorrectPackageFormat;
     case HeadCode.incorrectFirmwareSize:
-      return BleOtaUploadError.incorrectFirmwareSize;
+      return UploadError.incorrectFirmwareSize;
     case HeadCode.checksumError:
-      return BleOtaUploadError.incorrectChecksum;
+      return UploadError.incorrectChecksum;
     case HeadCode.internalSrorageError:
-      return BleOtaUploadError.internalSrorageError;
+      return UploadError.internalSrorageError;
     default:
-      return BleOtaUploadError.unexpectedDeviceResponce;
+      return UploadError.unexpectedDeviceResponce;
   }
 }
