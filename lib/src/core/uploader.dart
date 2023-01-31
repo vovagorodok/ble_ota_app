@@ -6,12 +6,11 @@ import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 
 class Uploader extends StatefulStream<UploadState> {
   Uploader({required deviceId})
-      : bleUploader = BleUploader(deviceId: deviceId) {
-    bleUploader.stateStream.listen(_onBleUploadStateChanged);
+      : _bleUploader = BleUploader(deviceId: deviceId) {
+    _bleUploader.stateStream.listen(_onBleUploadStateChanged);
   }
 
-  final BleUploader bleUploader;
-
+  final BleUploader _bleUploader;
   UploadState _state = UploadState();
 
   @override
@@ -34,7 +33,7 @@ class Uploader extends StatefulStream<UploadState> {
 
     File file = File(localPath);
     var data = await file.readAsBytes();
-    bleUploader.upload(data);
+    _bleUploader.upload(data);
   }
 
   Future<void> uploadHttpFile(String url) async {
@@ -51,7 +50,7 @@ class Uploader extends StatefulStream<UploadState> {
         return;
       }
 
-      bleUploader.upload(response.bodyBytes);
+      _bleUploader.upload(response.bodyBytes);
     } catch (_) {
       _state.status = UploadStatus.error;
       _state.errorMsg = "Network error";
