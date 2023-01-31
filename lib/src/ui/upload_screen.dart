@@ -81,7 +81,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   bool _canUploadLocalFile() {
     return alwaysAllowLocalFileUpload.value ||
-        widget.infoReader.state.unregistered;
+        widget.infoReader.state.unregisteredHardware;
   }
 
   Future<void> _pickFile() async {
@@ -180,7 +180,7 @@ class UploadScreenState extends State<UploadScreen> {
             backgroundImage: sw.icon != null ? NetworkImage(sw.icon!) : null,
           ),
           title: Text(sw.name),
-          subtitle: Text("v${sw.ver}"),
+          subtitle: Text("v${sw.version}"),
           onTap: () => _uploadHttpFile(sw.path),
           enabled: _canUpload(),
         ),
@@ -220,7 +220,7 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText("Uploading..");
     } else if (infoState.softwareInfoList.isEmpty) {
       return _buildStatusText("No available softwares");
-    } else if (infoState.newest == null) {
+    } else if (infoState.newestSoftware == null) {
       return _buildStatusText("Newest software already installed");
     } else {
       return Column(
@@ -234,7 +234,7 @@ class UploadScreenState extends State<UploadScreen> {
               textAlign: TextAlign.left,
             ),
           ),
-          _buildSoftwareCard(infoState.newest!),
+          _buildSoftwareCard(infoState.newestSoftware!),
         ],
       );
     }

@@ -6,15 +6,15 @@ import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/softwate_info.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 
-class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
-  SoftwareInfoState _state = SoftwareInfoState();
+class HttpInfoReader extends StatefulStream<RemoteInfoState> {
+  RemoteInfoState _state = RemoteInfoState();
 
   @override
-  SoftwareInfoState get state => _state;
+  RemoteInfoState get state => _state;
 
-  Future<void> _readSoftware(DeviceInfo deviceInfo, String hardwarePath) async {
+  Future<void> _readSoftware(DeviceInfo deviceInfo, String hardwareUrl) async {
     try {
-      final response = await http.get(Uri.parse(hardwarePath));
+      final response = await http.get(Uri.parse(hardwareUrl));
       if (response.statusCode != 200) {
         return;
       }
@@ -34,14 +34,14 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
       final fullList =
           softwares.map<SoftwareInfo>(SoftwareInfo.fromJson).toList();
       final filteredByHwList = fullList.where((SoftwareInfo info) {
-        return (info.hwVer != null
-                ? info.hwVer == deviceInfo.hardwareVersion
+        return (info.hardwareVersion != null
+                ? info.hardwareVersion == deviceInfo.hardwareVersion
                 : true) &&
-            (info.minHwVer != null
-                ? info.minHwVer! <= deviceInfo.hardwareVersion
+            (info.minHardwareVersion != null
+                ? info.minHardwareVersion! <= deviceInfo.hardwareVersion
                 : true) &&
-            (info.maxHwVer != null
-                ? info.maxHwVer! >= deviceInfo.hardwareVersion
+            (info.maxHardwareVersion != null
+                ? info.maxHardwareVersion! >= deviceInfo.hardwareVersion
                 : true);
       }).toList();
       final filteredBySwList = filteredByHwList.where((SoftwareInfo info) {
@@ -53,17 +53,17 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
         return;
       }
       final max = filteredBySwList.reduce((SoftwareInfo a, SoftwareInfo b) {
-        return a.ver >= b.ver ? a : b;
+        return a.version >= b.version ? a : b;
       });
       if (max.ver <= deviceInfo.softwareVersion) {
         return;
       }
-      state.newest = max;
+      state.newestSoftware = max;
     } catch (_) {}
   }
 
   void read(DeviceInfo deviceInfo, String hardwaresDictUrl) {
-    _state = SoftwareInfoState();
+    _state = RemoteInfoState();
     addStateToStream(state);
 
     () async {
@@ -74,11 +74,11 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
         }
 
         final body = json.decode(response.body);
-        final hardwarePath = body[deviceInfo.hardwareName];
-        if (hardwarePath != null) {
-          await _readSoftware(deviceInfo, hardwarePath);
+        final hardwareUrl = body[deviceInfo.hardwareName];
+        if (hardwareUrl != null) {
+          await _readSoftware(deviceInfo, hardwareUrl);
         } else {
-          state.unregistered = true;
+          state.unregisteredHardware = true;
         }
       } catch (_) {}
 
@@ -88,20 +88,20 @@ class HttpInfoReader extends StatefulStream<SoftwareInfoState> {
   }
 }
 
-class SoftwareInfoState {
-  SoftwareInfoState({
+class RemoteInfoState {
+  RemoteInfoState({
     this.hardwareName = "",
     this.hardwareIcon,
     this.softwareInfoList = const [],
-    this.newest,
-    this.unregistered = false,
+    this.newestSoftware,
+    this.unregisteredHardware = false,
     this.ready = false,
   });
 
   String hardwareName;
   String? hardwareIcon;
   List<SoftwareInfo> softwareInfoList;
-  SoftwareInfo? newest;
-  bool unregistered;
+  SoftwareInfo? newestSoftware;
+  bool unregisteredHardware;
   bool ready;
 }

@@ -9,7 +9,7 @@ class InfoReader extends StatefulStream<InfoState> {
       : _bleInfoReader = BleInfoReader(deviceId: deviceId),
         _httpInfoReader = HttpInfoReader() {
     _bleInfoReader.stateStream.listen(_onDeviceInfoStateChanged);
-    _httpInfoReader.stateStream.listen(_onSoftwareInfoStateChanged);
+    _httpInfoReader.stateStream.listen(_onRemoteInfoStateChanged);
   }
 
   final BleInfoReader _bleInfoReader;
@@ -27,12 +27,12 @@ class InfoReader extends StatefulStream<InfoState> {
     }
   }
 
-  void _onSoftwareInfoStateChanged(SoftwareInfoState softwareInfoState) {
-    if (softwareInfoState.ready) {
-      state.hardwareIcon = softwareInfoState.hardwareIcon;
-      state.softwareInfoList = softwareInfoState.softwareInfoList;
-      state.newest = softwareInfoState.newest;
-      state.unregistered = softwareInfoState.unregistered;
+  void _onRemoteInfoStateChanged(RemoteInfoState remoteInfoState) {
+    if (remoteInfoState.ready) {
+      state.hardwareIcon = remoteInfoState.hardwareIcon;
+      state.softwareInfoList = remoteInfoState.softwareInfoList;
+      state.newestSoftware = remoteInfoState.newestSoftware;
+      state.unregisteredHardware = remoteInfoState.unregisteredHardware;
       state.ready = true;
       addStateToStream(state);
     }
@@ -52,8 +52,8 @@ class InfoState {
     this.deviceInfo = const DeviceInfo(),
     this.hardwareIcon,
     this.softwareInfoList = const [],
-    this.newest,
-    this.unregistered = false,
+    this.newestSoftware,
+    this.unregisteredHardware = false,
     this.ready = false,
   });
 
@@ -66,7 +66,7 @@ class InfoState {
   DeviceInfo deviceInfo;
   String? hardwareIcon;
   List<SoftwareInfo> softwareInfoList;
-  SoftwareInfo? newest;
-  bool unregistered;
+  SoftwareInfo? newestSoftware;
+  bool unregisteredHardware;
   bool ready;
 }
