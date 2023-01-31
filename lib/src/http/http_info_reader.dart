@@ -79,7 +79,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         if (hardwareUrl != null) {
           await _readSoftware(deviceInfo, hardwareUrl);
         } else {
-          state.info.unregisteredHardware = true;
+          state.info.isHardwareUnregistered = true;
         }
       } catch (_) {}
 

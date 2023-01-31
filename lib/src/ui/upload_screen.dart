@@ -81,7 +81,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   bool _canUploadLocalFile() {
     return alwaysAllowLocalFileUpload.value ||
-        widget.infoReader.state.remoteInfo.unregisteredHardware;
+        widget.infoReader.state.remoteInfo.isHardwareUnregistered;
   }
 
   Future<void> _pickFile() async {
