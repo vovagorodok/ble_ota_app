@@ -24,36 +24,33 @@ class SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: ListView(children: [
-            SettingsGroup(
-              title: "General",
-              children: [
-                CheckboxSettingsTile(
-                  title: 'Infinite scan:',
-                  settingKey: infiniteScan.key,
-                  defaultValue: infiniteScan.defaultValue,
-                ),
-              ],
-            ),
-            SettingsGroup(
-              title: "Develoers options",
-              children: [
-                CheckboxSettingsTile(
-                  title: 'Always allow local file upload:',
-                  settingKey: alwaysAllowLocalFileUpload.key,
-                  defaultValue: alwaysAllowLocalFileUpload.defaultValue,
-                ),
-                TextInputSettingsTile(
-                  title: 'Hardwares dict url:',
-                  settingKey: hardwaresDictUrl.key,
-                  initialValue: hardwaresDictUrl.defaultValue,
-                ),
-              ],
-            ),
-          ]),
-        ),
+        child: ListView(children: [
+          SettingsGroup(
+            title: "General",
+            children: [
+              CheckboxSettingsTile(
+                title: 'Infinite scan:',
+                settingKey: infiniteScan.key,
+                defaultValue: infiniteScan.defaultValue,
+              ),
+            ],
+          ),
+          SettingsGroup(
+            title: "Develoers options",
+            children: [
+              CheckboxSettingsTile(
+                title: 'Always allow local file upload:',
+                settingKey: alwaysAllowLocalFileUpload.key,
+                defaultValue: alwaysAllowLocalFileUpload.defaultValue,
+              ),
+              TextInputSettingsTile(
+                title: 'Hardwares dict url:',
+                settingKey: hardwaresDictUrl.key,
+                initialValue: hardwaresDictUrl.defaultValue,
+              ),
+            ],
+          ),
+        ]),
       ),
     );
   }
