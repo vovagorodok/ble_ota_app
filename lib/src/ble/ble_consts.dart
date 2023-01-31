@@ -1,5 +1,6 @@
 const uint8BytesNum = 1;
 const uint32BytesNum = 4;
+const mtuOverheadBytesNum = 4;
 const headCodeBytesNum = uint8BytesNum;
 const attrSizeBytesNum = uint32BytesNum;
 const bufferSizeBytesNum = uint32BytesNum;
