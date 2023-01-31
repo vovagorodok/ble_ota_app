@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:jumping_dot/jumping_dot.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
@@ -45,6 +46,43 @@ class ScanerScreenState extends State<ScanerScreen> {
     bleScanner.stopScan();
   }
 
+  Widget _buildDeviceCard(device) => Card(
+        child: ListTile(
+          title: Text(device.name),
+          subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
+          leading: const Icon(Icons.bluetooth),
+          onTap: () async {
+            _stopScan();
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    UploadScreen(deviceId: device.id, deviceName: device.name),
+              ),
+            );
+          },
+        ),
+      );
+
+  Widget _buildDevicesList() {
+    final devices = bleScanner.state.discoveredDevices;
+    final additionalElement = bleScanner.state.scanIsInProgress ? 1 : 0;
+
+    return ListView.builder(
+      itemCount: devices.length + additionalElement,
+      itemBuilder: (context, index) => index != devices.length
+          ? _buildDeviceCard(devices[index])
+          : const Padding(
+              padding: EdgeInsets.all(25.0),
+              child: JumpingDots(
+                color: Colors.grey,
+                radius: 6,
+                innerPadding: 5,
+              ),
+            ),
+    );
+  }
+
   @override
   void initState() {
     ble.statusStream.listen(_evaluateBleStatus);
@@ -82,34 +120,8 @@ class ScanerScreenState extends State<ScanerScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Flexible(
-                  child: ListView(
-                    children: bleScanner.state.discoveredDevices
-                        .map(
-                          (device) => Card(
-                            child: ListTile(
-                              title: Text(device.name),
-                              subtitle:
-                                  Text("${device.id}\nRSSI: ${device.rssi}"),
-                              leading: const Icon(Icons.bluetooth),
-                              onTap: () async {
-                                _stopScan();
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UploadScreen(
-                                        deviceId: device.id,
-                                        deviceName: device.name),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
+                  child: _buildDevicesList(),
                 ),
-                if (bleScanner.state.scanIsInProgress)
-                  const CircularProgressIndicator(),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
