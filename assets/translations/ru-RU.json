@@ -1,0 +1,11 @@
+{
+    "Devices": "Устройства",
+    "Scan": "Скан",
+    "Stop": "Стоп",
+    "Settings": "Настройки",
+    "General": "Общие",
+    "InfiniteScan": "Бесконечное сканирование",
+    "DeveloperOptions": "Параметры разработчика",
+    "AlwaysAllowLocalFilesUpload": "Всегда разрешать локальную загрузку файлов",
+    "HardwaresDictionaryLink": "Ссылка на словарь оборудований"
+}

@@ -40,9 +40,9 @@ class SettingsScreenState extends State<SettingsScreen> {
             title: tr('DeveloperOptions'),
             children: [
               CheckboxSettingsTile(
-                title: tr('AlwaysAllowLocalFileUpload'),
-                settingKey: alwaysAllowLocalFileUpload.key,
-                defaultValue: alwaysAllowLocalFileUpload.defaultValue,
+                title: tr('AlwaysAllowLocalFilesUpload'),
+                settingKey: alwaysAllowLocalFilesUpload.key,
+                defaultValue: alwaysAllowLocalFilesUpload.defaultValue,
               ),
               TextInputSettingsTile(
                 title: tr('HardwaresDictionaryLink'),

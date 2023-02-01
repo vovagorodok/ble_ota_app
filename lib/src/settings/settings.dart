@@ -18,7 +18,7 @@ const infiniteScan = Setting<bool>(
   key: 'key-infinite-scan',
   defaultValue: false,
 );
-const alwaysAllowLocalFileUpload = Setting<bool>(
+const alwaysAllowLocalFilesUpload = Setting<bool>(
   key: 'key-allow-local-upload',
   defaultValue: false,
 );

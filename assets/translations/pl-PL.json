@@ -4,8 +4,8 @@
     "Stop": "Zatrzymaj",
     "Settings": "Ustawienia",
     "General": "Ogólne",
-    "InfiniteScan": "Skanuj w nieskończoniść",
-    "DeveloperOptions": "Opcje deweloperskie",
-    "AlwaysAllowLocalFileUpload": "Zawsze pozwalaj na wgranie lokalnych plików",
+    "InfiniteScan": "Nieskończone skanowanie",
+    "DeveloperOptions": "Opcje programistyczne",
+    "AlwaysAllowLocalFilesUpload": "Zawsze zezwalaj na lokalne przesyłanie plików",
     "HardwaresDictionaryLink": "Link do słownika urządzeń"
 }

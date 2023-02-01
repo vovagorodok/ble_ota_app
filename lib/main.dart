@@ -14,7 +14,12 @@ void main() async {
   ));
   runApp(
     EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('pl', 'PL')],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('pl', 'PL'),
+          Locale('ru', 'RU'),
+          Locale('uk', 'UA'),
+        ],
         path: 'assets/translations',
         fallbackLocale: const Locale('en', 'US'),
         child: const BleOtaApp()),

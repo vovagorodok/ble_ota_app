@@ -80,7 +80,7 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUploadLocalFile() {
-    return alwaysAllowLocalFileUpload.value ||
+    return alwaysAllowLocalFilesUpload.value ||
         widget.infoReader.state.remoteInfo.isHardwareUnregistered;
   }
 
