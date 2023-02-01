@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 
@@ -16,17 +17,17 @@ class StatusScreenState extends State<StatusScreen> {
   String _determineText(BleStatus status) {
     switch (status) {
       case BleStatus.unsupported:
-        return "This device does not support Bluetooth";
+        return tr('ThisDeviceDoesNotSupportBluetooth');
       case BleStatus.unauthorized:
-        return "Authorize applicatin to use Bluetooth and location";
+        return tr('AuthorizeApplicatinToUseBluetoothAndLocation');
       case BleStatus.poweredOff:
-        return "Bluetooth is disabled, turn it on";
+        return tr('BluetoothIsDisabledTurnItOn');
       case BleStatus.locationServicesDisabled:
-        return "Location services are disabled, enable them";
+        return tr('LocationServicesAreDisabledEnableThem');
       case BleStatus.ready:
-        return "Bluetooth is up and running";
+        return tr('BluetoothIsUpAndRunning');
       default:
-        return "Waiting to fetch Bluetooth status $status";
+        return tr('WaitingToFetchBluetoothStatus', args: ['$status']);
     }
   }
 
