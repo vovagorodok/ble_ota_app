@@ -1,5 +1,11 @@
 {
     "Devices": "Devices",
     "Scan": "Scan",
-    "Stop": "Stop"
+    "Stop": "Stop",
+    "Settings": "Settings",
+    "General": "General",
+    "InfiniteScan": "Infinite scan",
+    "DeveloperOptions": "Developer options",
+    "AlwaysAllowLocalFileUpload": "Always allow local file upload",
+    "HardwaresDictionaryLink": "Hardwares dictionary link"
 }

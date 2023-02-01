@@ -1,5 +1,11 @@
 {
     "Devices": "Urządzenia",
     "Scan": "Skanuj",
-    "Stop": "Zatrzymaj"
+    "Stop": "Zatrzymaj",
+    "Settings": "Ustawienia",
+    "General": "Ogólne",
+    "InfiniteScan": "Skanuj w nieskończoniść",
+    "DeveloperOptions": "Opcje deweloperskie",
+    "AlwaysAllowLocalFileUpload": "Zawsze pozwalaj na wgranie lokalnych plików",
+    "HardwaresDictionaryLink": "Link do słownika urządzeń"
 }

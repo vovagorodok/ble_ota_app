@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: Text(tr('Settings')),
         centerTitle: true,
         actions: [
           IconButton(
@@ -26,25 +27,25 @@ class SettingsScreenState extends State<SettingsScreen> {
       body: SafeArea(
         child: ListView(children: [
           SettingsGroup(
-            title: "General",
+            title: tr('General'),
             children: [
               CheckboxSettingsTile(
-                title: 'Infinite scan',
+                title: tr('InfiniteScan'),
                 settingKey: infiniteScan.key,
                 defaultValue: infiniteScan.defaultValue,
               ),
             ],
           ),
           SettingsGroup(
-            title: "Developer options",
+            title: tr('DeveloperOptions'),
             children: [
               CheckboxSettingsTile(
-                title: 'Always allow local file upload',
+                title: tr('AlwaysAllowLocalFileUpload'),
                 settingKey: alwaysAllowLocalFileUpload.key,
                 defaultValue: alwaysAllowLocalFileUpload.defaultValue,
               ),
               TextInputSettingsTile(
-                title: 'Hardwares dict url',
+                title: tr('HardwaresDictionaryLink'),
                 settingKey: hardwaresDictUrl.key,
                 initialValue: hardwaresDictUrl.defaultValue,
               ),
