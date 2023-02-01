@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ble_ota/uploader.dart';
@@ -213,24 +214,24 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText(
           determineUploadError(uploadState.error, uploadState.errorCode));
     } else if (bleConnectionState == BleConnectionState.disconnected) {
-      return _buildStatusText("Connecting..");
+      return _buildStatusText(tr('Connecting..'));
     } else if (!infoState.isReady) {
-      return _buildStatusText("Loading..");
+      return _buildStatusText(tr('Loading..'));
     } else if (uploadState.status == UploadStatus.upload) {
-      return _buildStatusText("Uploading..");
+      return _buildStatusText(tr('Uploading..'));
     } else if (infoState.remoteInfo.softwareList.isEmpty) {
-      return _buildStatusText("No available softwares");
+      return _buildStatusText(tr('NoAvailableSoftwares'));
     } else if (infoState.remoteInfo.newestSoftware == null) {
-      return _buildStatusText("Newest software already installed");
+      return _buildStatusText(tr('NewestSoftwareAlreadyInstalled'));
     } else {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(10),
+          Padding(
+            padding: const EdgeInsets.all(10),
             child: Text(
-              "New software available:",
+              tr('NewSoftwareAvailable:'),
               textAlign: TextAlign.left,
             ),
           ),
@@ -247,9 +248,9 @@ class UploadScreenState extends State<UploadScreen> {
             scrollOnExpand: true,
             scrollOnCollapse: false,
             child: ExpandablePanel(
-              header: const Padding(
-                padding: EdgeInsets.all(10),
-                child: Text("All available softwares: "),
+              header: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(tr('AllAvailableSoftwares:')),
               ),
               collapsed: const SizedBox(),
               expanded: _buildSoftwareList(),
@@ -286,10 +287,12 @@ class UploadScreenState extends State<UploadScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Hardware: ${createHardwareString(widget.infoReader.state)}",
+                  tr('Hardware:',
+                      args: [createHardwareString(widget.infoReader.state)]),
                 ),
                 Text(
-                  "Software: ${createSoftwareString(widget.infoReader.state)}",
+                  tr('Software:',
+                      args: [createSoftwareString(widget.infoReader.state)]),
                 ),
                 const SizedBox(height: 25),
                 Row(
@@ -307,7 +310,7 @@ class UploadScreenState extends State<UploadScreen> {
                 if (_canUploadLocalFile())
                   ElevatedButton.icon(
                     icon: const Icon(Icons.file_open),
-                    label: const Text('Upload file'),
+                    label: Text(tr('UploadFile')),
                     onPressed: _canUpload() ? _pickFile : null,
                   ),
               ],

@@ -23,5 +23,14 @@
     "UnexpectedNetworkResponce": "Unexpected network responce: {}",
     "NetworkError": "Network error",
     "UnknownError": "Unknown error: {}",
-    "Loading..": "Loading.."
+    "Loading..": "Loading..",
+    "Connecting..": "Connecting..",
+    "Uploading..": "Uploading..",
+    "NoAvailableSoftwares": "No available softwares",
+    "NewestSoftwareAlreadyInstalled": "Newest software already installed",
+    "NewSoftwareAvailable:": "New software available:",
+    "AllAvailableSoftwares:" : "All available softwares:",
+    "UploadFile": "Upload file",
+    "Hardware:": "Hardware: {}",
+    "Software:": "Software: {}"
 }
