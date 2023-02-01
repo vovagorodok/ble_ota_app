@@ -46,6 +46,7 @@ dependencies:
   meta: ^1.8.0
   flutter_settings_screens: ^0.3.3-null-safety+2
   jumping_dot: ^0.0.4
+  easy_localization: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -99,3 +100,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  assets:
+    - assets/translations/

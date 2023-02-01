@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
@@ -94,7 +95,7 @@ class ScanerScreenState extends State<ScanerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Devices"),
+        title: Text(tr('Devices')),
         centerTitle: true,
         actions: [
           IconButton(
@@ -128,14 +129,14 @@ class ScanerScreenState extends State<ScanerScreen> {
                   children: [
                     ElevatedButton.icon(
                       icon: const Icon(Icons.search),
-                      label: const Text('Scan'),
+                      label: Text(tr('Scan')),
                       onPressed: !bleScanner.state.scanIsInProgress
                           ? _startScan
                           : null,
                     ),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.search_off),
-                      label: const Text('Stop'),
+                      label: Text(tr('Stop')),
                       onPressed:
                           bleScanner.state.scanIsInProgress ? _stopScan : null,
                     ),
