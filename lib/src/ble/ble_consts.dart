@@ -38,6 +38,6 @@ UploadError determineErrorHeadCode(int code) {
     case HeadCode.internalSrorageError:
       return UploadError.internalSrorageError;
     default:
-      return UploadError.unexpectedDeviceResponce;
+      return UploadError.unexpectedDeviceResponse;
   }
 }

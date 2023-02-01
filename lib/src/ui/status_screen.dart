@@ -19,7 +19,7 @@ class StatusScreenState extends State<StatusScreen> {
       case BleStatus.unsupported:
         return tr('ThisDeviceDoesNotSupportBluetooth');
       case BleStatus.unauthorized:
-        return tr('AuthorizeApplicatinToUseBluetoothAndLocation');
+        return tr('AuthorizeApplicationToUseBluetoothAndLocation');
       case BleStatus.poweredOff:
         return tr('BluetoothIsDisabledTurnItOn');
       case BleStatus.locationServicesDisabled:

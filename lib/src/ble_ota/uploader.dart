@@ -46,7 +46,7 @@ class Uploader extends StatefulStream<UploadState> {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode != 200) {
         _state.status = UploadStatus.error;
-        _state.error = UploadError.unexpectedNetworkResponce;
+        _state.error = UploadError.unexpectedNetworkResponse;
         _state.errorCode = response.statusCode;
         addStateToStream(state);
         return;

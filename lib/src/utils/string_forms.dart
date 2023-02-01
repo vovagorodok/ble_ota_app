@@ -14,10 +14,10 @@ String determineUploadError(UploadError error, int code) {
       return tr('ChecksumError');
     case UploadError.internalSrorageError:
       return tr('InternalStorageError');
-    case UploadError.unexpectedDeviceResponce:
-      return tr('UnexpectedDeviceResponce', args: ['$code']);
-    case UploadError.unexpectedNetworkResponce:
-      return tr('UnexpectedNetworkResponce', args: ['$code']);
+    case UploadError.unexpectedDeviceResponse:
+      return tr('UnexpectedDeviceResponse', args: ['$code']);
+    case UploadError.unexpectedNetworkResponse:
+      return tr('UnexpectedNetworkResponse', args: ['$code']);
     case UploadError.generalNetworkError:
       return tr('NetworkError');
     default:
