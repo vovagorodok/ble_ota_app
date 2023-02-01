@@ -1,31 +1,32 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
 import 'package:ble_ota_app/src/core/upload_error.dart';
 
 String determineUploadError(UploadError error, int code) {
   switch (error) {
     case UploadError.generalDeviceError:
-      return "Upload error";
+      return tr('UploadError');
     case UploadError.incorrectPackageFormat:
-      return "Incorrect package format";
+      return tr('IncorrectPackageFormat');
     case UploadError.incorrectFirmwareSize:
-      return "Incorrect firmware size";
+      return tr('IncorrectFirmwareSize');
     case UploadError.incorrectChecksum:
-      return "Checksum error";
+      return tr('ChecksumError');
     case UploadError.internalSrorageError:
-      return "Internal storage error";
+      return tr('InternalStorageError');
     case UploadError.unexpectedDeviceResponce:
-      return "Unexpected device responce: $code";
+      return tr('UnexpectedDeviceResponce', args: ['$code']);
     case UploadError.unexpectedNetworkResponce:
-      return "Unexpected network responce: $code";
+      return tr('UnexpectedNetworkResponce', args: ['$code']);
     case UploadError.generalNetworkError:
-      return "Network error";
+      return tr('NetworkError');
     default:
-      return "Unknown error: $code";
+      return tr('UnknownError', args: ['$code']);
   }
 }
 
 String createDeviceString(infoState, name, version) =>
-    infoState.isReady ? "$name v$version" : "loading..";
+    infoState.isReady ? "$name v$version" : tr('Loading..');
 String createHardwareString(InfoState infoState) => createDeviceString(
     infoState,
     infoState.deviceInfo.hardwareName,

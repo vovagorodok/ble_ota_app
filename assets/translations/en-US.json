@@ -13,5 +13,15 @@
     "BluetoothIsDisabledTurnItOn": "Bluetooth is disabled, turn it on",
     "LocationServicesAreDisabledEnableThem": "Location services are disabled, enable them",
     "BluetoothIsUpAndRunning": "Bluetooth is up and running",
-    "WaitingToFetchBluetoothStatus": "Waiting to fetch Bluetooth status: {}"
+    "WaitingToFetchBluetoothStatus": "Waiting to fetch Bluetooth status: {}",
+    "UploadError": "Upload error",
+    "IncorrectPackageFormat": "Incorrect package format",
+    "IncorrectFirmwareSize": "Incorrect firmware size",
+    "ChecksumError": "Checksum error",
+    "InternalStorageError": "Internal storage error",
+    "UnexpectedDeviceResponce": "Unexpected device responce: {}",
+    "UnexpectedNetworkResponce": "Unexpected network responce: {}",
+    "NetworkError": "Network error",
+    "UnknownError": "Unknown error: {}",
+    "Loading..": "Loading.."
 }
