@@ -44,12 +44,12 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
                 ? software.maxHardwareVersion! >= deviceInfo.hardwareVersion
                 : true);
       }).toList();
+      state.info.softwareList = filteredByHardwareList;
+
       final filteredBySoftwareList =
           filteredByHardwareList.where((Software software) {
         return software.name == deviceInfo.softwareName;
       }).toList();
-
-      state.info.softwareList = filteredByHardwareList;
       if (filteredBySoftwareList.isEmpty) {
         return;
       }

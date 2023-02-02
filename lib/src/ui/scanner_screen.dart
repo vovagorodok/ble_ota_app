@@ -11,14 +11,14 @@ import 'package:ble_ota_app/src/ui/settings_screen.dart';
 import 'package:ble_ota_app/src/ui/upload_screen.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
-class ScanerScreen extends StatefulWidget {
-  const ScanerScreen({super.key});
+class ScannerScreen extends StatefulWidget {
+  const ScannerScreen({super.key});
 
   @override
-  State<ScanerScreen> createState() => ScanerScreenState();
+  State<ScannerScreen> createState() => ScannerScreenState();
 }
 
-class ScanerScreenState extends State<ScanerScreen> {
+class ScannerScreenState extends State<ScannerScreen> {
   void _evaluateBleStatus(BleStatus status) {
     setState(() {
       if (status == BleStatus.ready) {

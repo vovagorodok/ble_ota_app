@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:ble_ota_app/src/ui/scaner_screen.dart';
+import 'package:ble_ota_app/src/ui/scanner_screen.dart';
 
 void main() async {
   await Settings.init();
@@ -38,7 +38,7 @@ class BleOtaApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: const ScanerScreen(),
+      home: const ScannerScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
