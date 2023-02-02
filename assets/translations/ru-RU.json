@@ -26,11 +26,11 @@
     "Loading..": "Загрузка..",
     "Connecting..": "Подключение..",
     "Uploading..": "Загрузка..",
-    "NoAvailableSoftwares": "Нет доступного ПО",
-    "NewestSoftwareAlreadyInstalled": "Самое новое ПО уже установлено",
-    "NewSoftwareAvailable:": "Доступно новое ПО:",
-    "AllAvailableSoftwares:" : "Все доступные ПО:",
+    "NoAvailableSoftwares": "Нет доступной прошивки",
+    "NewestSoftwareAlreadyInstalled": "Самая новая прошивка уже установлена",
+    "NewSoftwareAvailable:": "Доступная новая прошивка:",
+    "AllAvailableSoftwares:" : "Все доступные прошивки:",
     "UploadFile": "Загрузить файл",
     "Hardware:": "Оборудование: {}",
-    "Software:": "ПО: {}"
+    "Software:": "Прошивка: {}"
 }
