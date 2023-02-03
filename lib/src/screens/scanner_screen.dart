@@ -7,9 +7,9 @@ import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/core/timer_wrapper.dart';
-import 'package:ble_ota_app/src/ui/status_screen.dart';
-import 'package:ble_ota_app/src/ui/settings_screen.dart';
-import 'package:ble_ota_app/src/ui/upload_screen.dart';
+import 'package:ble_ota_app/src/screens/status_screen.dart';
+import 'package:ble_ota_app/src/screens/settings_screen.dart';
+import 'package:ble_ota_app/src/screens/upload_screen.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
 class ScannerScreen extends StatefulWidget {
