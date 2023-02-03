@@ -6,6 +6,7 @@ import 'package:jumping_dot/jumping_dot.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/core/timer_wrapper.dart';
 import 'package:ble_ota_app/src/ui/status_screen.dart';
 import 'package:ble_ota_app/src/ui/settings_screen.dart';
 import 'package:ble_ota_app/src/ui/upload_screen.dart';
@@ -19,6 +20,8 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class ScannerScreenState extends State<ScannerScreen> {
+  final scanTimer = TimerWrapper();
+
   void _evaluateBleStatus(BleStatus status) {
     setState(() {
       if (status == BleStatus.ready) {
@@ -38,11 +41,12 @@ class ScannerScreenState extends State<ScannerScreen> {
     bleScanner.startScan([serviceUuid]);
 
     if (!infiniteScan.value) {
-      Future.delayed(const Duration(seconds: 10), _stopScan);
+      scanTimer.start(const Duration(seconds: 10), _stopScan);
     }
   }
 
   void _stopScan() {
+    scanTimer.stop();
     Wakelock.disable();
     bleScanner.stopScan();
   }
