@@ -19,6 +19,7 @@
     "IncorrectFirmwareSize": "Неправильний розмір прошивки",
     "ChecksumError": "Помилка контрольної суми",
     "InternalStorageError": "Помилка внутрішньої пам'яті",
+    "NoDeviceResponse": "Пристрій не відповідає",
     "UnexpectedDeviceResponse": "Неочікувана відповідь пристрою: {}",
     "UnexpectedNetworkResponse": "Неочікувана відповідь мережі: {}",
     "NetworkError": "Помилка мережі",

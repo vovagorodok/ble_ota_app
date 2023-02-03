@@ -19,6 +19,7 @@
     "IncorrectFirmwareSize": "Incorrect firmware size",
     "ChecksumError": "Checksum error",
     "InternalStorageError": "Internal storage error",
+    "NoDeviceResponse": "No device response",
     "UnexpectedDeviceResponse": "Unexpected device response: {}",
     "UnexpectedNetworkResponse": "Unexpected network response: {}",
     "NetworkError": "Network error",

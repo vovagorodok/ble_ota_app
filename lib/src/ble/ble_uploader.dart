@@ -5,6 +5,7 @@ import 'package:archive/archive_io.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/core/upload_error.dart';
+import 'package:ble_ota_app/src/core/timer_wrapper.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
@@ -21,6 +22,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
   final String deviceId;
   final QualifiedCharacteristic _characteristicRx;
   final QualifiedCharacteristic _characteristicTx;
+  final responseGuard = TimerWrapper();
   BleUploadState _state = BleUploadState();
   Uint8List _dataToSend = Uint8List(0);
   int _currentDataPos = 0;
@@ -39,6 +41,21 @@ class BleUploader extends StatefulStream<BleUploadState> {
     addStateToStream(state);
     _dataToSend = data;
     _sendBegin();
+    _waitForResponse();
+  }
+
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    responseGuard.stop();
+  }
+
+  void _waitForResponse() {
+    responseGuard.start(const Duration(seconds: 20), () {
+      state.status = BleUploadStatus.error;
+      state.error = UploadError.noDeviceResponse;
+      addStateToStream(state);
+    });
   }
 
   void _sendData(List<int> data) {
@@ -51,6 +68,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
   }
 
   void _handleResp(Uint8List data) {
+    responseGuard.stop();
     var headCode = _bytesToUint8(data, headCodePos);
     if (headCode == HeadCode.ok) {
       if (state.status == BleUploadStatus.begin) {
@@ -61,6 +79,10 @@ class BleUploader extends StatefulStream<BleUploadState> {
       } else if (state.status == BleUploadStatus.end) {
         _dataToSend = Uint8List(0);
         state.status = BleUploadStatus.success;
+        addStateToStream(state);
+      } else {
+        state.status = BleUploadStatus.error;
+        state.error = UploadError.unexpectedDeviceResponse;
         addStateToStream(state);
       }
     } else {
@@ -101,6 +123,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
       _currentBufferSize += packageSize;
       if (_currentBufferSize > _bufferMaxSize) {
         _currentBufferSize = packageSize;
+        _waitForResponse();
         return;
       }
     }
@@ -112,6 +135,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
     _sendData(
         _uint8ToBytes(HeadCode.end) + _uint32ToBytes(getCrc32(_dataToSend)));
     state.status = BleUploadStatus.end;
+    _waitForResponse();
   }
 
   Uint8List _uint8ToBytes(int value) =>

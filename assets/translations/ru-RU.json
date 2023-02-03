@@ -19,6 +19,7 @@
     "IncorrectFirmwareSize": "Неправильный размер прошивки",
     "ChecksumError": "Ошибка контрольной суммы",
     "InternalStorageError": "Ошибка внутренней памяти",
+    "NoDeviceResponse": "Устройство не отвечает",
     "UnexpectedDeviceResponse": "Неожиданный ответ устройства: {}",
     "UnexpectedNetworkResponse": "Неожиданный ответ сети: {}",
     "NetworkError": "Ошибка сети",

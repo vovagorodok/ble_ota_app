@@ -14,6 +14,8 @@ String determineUploadError(UploadError error, int code) {
       return tr('ChecksumError');
     case UploadError.internalSrorageError:
       return tr('InternalStorageError');
+    case UploadError.noDeviceResponse:
+      return tr('NoDeviceResponse');
     case UploadError.unexpectedDeviceResponse:
       return tr('UnexpectedDeviceResponse', args: ['$code']);
     case UploadError.unexpectedNetworkResponse:

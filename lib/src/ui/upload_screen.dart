@@ -70,8 +70,14 @@ class UploadScreenState extends State<UploadScreen> {
     for (var subscription in _subscriptions) {
       subscription.cancel();
     }
-    widget.bleConnector.disconnect();
-    Wakelock.disable();
+
+    () async {
+      widget.uploader.dispose();
+      widget.infoReader.dispose();
+      widget.bleConnector.disconnect();
+      widget.bleConnector.dispose();
+      Wakelock.disable();
+    }.call();
   }
 
   bool _canUpload() {

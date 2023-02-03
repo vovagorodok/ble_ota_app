@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
+
 abstract class StatefulStream<T> extends StateStream<T> {
   T get state;
 }
@@ -12,6 +14,7 @@ abstract class StateStream<T> {
     _stateStreamController.add(state);
   }
 
+  @mustCallSuper
   Future<void> dispose() async {
     await _stateStreamController.close();
   }

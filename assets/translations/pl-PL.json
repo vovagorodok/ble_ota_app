@@ -19,6 +19,7 @@
     "IncorrectFirmwareSize": "Nieprawidłowy rozmiar oprogramowania",
     "ChecksumError": "Błąd sumy kontrolnej",
     "InternalStorageError": "Błąd pamięci wewnętrznej",
+    "NoDeviceResponse": "Brak odpowiedzi urządzenia",
     "UnexpectedDeviceResponse": "Nieoczekiwana odpowiedź urządzenia: {}",
     "UnexpectedNetworkResponse": "Nieoczekiwana odpowiedź sieci: {}",
     "NetworkError": "Błąd sieci",
