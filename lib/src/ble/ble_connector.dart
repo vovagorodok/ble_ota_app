@@ -30,28 +30,36 @@ class BleConnector extends StatefulStream<BleConnectionState> {
   }
 
   Future<void> findAndConnect() async {
-    _connection = ble
-        .connectToAdvertisingDevice(
-            id: deviceId,
-            withServices: [serviceUuid],
-            prescanDuration: const Duration(seconds: 20))
-        .listen(
-          _updateState,
-          onError: (Object e) {},
-        );
+    try {
+      _connection = ble
+          .connectToAdvertisingDevice(
+              id: deviceId,
+              withServices: [serviceUuid],
+              prescanDuration: const Duration(seconds: 20))
+          .listen(
+            _updateState,
+            onError: (Object e) {},
+          );
+    } catch (_) {
+      // TODO: handle exception
+    }
   }
 
   Future<void> connect() async {
-    _connection = ble.connectToDevice(id: deviceId).listen(
-          _updateState,
-          onError: (Object e) {},
-        );
+    try {
+      _connection = ble.connectToDevice(id: deviceId).listen(
+            _updateState,
+            onError: (Object e) {},
+          );
+    } catch (_) {
+      // TODO: handle exception
+    }
   }
 
   Future<void> disconnect() async {
     try {
       await _connection.cancel();
-    } catch (e) {
+    } catch (_) {
       // TODO: handle exception
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated

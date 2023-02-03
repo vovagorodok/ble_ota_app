@@ -18,8 +18,10 @@ class BleScanner extends StatefulStream<BleScanState> {
   void startScan(List<Uuid> serviceIds) {
     _devices.clear();
     _subscription?.cancel();
-    _subscription =
-        ble.scanForDevices(withServices: serviceIds).listen((device) {
+    _subscription = ble
+        .scanForDevices(
+            withServices: serviceIds, requireLocationServicesEnabled: false)
+        .listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;
