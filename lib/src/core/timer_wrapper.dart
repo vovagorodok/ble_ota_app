@@ -11,11 +11,11 @@ class TimerWrapper {
   void stop() {
     if (isActive()) {
       _handle!.cancel();
-      _handle = null;
     }
+    _handle = null;
   }
 
   bool isActive() {
-    return _handle != null;
+    return _handle != null && _handle!.isActive;
   }
 }

@@ -22,7 +22,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
   final String deviceId;
   final QualifiedCharacteristic _characteristicRx;
   final QualifiedCharacteristic _characteristicTx;
-  final responseGuard = TimerWrapper();
+  final _responseGuard = TimerWrapper();
   BleUploadState _state = BleUploadState();
   Uint8List _dataToSend = Uint8List(0);
   int _currentDataPos = 0;
@@ -41,17 +41,16 @@ class BleUploader extends StatefulStream<BleUploadState> {
     addStateToStream(state);
     _dataToSend = data;
     _sendBegin();
-    _waitForResponse();
   }
 
   @override
   Future<void> dispose() async {
     super.dispose();
-    responseGuard.stop();
+    _responseGuard.stop();
   }
 
   void _waitForResponse() {
-    responseGuard.start(const Duration(seconds: 20), () {
+    _responseGuard.start(const Duration(seconds: 20), () {
       state.status = BleUploadStatus.error;
       state.error = UploadError.noDeviceResponse;
       addStateToStream(state);
@@ -65,10 +64,11 @@ class BleUploader extends StatefulStream<BleUploadState> {
   void _sendBegin() {
     _sendData(
         _uint8ToBytes(HeadCode.begin) + _uint32ToBytes(_dataToSend.length));
+    _waitForResponse();
   }
 
   void _handleResp(Uint8List data) {
-    responseGuard.stop();
+    _responseGuard.stop();
     var headCode = _bytesToUint8(data, headCodePos);
     if (headCode == HeadCode.ok) {
       if (state.status == BleUploadStatus.begin) {

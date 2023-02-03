@@ -34,7 +34,7 @@ class BleConnector extends StatefulStream<BleConnectionState> {
         .connectToAdvertisingDevice(
             id: deviceId,
             withServices: [serviceUuid],
-            prescanDuration: const Duration(seconds: 10))
+            prescanDuration: const Duration(seconds: 20))
         .listen(
           _updateState,
           onError: (Object e) {},
