@@ -33,13 +33,15 @@ class UploadScreenState extends State<UploadScreen> {
   late List<StreamSubscription> _subscriptions;
 
   void _onConnectionStateChanged(BleConnectionState state) {
-    if (state == BleConnectionState.disconnected) {
-      widget.bleConnector.findAndConnect();
-    } else if (state == BleConnectionState.connected) {
-      if (!skipInfoRead.value) {
-        widget.infoReader.read(hardwaresDictUrl.value);
+    setState(() {
+      if (state == BleConnectionState.disconnected) {
+        widget.bleConnector.findAndConnect();
+      } else if (state == BleConnectionState.connected) {
+        if (!skipInfoRead.value) {
+          widget.infoReader.read(hardwaresDictUrl.value);
+        }
       }
-    }
+    });
   }
 
   void _onInfoStateChanged(InfoState state) {
@@ -223,12 +225,12 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText(determineInfoError(infoState));
     } else if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText(tr('Connecting..'));
-    } else if (infoState.status == WorkStatus.idle) {
-      return _buildStatusText(tr('Connected'));
-    } else if (infoState.status != WorkStatus.success) {
-      return _buildStatusText(tr('Loading..'));
     } else if (uploadState.status == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
+    } else if (infoState.status == WorkStatus.idle) {
+      return _buildStatusText(tr('Connected'));
+    } else if (infoState.status == WorkStatus.working) {
+      return _buildStatusText(tr('Loading..'));
     } else if (infoState.remoteInfo.softwareList.isEmpty) {
       return _buildStatusText(tr('NoAvailableSoftwares'));
     } else if (infoState.remoteInfo.newestSoftware == null) {
