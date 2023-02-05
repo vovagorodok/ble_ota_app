@@ -10,3 +10,7 @@ enum UploadError {
   unexpectedNetworkResponse,
   generalNetworkError,
 }
+
+enum InfoError {
+  unknown,
+}

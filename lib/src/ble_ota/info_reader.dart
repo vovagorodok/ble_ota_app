@@ -1,5 +1,7 @@
 import 'package:ble_ota_app/src/core/device_info.dart';
+import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
+import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/http/http_info_reader.dart';
@@ -30,7 +32,7 @@ class InfoReader extends StatefulStream<InfoState> {
   void _onRemoteInfoStateChanged(RemoteInfoState remoteInfoState) {
     if (remoteInfoState.isReady) {
       state.remoteInfo = remoteInfoState.info;
-      state.isReady = true;
+      state.status = WorkStatus.success;
       addStateToStream(state);
     }
   }
@@ -44,14 +46,14 @@ class InfoReader extends StatefulStream<InfoState> {
   }
 }
 
-class InfoState {
+class InfoState extends WorkState<WorkStatus, InfoError> {
   InfoState({
+    super.status = WorkStatus.idle,
+    super.error = InfoError.unknown,
     this.deviceInfo = const DeviceInfo(),
     required this.remoteInfo,
-    this.isReady = false,
   });
 
   DeviceInfo deviceInfo;
   RemoteInfo remoteInfo;
-  bool isReady;
 }

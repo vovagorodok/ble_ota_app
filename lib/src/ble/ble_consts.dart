@@ -1,4 +1,4 @@
-import 'package:ble_ota_app/src/core/upload_error.dart';
+import 'package:ble_ota_app/src/core/errors.dart';
 
 const uint8BytesNum = 1;
 const uint32BytesNum = 4;

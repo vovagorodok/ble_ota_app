@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
 import 'package:ble_ota_app/src/ble_ota/uploader.dart';
-import 'package:ble_ota_app/src/core/upload_error.dart';
+import 'package:ble_ota_app/src/core/errors.dart';
 
 String determineUploadError(UploadState state) {
   switch (state.error) {

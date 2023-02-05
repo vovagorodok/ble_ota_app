@@ -84,7 +84,7 @@ class UploadScreenState extends State<UploadScreen> {
   bool _canUpload() {
     return widget.bleConnector.state == BleConnectionState.connected &&
         widget.uploader.state.status != WorkStatus.working &&
-        widget.infoReader.state.isReady;
+        widget.infoReader.state.status == WorkStatus.success;
   }
 
   bool _canUploadLocalFile() {
@@ -221,7 +221,7 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText(determineUploadError(uploadState));
     } else if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText(tr('Connecting..'));
-    } else if (!infoState.isReady) {
+    } else if (infoState.status != WorkStatus.success) {
       return _buildStatusText(tr('Loading..'));
     } else if (uploadState.status == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
@@ -271,7 +271,7 @@ class UploadScreenState extends State<UploadScreen> {
     final infoState = widget.infoReader.state;
     final buildStatusOnly =
         bleConnectionState == BleConnectionState.disconnected ||
-            !infoState.isReady ||
+            infoState.status != WorkStatus.success ||
             uploadState.status == WorkStatus.working ||
             infoState.remoteInfo.softwareList.isEmpty;
     return buildStatusOnly
