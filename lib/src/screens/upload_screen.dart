@@ -70,19 +70,17 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
     for (var subscription in _subscriptions) {
-      subscription.cancel();
+      await subscription.cancel();
     }
 
-    () async {
-      widget.uploader.dispose();
-      widget.infoReader.dispose();
-      widget.bleConnector.disconnect();
-      widget.bleConnector.dispose();
-      Wakelock.disable();
-    }.call();
+    await widget.uploader.dispose();
+    await widget.infoReader.dispose();
+    await widget.bleConnector.disconnect();
+    await widget.bleConnector.dispose();
+    await Wakelock.disable();
   }
 
   bool _canUpload() {
