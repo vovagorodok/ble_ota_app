@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-abstract class StatefulStream<T> extends StateStream<T> {
-  T get state;
+abstract class StatefulStream<State> extends StateStream<State> {
+  State get state;
 }
 
-abstract class StateStream<T> {
-  final StreamController<T> _stateStreamController = StreamController();
-  Stream<T> get stateStream => _stateStreamController.stream;
+abstract class StateStream<State> {
+  final StreamController<State> _stateStreamController = StreamController();
+  Stream<State> get stateStream => _stateStreamController.stream;
 
-  void addStateToStream(T state) {
+  void addStateToStream(State state) {
     _stateStreamController.add(state);
   }
 
