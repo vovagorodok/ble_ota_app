@@ -18,6 +18,10 @@ const infiniteScan = Setting<bool>(
   key: 'key-infinite-scan',
   defaultValue: false,
 );
+const skipInfoRead = Setting<bool>(
+  key: 'key-skip-info-read',
+  defaultValue: false,
+);
 const alwaysAllowLocalFilesUpload = Setting<bool>(
   key: 'key-allow-local-upload',
   defaultValue: false,

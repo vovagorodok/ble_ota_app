@@ -36,7 +36,9 @@ class UploadScreenState extends State<UploadScreen> {
     if (state == BleConnectionState.disconnected) {
       widget.bleConnector.findAndConnect();
     } else if (state == BleConnectionState.connected) {
-      widget.infoReader.read(hardwaresDictUrl.value);
+      if (!skipInfoRead.value) {
+        widget.infoReader.read(hardwaresDictUrl.value);
+      }
     }
   }
 
@@ -221,6 +223,8 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText(determineInfoError(infoState));
     } else if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText(tr('Connecting..'));
+    } else if (infoState.status == WorkStatus.idle) {
+      return _buildStatusText(tr('Connected'));
     } else if (infoState.status != WorkStatus.success) {
       return _buildStatusText(tr('Loading..'));
     } else if (uploadState.status == WorkStatus.working) {
