@@ -29,12 +29,12 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       final body = json.decode(response.body);
       if (!body.containsKey("hardware_name") ||
           !body.containsKey("softwares")) {
-        _raiseError(InfoError.incorrectJsonFormat);
+        _raiseError(InfoError.incorrectJsonFileFormat);
         return;
       }
       _state.info.hardwareName = body["hardware_name"];
       if (_state.info.hardwareName != deviceInfo.hardwareName) {
-        _raiseError(InfoError.incorrectJsonFormat);
+        _raiseError(InfoError.incorrectJsonFileFormat);
         return;
       }
       _state.info.hardwareIcon = body["hardware_icon"];

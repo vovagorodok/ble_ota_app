@@ -24,6 +24,7 @@
     "UnexpectedNetworkResponse": "Неожиданный ответ сети: {}",
     "NetworkError": "Ошибка сети",
     "UnknownError": "Неизвестная ошибка: {}",
+    "IncorrectJsonFileFormat": "Неправильный формат json файла",
     "Loading..": "Загрузка..",
     "Connecting..": "Подключение..",
     "Uploading..": "Загрузка..",

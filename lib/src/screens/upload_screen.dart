@@ -219,6 +219,8 @@ class UploadScreenState extends State<UploadScreen> {
 
     if (uploadState.status == WorkStatus.error) {
       return _buildStatusText(determineUploadError(uploadState));
+    } else if (infoState.status == WorkStatus.error) {
+      return _buildStatusText(determineInfoError(infoState));
     } else if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText(tr('Connecting..'));
     } else if (infoState.status != WorkStatus.success) {

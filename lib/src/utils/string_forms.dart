@@ -4,6 +4,19 @@ import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
 import 'package:ble_ota_app/src/ble_ota/uploader.dart';
 
+String determineInfoError(InfoState state) {
+  switch (state.error) {
+    case InfoError.incorrectJsonFileFormat:
+      return tr('IncorrectJsonFileFormat');
+    case InfoError.unexpectedNetworkResponse:
+      return tr('UnexpectedNetworkResponse', args: ['${state.errorCode}']);
+    case InfoError.generalNetworkError:
+      return tr('NetworkError');
+    default:
+      return tr('UnknownError', args: ['${state.errorCode}']);
+  }
+}
+
 String determineUploadError(UploadState state) {
   switch (state.error) {
     case UploadError.generalDeviceError:

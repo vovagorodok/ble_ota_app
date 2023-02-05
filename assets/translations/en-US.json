@@ -24,6 +24,7 @@
     "UnexpectedNetworkResponse": "Unexpected network response: {}",
     "NetworkError": "Network error",
     "UnknownError": "Unknown error: {}",
+    "IncorrectJsonFileFormat": "Incorrect json file format",
     "Loading..": "Loading..",
     "Connecting..": "Connecting..",
     "Uploading..": "Uploading..",
