@@ -19,16 +19,22 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
     try {
       final response = await http.get(Uri.parse(hardwareUrl));
       if (response.statusCode != 200) {
+        _raiseError(
+          InfoError.unexpectedNetworkResponse,
+          errorCode: response.statusCode,
+        );
         return;
       }
 
       final body = json.decode(response.body);
       if (!body.containsKey("hardware_name") ||
           !body.containsKey("softwares")) {
+        _raiseError(InfoError.incorrectJsonFormat);
         return;
       }
       _state.info.hardwareName = body["hardware_name"];
       if (_state.info.hardwareName != deviceInfo.hardwareName) {
+        _raiseError(InfoError.incorrectJsonFormat);
         return;
       }
       _state.info.hardwareIcon = body["hardware_icon"];
@@ -62,7 +68,16 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         return;
       }
       state.info.newestSoftware = max;
-    } catch (_) {}
+    } catch (_) {
+      _raiseError(InfoError.generalNetworkError);
+    }
+  }
+
+  void _raiseError(InfoError error, {int errorCode = 0}) {
+    state.status = WorkStatus.error;
+    state.error = InfoError.unexpectedNetworkResponse;
+    state.errorCode = errorCode;
+    addStateToStream(state);
   }
 
   void read(DeviceInfo deviceInfo, String hardwaresDictUrl) {
@@ -76,6 +91,10 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       try {
         final response = await http.get(Uri.parse(hardwaresDictUrl));
         if (response.statusCode != 200) {
+          _raiseError(
+            InfoError.unexpectedNetworkResponse,
+            errorCode: response.statusCode,
+          );
           return;
         }
 
@@ -86,7 +105,9 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         } else {
           state.info.isHardwareUnregistered = true;
         }
-      } catch (_) {}
+      } catch (_) {
+        _raiseError(InfoError.generalNetworkError);
+      }
 
       state.status = WorkStatus.success;
       addStateToStream(state);

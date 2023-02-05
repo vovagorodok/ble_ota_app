@@ -26,6 +26,11 @@ class InfoReader extends StatefulStream<InfoState> {
     if (deviceInfoState.status == WorkStatus.success) {
       state.deviceInfo = deviceInfoState.info;
       _httpInfoReader.read(state.deviceInfo, _hardwaresDictUrl);
+    } else if (deviceInfoState.status == WorkStatus.error) {
+      state.status = WorkStatus.error;
+      state.error = deviceInfoState.error;
+      state.errorCode = deviceInfoState.errorCode;
+      addStateToStream(state);
     }
   }
 
@@ -33,6 +38,11 @@ class InfoReader extends StatefulStream<InfoState> {
     if (remoteInfoState.status == WorkStatus.success) {
       state.remoteInfo = remoteInfoState.info;
       state.status = WorkStatus.success;
+      addStateToStream(state);
+    } else if (remoteInfoState.status == WorkStatus.error) {
+      state.status = WorkStatus.error;
+      state.error = remoteInfoState.error;
+      state.errorCode = remoteInfoState.errorCode;
       addStateToStream(state);
     }
   }
