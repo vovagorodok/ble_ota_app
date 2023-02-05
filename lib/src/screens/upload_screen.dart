@@ -118,7 +118,10 @@ class UploadScreenState extends State<UploadScreen> {
   MaterialColor _determinateStatusColor() {
     final uploadStatus = widget.uploader.state.status;
     final infoStatus = widget.infoReader.state.status;
-    if (uploadStatus == WorkStatus.error || infoStatus == WorkStatus.error) {
+    if (uploadStatus == WorkStatus.working) {
+      return Colors.blue;
+    } else if (uploadStatus == WorkStatus.error ||
+        infoStatus == WorkStatus.error) {
       return Colors.red;
     } else if (uploadStatus == WorkStatus.success) {
       return Colors.green;
@@ -130,7 +133,16 @@ class UploadScreenState extends State<UploadScreen> {
   Widget _buildProgressInside() {
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
-    if (uploadState.status == WorkStatus.error ||
+    if (uploadState.status == WorkStatus.working) {
+      return Text(
+        (uploadState.progress * 100).toStringAsFixed(1),
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.blue,
+          fontSize: 24,
+        ),
+      );
+    } else if (uploadState.status == WorkStatus.error ||
         infoState.status == WorkStatus.error) {
       return const Icon(
         Icons.error,
@@ -143,22 +155,13 @@ class UploadScreenState extends State<UploadScreen> {
         color: Colors.green,
         size: 56,
       );
-    } else if (uploadState.status == WorkStatus.idle) {
+    } else {
       return CircleAvatar(
         radius: 55,
         backgroundColor: Colors.transparent,
         backgroundImage: infoState.remoteInfo.hardwareIcon != null
             ? NetworkImage(infoState.remoteInfo.hardwareIcon!)
             : null,
-      );
-    } else {
-      return Text(
-        (uploadState.progress * 100).toStringAsFixed(1),
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.blue,
-          fontSize: 24,
-        ),
       );
     }
   }
@@ -219,14 +222,14 @@ class UploadScreenState extends State<UploadScreen> {
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
 
-    if (uploadState.status == WorkStatus.error) {
-      return _buildStatusText(determineUploadError(uploadState));
-    } else if (infoState.status == WorkStatus.error) {
-      return _buildStatusText(determineInfoError(infoState));
-    } else if (bleConnectionState == BleConnectionState.disconnected) {
+    if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText(tr('Connecting..'));
     } else if (uploadState.status == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
+    } else if (uploadState.status == WorkStatus.error) {
+      return _buildStatusText(determineUploadError(uploadState));
+    } else if (infoState.status == WorkStatus.error) {
+      return _buildStatusText(determineInfoError(infoState));
     } else if (infoState.status == WorkStatus.idle) {
       return _buildStatusText(tr('Connected'));
     } else if (infoState.status == WorkStatus.working) {
