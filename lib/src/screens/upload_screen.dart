@@ -116,6 +116,7 @@ class UploadScreenState extends State<UploadScreen> {
   MaterialColor _determinateStatusColor() {
     final uploadStatus = widget.uploader.state.status;
     final infoStatus = widget.infoReader.state.status;
+
     if (uploadStatus == WorkStatus.working) {
       return Colors.blue;
     } else if (uploadStatus == WorkStatus.error ||
@@ -131,6 +132,7 @@ class UploadScreenState extends State<UploadScreen> {
   Widget _buildProgressInside() {
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
+
     if (uploadState.status == WorkStatus.working) {
       return Text(
         (uploadState.progress * 100).toStringAsFixed(1),
@@ -276,6 +278,7 @@ class UploadScreenState extends State<UploadScreen> {
     final bleConnectionState = widget.bleConnector.state;
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
+
     final buildSoftwareList =
         bleConnectionState == BleConnectionState.connected &&
             infoState.status == WorkStatus.success &&
