@@ -52,9 +52,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
   void _waitForResponse() {
     _responseGuard.start(const Duration(seconds: 20), () {
       state.status = BleUploadStatus.error;
-      state.error = const UploadError(
-        status: UploadErrorStatus.noDeviceResponse,
-      );
+      state.error = UploadError.noDeviceResponse;
       addStateToStream(state);
     });
   }
@@ -84,17 +82,13 @@ class BleUploader extends StatefulStream<BleUploadState> {
         addStateToStream(state);
       } else {
         state.status = BleUploadStatus.error;
-        state.error = const UploadError(
-          status: UploadErrorStatus.unexpectedDeviceResponse,
-        );
+        state.error = UploadError.unexpectedDeviceResponse;
         addStateToStream(state);
       }
     } else {
       state.status = BleUploadStatus.error;
-      state.error = UploadError(
-        status: determineErrorHeadCode(headCode),
-        code: headCode,
-      );
+      state.error = determineErrorHeadCode(headCode);
+      state.errorCode = headCode;
       addStateToStream(state);
     }
   }
@@ -173,12 +167,14 @@ class BleUploadState {
   BleUploadState({
     this.status = BleUploadStatus.idle,
     this.progress = 0.0,
-    this.error = const UploadError(),
+    this.error = UploadError.unknown,
+    this.errorCode = 0,
   });
 
   BleUploadStatus status;
   double progress;
   UploadError error;
+  int errorCode;
 }
 
 enum BleUploadStatus {

@@ -217,7 +217,8 @@ class UploadScreenState extends State<UploadScreen> {
     final infoState = widget.infoReader.state;
 
     if (uploadState.status == UploadStatus.error) {
-      return _buildStatusText(determineUploadError(uploadState.error));
+      return _buildStatusText(
+          determineUploadError(uploadState.error, uploadState.errorCode));
     } else if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText(tr('Connecting..'));
     } else if (!infoState.isReady) {

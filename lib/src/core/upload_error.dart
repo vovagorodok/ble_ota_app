@@ -1,17 +1,4 @@
-import 'package:meta/meta.dart';
-
-@immutable
-class UploadError {
-  const UploadError({
-    this.status = UploadErrorStatus.unknown,
-    this.code = 0,
-  });
-
-  final UploadErrorStatus status;
-  final int code;
-}
-
-enum UploadErrorStatus {
+enum UploadError {
   unknown,
   generalDeviceError,
   incorrectPackageFormat,
