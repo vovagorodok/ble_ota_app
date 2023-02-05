@@ -50,7 +50,10 @@ class InfoReader extends StatefulStream<InfoState> {
 
   void read(String hardwaresDictUrl) {
     _hardwaresDictUrl = hardwaresDictUrl;
-    _state = InfoState(remoteInfo: RemoteInfo());
+    _state = InfoState(
+      status: WorkStatus.working,
+      remoteInfo: RemoteInfo(),
+    );
     addStateToStream(state);
 
     _bleInfoReader.read();
