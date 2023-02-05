@@ -101,13 +101,13 @@ class UploadScreenState extends State<UploadScreen> {
     );
 
     if (result != null) {
-      Wakelock.enable();
+      await Wakelock.enable();
       await widget.uploader.uploadLocalFile(result.files.single.path!);
     }
   }
 
   Future<void> _uploadHttpFile(String url) async {
-    Wakelock.enable();
+    await Wakelock.enable();
     await widget.uploader.uploadHttpFile(url);
   }
 
