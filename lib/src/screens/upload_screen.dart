@@ -112,32 +112,22 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   MaterialColor _determinateStatusColor() {
-    switch (widget.uploader.state.status) {
-      case WorkStatus.working:
-        return Colors.blue;
-      case WorkStatus.success:
-        return Colors.green;
-      case WorkStatus.error:
-        return Colors.red;
-      case WorkStatus.idle:
-        return Colors.blue;
-      default:
-        return Colors.blue;
+    final uploadStatus = widget.uploader.state.status;
+    final infoStatus = widget.infoReader.state.status;
+    if (uploadStatus == WorkStatus.error || infoStatus == WorkStatus.error) {
+      return Colors.red;
+    } else if (uploadStatus == WorkStatus.success) {
+      return Colors.green;
+    } else {
+      return Colors.blue;
     }
   }
 
   Widget _buildProgressInside() {
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
-    if (uploadState.status == WorkStatus.idle) {
-      return CircleAvatar(
-        radius: 55,
-        backgroundColor: Colors.transparent,
-        backgroundImage: infoState.remoteInfo.hardwareIcon != null
-            ? NetworkImage(infoState.remoteInfo.hardwareIcon!)
-            : null,
-      );
-    } else if (uploadState.status == WorkStatus.error) {
+    if (uploadState.status == WorkStatus.error ||
+        infoState.status == WorkStatus.error) {
       return const Icon(
         Icons.error,
         color: Colors.red,
@@ -148,6 +138,14 @@ class UploadScreenState extends State<UploadScreen> {
         Icons.done,
         color: Colors.green,
         size: 56,
+      );
+    } else if (uploadState.status == WorkStatus.idle) {
+      return CircleAvatar(
+        radius: 55,
+        backgroundColor: Colors.transparent,
+        backgroundImage: infoState.remoteInfo.hardwareIcon != null
+            ? NetworkImage(infoState.remoteInfo.hardwareIcon!)
+            : null,
       );
     } else {
       return Text(

@@ -25,6 +25,7 @@
     "NetworkError": "Błąd sieci",
     "UnknownError": "Nieznany błąd: {}",
     "IncorrectJsonFileFormat": "Nieprawidłowy format pliku json",
+    "NoInformation": "Brak informacji",
     "Loading..": "Ładowanie..",
     "Connecting..": "Łączenie..",
     "Uploading..": "Wgrywanie..",

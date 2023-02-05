@@ -25,6 +25,7 @@
     "NetworkError": "Помилка мережі",
     "UnknownError": "Невідома помилка: {}",
     "IncorrectJsonFileFormat": "Неправильний формат файлу json",
+    "NoInformation": "Немає інформації",
     "Loading..": "Завантаження..",
     "Connecting..": "Підключення..",
     "Uploading..": "Завантаження..",

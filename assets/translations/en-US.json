@@ -25,6 +25,7 @@
     "NetworkError": "Network error",
     "UnknownError": "Unknown error: {}",
     "IncorrectJsonFileFormat": "Incorrect json file format",
+    "NoInformation": "No information",
     "Loading..": "Loading..",
     "Connecting..": "Connecting..",
     "Uploading..": "Uploading..",

@@ -42,10 +42,16 @@ String determineUploadError(UploadState state) {
   }
 }
 
-String createDeviceString(infoState, name, version) =>
-    infoState.status == WorkStatus.success
-        ? "$name v$version"
-        : tr('Loading..');
+String createDeviceString(infoState, name, version) {
+  if (infoState.status == WorkStatus.success) {
+    return "$name v$version";
+  } else if (infoState.status == WorkStatus.error) {
+    return tr('NoInformation');
+  } else {
+    return tr('Loading..');
+  }
+}
+
 String createHardwareString(InfoState infoState) => createDeviceString(
     infoState,
     infoState.deviceInfo.hardwareName,
