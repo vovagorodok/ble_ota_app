@@ -105,12 +105,12 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         } else {
           state.info.isHardwareUnregistered = true;
         }
+
+        state.status = WorkStatus.success;
+        addStateToStream(state);
       } catch (_) {
         _raiseError(InfoError.generalNetworkError);
       }
-
-      state.status = WorkStatus.success;
-      addStateToStream(state);
     }.call();
   }
 }
