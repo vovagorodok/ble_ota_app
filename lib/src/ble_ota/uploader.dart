@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:ble_ota_app/src/core/state.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/core/upload_error.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
@@ -61,18 +62,14 @@ class Uploader extends StatefulStream<UploadState> {
   }
 }
 
-class UploadState {
+class UploadState extends State<UploadStatus, UploadError> {
   UploadState({
-    this.status = UploadStatus.idle,
+    super.status = UploadStatus.idle,
+    super.error = UploadError.unknown,
     this.progress = 0.0,
-    this.error = UploadError.unknown,
-    this.errorCode = 0,
   });
 
-  UploadStatus status;
   double progress;
-  UploadError error;
-  int errorCode;
 }
 
 enum UploadStatus {

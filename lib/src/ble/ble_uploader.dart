@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:ble_ota_app/src/core/state.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/core/upload_error.dart';
 import 'package:ble_ota_app/src/core/timer_wrapper.dart';
@@ -163,18 +164,14 @@ class BleUploader extends StatefulStream<BleUploadState> {
           deviceId: deviceId);
 }
 
-class BleUploadState {
+class BleUploadState extends State<BleUploadStatus, UploadError> {
   BleUploadState({
-    this.status = BleUploadStatus.idle,
+    super.status = BleUploadStatus.idle,
+    super.error = UploadError.unknown,
     this.progress = 0.0,
-    this.error = UploadError.unknown,
-    this.errorCode = 0,
   });
 
-  BleUploadStatus status;
   double progress;
-  UploadError error;
-  int errorCode;
 }
 
 enum BleUploadStatus {
