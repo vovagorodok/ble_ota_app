@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ble_ota_app/src/core/work_state.dart';
+import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
 import 'package:ble_ota_app/src/ble_ota/uploader.dart';
-import 'package:ble_ota_app/src/core/errors.dart';
 
 String determineUploadError(UploadState state) {
   switch (state.error) {
@@ -29,7 +30,9 @@ String determineUploadError(UploadState state) {
 }
 
 String createDeviceString(infoState, name, version) =>
-    infoState.isReady ? "$name v$version" : tr('Loading..');
+    infoState.status == WorkStatus.success
+        ? "$name v$version"
+        : tr('Loading..');
 String createHardwareString(InfoState infoState) => createDeviceString(
     infoState,
     infoState.deviceInfo.hardwareName,
