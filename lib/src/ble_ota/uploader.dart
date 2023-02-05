@@ -18,16 +18,27 @@ class Uploader extends StatefulStream<UploadState> {
   @override
   UploadState get state => _state;
 
+  void _raiseError(UploadError error, {int errorCode = 0}) {
+    state.status = WorkStatus.error;
+    state.error = error;
+    state.errorCode = errorCode;
+    addStateToStream(state);
+  }
+
   void _onBleUploadStateChanged(BleUploadState bleUploadState) {
+    state.progress = bleUploadState.progress;
+
     if (bleUploadState.status == BleUploadStatus.success) {
       state.status = WorkStatus.success;
+      addStateToStream(state);
     } else if (bleUploadState.status == BleUploadStatus.error) {
-      state.status = WorkStatus.error;
-      state.error = bleUploadState.error;
-      state.errorCode = bleUploadState.errorCode;
+      _raiseError(
+        bleUploadState.error,
+        errorCode: bleUploadState.errorCode,
+      );
+    } else {
+      addStateToStream(state);
     }
-    state.progress = bleUploadState.progress;
-    addStateToStream(state);
   }
 
   Future<void> uploadLocalFile(String localPath) async {
@@ -46,18 +57,16 @@ class Uploader extends StatefulStream<UploadState> {
 
       final response = await http.get(Uri.parse(url));
       if (response.statusCode != 200) {
-        _state.status = WorkStatus.error;
-        _state.error = UploadError.unexpectedNetworkResponse;
-        _state.errorCode = response.statusCode;
-        addStateToStream(state);
+        _raiseError(
+          UploadError.unexpectedNetworkResponse,
+          errorCode: response.statusCode,
+        );
         return;
       }
 
       _bleUploader.upload(response.bodyBytes);
     } catch (_) {
-      _state.status = WorkStatus.error;
-      _state.error = UploadError.generalNetworkError;
-      addStateToStream(state);
+      _raiseError(UploadError.generalNetworkError);
     }
   }
 }

@@ -50,12 +50,16 @@ class BleUploader extends StatefulStream<BleUploadState> {
     _responseGuard.stop();
   }
 
+  void _raiseError(UploadError error, {int errorCode = 0}) {
+    state.status = BleUploadStatus.error;
+    state.error = error;
+    state.errorCode = errorCode;
+    addStateToStream(state);
+  }
+
   void _waitForResponse() {
-    _responseGuard.start(const Duration(seconds: 20), () {
-      state.status = BleUploadStatus.error;
-      state.error = UploadError.noDeviceResponse;
-      addStateToStream(state);
-    });
+    _responseGuard.start(const Duration(seconds: 20),
+        () => _raiseError(UploadError.noDeviceResponse));
   }
 
   void _sendData(List<int> data) {
@@ -82,15 +86,13 @@ class BleUploader extends StatefulStream<BleUploadState> {
         state.status = BleUploadStatus.success;
         addStateToStream(state);
       } else {
-        state.status = BleUploadStatus.error;
-        state.error = UploadError.unexpectedDeviceResponse;
-        addStateToStream(state);
+        _raiseError(UploadError.unexpectedDeviceResponse);
       }
     } else {
-      state.status = BleUploadStatus.error;
-      state.error = determineErrorHeadCode(headCode);
-      state.errorCode = headCode;
-      addStateToStream(state);
+      _raiseError(
+        determineErrorHeadCode(headCode),
+        errorCode: headCode,
+      );
     }
   }
 

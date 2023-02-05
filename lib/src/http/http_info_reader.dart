@@ -75,7 +75,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
 
   void _raiseError(InfoError error, {int errorCode = 0}) {
     state.status = WorkStatus.error;
-    state.error = InfoError.unexpectedNetworkResponse;
+    state.error = error;
     state.errorCode = errorCode;
     addStateToStream(state);
   }
