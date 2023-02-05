@@ -84,7 +84,7 @@ class UploadScreenState extends State<UploadScreen> {
   bool _canUpload() {
     return widget.bleConnector.state == BleConnectionState.connected &&
         widget.uploader.state.status != WorkStatus.working &&
-        widget.infoReader.state.status == WorkStatus.success;
+        widget.infoReader.state.status != WorkStatus.working;
   }
 
   bool _canUploadLocalFile() {
