@@ -1,5 +1,5 @@
-class State<Status, Error> {
-  State({
+class WorkState<Status, Error> {
+  WorkState({
     required this.status,
     required this.error,
     this.errorCode = 0,
@@ -8,4 +8,11 @@ class State<Status, Error> {
   Status status;
   Error error;
   int errorCode;
+}
+
+enum WorkStatus {
+  idle,
+  working,
+  success,
+  error,
 }

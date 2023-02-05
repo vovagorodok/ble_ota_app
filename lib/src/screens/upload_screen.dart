@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ble_ota/uploader.dart';
@@ -45,8 +46,8 @@ class UploadScreenState extends State<UploadScreen> {
 
   void _onUploadStateChanged(UploadState state) {
     setState(() {
-      if (state.status == UploadStatus.success ||
-          state.status == UploadStatus.error) {
+      if (state.status == WorkStatus.success ||
+          state.status == WorkStatus.error) {
         widget.bleConnector.disconnect();
         Wakelock.disable();
       }
@@ -82,7 +83,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   bool _canUpload() {
     return widget.bleConnector.state == BleConnectionState.connected &&
-        widget.uploader.state.status != UploadStatus.upload &&
+        widget.uploader.state.status != WorkStatus.working &&
         widget.infoReader.state.isReady;
   }
 
@@ -112,13 +113,13 @@ class UploadScreenState extends State<UploadScreen> {
 
   MaterialColor _determinateStatusColor() {
     switch (widget.uploader.state.status) {
-      case UploadStatus.upload:
+      case WorkStatus.working:
         return Colors.blue;
-      case UploadStatus.success:
+      case WorkStatus.success:
         return Colors.green;
-      case UploadStatus.error:
+      case WorkStatus.error:
         return Colors.red;
-      case UploadStatus.idle:
+      case WorkStatus.idle:
         return Colors.blue;
       default:
         return Colors.blue;
@@ -128,7 +129,7 @@ class UploadScreenState extends State<UploadScreen> {
   Widget _buildProgressInside() {
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
-    if (uploadState.status == UploadStatus.idle) {
+    if (uploadState.status == WorkStatus.idle) {
       return CircleAvatar(
         radius: 55,
         backgroundColor: Colors.transparent,
@@ -136,13 +137,13 @@ class UploadScreenState extends State<UploadScreen> {
             ? NetworkImage(infoState.remoteInfo.hardwareIcon!)
             : null,
       );
-    } else if (uploadState.status == UploadStatus.error) {
+    } else if (uploadState.status == WorkStatus.error) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 56,
       );
-    } else if (uploadState.status == UploadStatus.success) {
+    } else if (uploadState.status == WorkStatus.success) {
       return const Icon(
         Icons.done,
         color: Colors.green,
@@ -216,13 +217,13 @@ class UploadScreenState extends State<UploadScreen> {
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
 
-    if (uploadState.status == UploadStatus.error) {
+    if (uploadState.status == WorkStatus.error) {
       return _buildStatusText(determineUploadError(uploadState));
     } else if (bleConnectionState == BleConnectionState.disconnected) {
       return _buildStatusText(tr('Connecting..'));
     } else if (!infoState.isReady) {
       return _buildStatusText(tr('Loading..'));
-    } else if (uploadState.status == UploadStatus.upload) {
+    } else if (uploadState.status == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
     } else if (infoState.remoteInfo.softwareList.isEmpty) {
       return _buildStatusText(tr('NoAvailableSoftwares'));
@@ -271,7 +272,7 @@ class UploadScreenState extends State<UploadScreen> {
     final buildStatusOnly =
         bleConnectionState == BleConnectionState.disconnected ||
             !infoState.isReady ||
-            uploadState.status == UploadStatus.upload ||
+            uploadState.status == WorkStatus.working ||
             infoState.remoteInfo.softwareList.isEmpty;
     return buildStatusOnly
         ? _buildStatusWidget()
