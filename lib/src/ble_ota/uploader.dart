@@ -23,7 +23,6 @@ class Uploader extends StatefulStream<UploadState> {
     } else if (bleUploadState.status == BleUploadStatus.error) {
       state.status = UploadStatus.error;
       state.error = bleUploadState.error;
-      state.errorCode = bleUploadState.errorCode;
     }
     state.progress = bleUploadState.progress;
     addStateToStream(state);
@@ -46,8 +45,10 @@ class Uploader extends StatefulStream<UploadState> {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode != 200) {
         _state.status = UploadStatus.error;
-        _state.error = UploadError.unexpectedNetworkResponse;
-        _state.errorCode = response.statusCode;
+        _state.error = UploadError(
+          status: UploadErrorStatus.unexpectedNetworkResponse,
+          code: response.statusCode,
+        );
         addStateToStream(state);
         return;
       }
@@ -55,7 +56,9 @@ class Uploader extends StatefulStream<UploadState> {
       _bleUploader.upload(response.bodyBytes);
     } catch (_) {
       _state.status = UploadStatus.error;
-      _state.error = UploadError.generalNetworkError;
+      _state.error = const UploadError(
+        status: UploadErrorStatus.generalNetworkError,
+      );
       addStateToStream(state);
     }
   }
@@ -65,14 +68,12 @@ class UploadState {
   UploadState({
     this.status = UploadStatus.idle,
     this.progress = 0.0,
-    this.error = UploadError.unknown,
-    this.errorCode = 0,
+    this.error = const UploadError(),
   });
 
   UploadStatus status;
   double progress;
   UploadError error;
-  int errorCode;
 }
 
 enum UploadStatus {

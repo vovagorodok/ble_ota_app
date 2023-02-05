@@ -25,19 +25,19 @@ class HeadCode {
   static const end = 0x12;
 }
 
-UploadError determineErrorHeadCode(int code) {
+UploadErrorStatus determineErrorHeadCode(int code) {
   switch (code) {
     case HeadCode.nok:
-      return UploadError.generalDeviceError;
+      return UploadErrorStatus.generalDeviceError;
     case HeadCode.incorrectFormat:
-      return UploadError.incorrectPackageFormat;
+      return UploadErrorStatus.incorrectPackageFormat;
     case HeadCode.incorrectFirmwareSize:
-      return UploadError.incorrectFirmwareSize;
+      return UploadErrorStatus.incorrectFirmwareSize;
     case HeadCode.checksumError:
-      return UploadError.incorrectChecksum;
+      return UploadErrorStatus.incorrectChecksum;
     case HeadCode.internalSrorageError:
-      return UploadError.internalSrorageError;
+      return UploadErrorStatus.internalSrorageError;
     default:
-      return UploadError.unexpectedDeviceResponse;
+      return UploadErrorStatus.unexpectedDeviceResponse;
   }
 }

@@ -2,28 +2,28 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
 import 'package:ble_ota_app/src/core/upload_error.dart';
 
-String determineUploadError(UploadError error, int code) {
-  switch (error) {
-    case UploadError.generalDeviceError:
+String determineUploadError(UploadError error) {
+  switch (error.status) {
+    case UploadErrorStatus.generalDeviceError:
       return tr('UploadError');
-    case UploadError.incorrectPackageFormat:
+    case UploadErrorStatus.incorrectPackageFormat:
       return tr('IncorrectPackageFormat');
-    case UploadError.incorrectFirmwareSize:
+    case UploadErrorStatus.incorrectFirmwareSize:
       return tr('IncorrectFirmwareSize');
-    case UploadError.incorrectChecksum:
+    case UploadErrorStatus.incorrectChecksum:
       return tr('ChecksumError');
-    case UploadError.internalSrorageError:
+    case UploadErrorStatus.internalSrorageError:
       return tr('InternalStorageError');
-    case UploadError.noDeviceResponse:
+    case UploadErrorStatus.noDeviceResponse:
       return tr('NoDeviceResponse');
-    case UploadError.unexpectedDeviceResponse:
-      return tr('UnexpectedDeviceResponse', args: ['$code']);
-    case UploadError.unexpectedNetworkResponse:
-      return tr('UnexpectedNetworkResponse', args: ['$code']);
-    case UploadError.generalNetworkError:
+    case UploadErrorStatus.unexpectedDeviceResponse:
+      return tr('UnexpectedDeviceResponse', args: ['${error.code}']);
+    case UploadErrorStatus.unexpectedNetworkResponse:
+      return tr('UnexpectedNetworkResponse', args: ['${error.code}']);
+    case UploadErrorStatus.generalNetworkError:
       return tr('NetworkError');
     default:
-      return tr('UnknownError', args: ['$code']);
+      return tr('UnknownError', args: ['${error.code}']);
   }
 }
 
