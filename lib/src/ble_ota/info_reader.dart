@@ -23,14 +23,14 @@ class InfoReader extends StatefulStream<InfoState> {
   InfoState get state => _state;
 
   void _onDeviceInfoStateChanged(DeviceInfoState deviceInfoState) {
-    if (deviceInfoState.isReady) {
+    if (deviceInfoState.status == WorkStatus.success) {
       state.deviceInfo = deviceInfoState.info;
       _httpInfoReader.read(state.deviceInfo, _hardwaresDictUrl);
     }
   }
 
   void _onRemoteInfoStateChanged(RemoteInfoState remoteInfoState) {
-    if (remoteInfoState.isReady) {
+    if (remoteInfoState.status == WorkStatus.success) {
       state.remoteInfo = remoteInfoState.info;
       state.status = WorkStatus.success;
       addStateToStream(state);

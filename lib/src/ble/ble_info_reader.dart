@@ -1,4 +1,6 @@
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:ble_ota_app/src/core/errors.dart';
+import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/core/version.dart';
@@ -26,7 +28,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
   DeviceInfoState get state => _state;
 
   void read() {
-    state.isReady = false;
+    state.status = WorkStatus.working;
     addStateToStream(state);
 
     () async {
@@ -40,7 +42,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
         softwareVersion: Version.fromList(
             await ble.readCharacteristic(_characteristicSoftwareVersion)),
       );
-      state.isReady = true;
+      state.status = WorkStatus.success;
 
       addStateToStream(state);
     }.call();
@@ -53,12 +55,12 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
           deviceId: deviceId);
 }
 
-class DeviceInfoState {
+class DeviceInfoState extends WorkState<WorkStatus, InfoError> {
   DeviceInfoState({
+    super.status = WorkStatus.idle,
+    super.error = InfoError.unknown,
     this.info = const DeviceInfo(),
-    this.isReady = false,
   });
 
   DeviceInfo info;
-  bool isReady;
 }

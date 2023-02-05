@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:ble_ota_app/src/core/errors.dart';
+import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
 import 'package:ble_ota_app/src/core/software.dart';
@@ -64,7 +66,10 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
   }
 
   void read(DeviceInfo deviceInfo, String hardwaresDictUrl) {
-    _state = RemoteInfoState(info: RemoteInfo());
+    _state = RemoteInfoState(
+      status: WorkStatus.working,
+      info: RemoteInfo(),
+    );
     addStateToStream(state);
 
     () async {
@@ -83,18 +88,18 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         }
       } catch (_) {}
 
-      state.isReady = true;
+      state.status = WorkStatus.success;
       addStateToStream(state);
     }.call();
   }
 }
 
-class RemoteInfoState {
+class RemoteInfoState extends WorkState<WorkStatus, InfoError> {
   RemoteInfoState({
+    super.status = WorkStatus.idle,
+    super.error = InfoError.unknown,
     required this.info,
-    this.isReady = false,
   });
 
   RemoteInfo info;
-  bool isReady;
 }
