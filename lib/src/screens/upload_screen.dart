@@ -103,8 +103,6 @@ class UploadScreenState extends State<UploadScreen> {
     if (result != null) {
       Wakelock.enable();
       await widget.uploader.uploadLocalFile(result.files.single.path!);
-    } else {
-      // User canceled the picker
     }
   }
 
