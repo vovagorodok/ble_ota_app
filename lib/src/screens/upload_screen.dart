@@ -273,14 +273,14 @@ class UploadScreenState extends State<UploadScreen> {
     final bleConnectionState = widget.bleConnector.state;
     final uploadState = widget.uploader.state;
     final infoState = widget.infoReader.state;
-    final buildStatusOnly =
-        bleConnectionState == BleConnectionState.disconnected ||
-            infoState.status != WorkStatus.success ||
-            uploadState.status == WorkStatus.working ||
-            infoState.remoteInfo.softwareList.isEmpty;
-    return buildStatusOnly
-        ? _buildStatusWidget()
-        : _buildStatusWithSoftwareList();
+    final buildSoftwareList =
+        bleConnectionState == BleConnectionState.connected &&
+            infoState.status == WorkStatus.success &&
+            uploadState.status != WorkStatus.working &&
+            infoState.remoteInfo.softwareList.isNotEmpty;
+    return buildSoftwareList
+        ? _buildStatusWithSoftwareList()
+        : _buildStatusWidget();
   }
 
   @override
