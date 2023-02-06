@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -16,14 +17,13 @@ class BleUploader extends StatefulStream<BleUploadState> {
       : _characteristicRx =
             _crateCharacteristic(characteristicUuidRx, deviceId),
         _characteristicTx =
-            _crateCharacteristic(characteristicUuidTx, deviceId) {
-    _subscribeToCharacteristic();
-  }
+            _crateCharacteristic(characteristicUuidTx, deviceId);
 
   final String deviceId;
   final QualifiedCharacteristic _characteristicRx;
   final QualifiedCharacteristic _characteristicTx;
   final _responseGuard = TimerWrapper();
+  late StreamSubscription _subscription;
   BleUploadState _state = BleUploadState();
   Uint8List _dataToSend = Uint8List(0);
   int _currentDataPos = 0;
@@ -35,9 +35,8 @@ class BleUploader extends StatefulStream<BleUploadState> {
   BleUploadState get state => _state;
 
   void upload(Uint8List data) {
-    if (state.status == BleUploadStatus.success) {
-      _subscribeToCharacteristic();
-    }
+    _subscribeToCharacteristic();
+
     _state = BleUploadState(status: BleUploadStatus.begin);
     addStateToStream(state);
     _dataToSend = data;
@@ -46,11 +45,13 @@ class BleUploader extends StatefulStream<BleUploadState> {
 
   @override
   Future<void> dispose() async {
-    super.dispose();
+    _subscription.cancel();
     _responseGuard.stop();
+    super.dispose();
   }
 
   void _raiseError(UploadError error, {int errorCode = 0}) {
+    _subscription.cancel();
     state.status = BleUploadStatus.error;
     state.error = error;
     state.errorCode = errorCode;
@@ -82,6 +83,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
       } else if (state.status == BleUploadStatus.upload) {
         _sendPackages();
       } else if (state.status == BleUploadStatus.end) {
+        _subscription.cancel();
         _dataToSend = Uint8List(0);
         state.status = BleUploadStatus.success;
         addStateToStream(state);
@@ -154,7 +156,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
       data.buffer.asByteData().getUint32(offset, Endian.little);
 
   void _subscribeToCharacteristic() {
-    ble
+    _subscription = ble
         .subscribeToCharacteristic(_characteristicTx)
         .listen((event) => _handleResp(Uint8List.fromList(event)));
   }
