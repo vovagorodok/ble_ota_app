@@ -10,6 +10,7 @@ abstract class StateStream<State> {
   final StreamController<State> _stateStreamController = StreamController();
   Stream<State> get stateStream => _stateStreamController.stream;
 
+  @protected
   void addStateToStream(State state) {
     _stateStreamController.add(state);
   }
