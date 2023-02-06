@@ -35,19 +35,23 @@ class StatusScreenState extends State<StatusScreen> {
     setState(() {
       if (status == BleStatus.ready) {
         Navigator.pop(context);
-      } else if (status == BleStatus.unauthorized) {
-        if (Platform.isAndroid) {
-          Permission.location.request();
-        }
       }
     });
   }
 
   @override
   void initState() {
-    ble.statusStream.listen(_evaluateBleStatus);
-    _evaluateBleStatus(ble.status);
     super.initState();
+    ble.statusStream.listen(_evaluateBleStatus);
+    () async {
+      if (Platform.isAndroid) {
+        await Permission.location.request();
+      }
+      await Permission.bluetooth.request();
+      await Permission.bluetoothScan.request();
+      await Permission.bluetoothAdvertise.request();
+    }.call();
+    _evaluateBleStatus(ble.status);
   }
 
   @override
