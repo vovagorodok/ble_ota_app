@@ -90,9 +90,9 @@ class ScannerScreenState extends State<ScannerScreen> {
 
   @override
   void initState() {
+    super.initState();
     ble.statusStream.listen(_evaluateBleStatus);
     _evaluateBleStatus(ble.status);
-    super.initState();
   }
 
   @override

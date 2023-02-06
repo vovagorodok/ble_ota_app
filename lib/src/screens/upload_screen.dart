@@ -60,27 +60,29 @@ class UploadScreenState extends State<UploadScreen> {
 
   @override
   void initState() {
+    super.initState();
     _subscriptions = [
       widget.uploader.stateStream.listen(_onUploadStateChanged),
       widget.infoReader.stateStream.listen(_onInfoStateChanged),
       widget.bleConnector.stateStream.listen(_onConnectionStateChanged),
     ];
     widget.bleConnector.connect();
-    super.initState();
   }
 
   @override
-  void dispose() async {
-    super.dispose();
-    for (var subscription in _subscriptions) {
-      await subscription.cancel();
-    }
+  void dispose() {
+    () async {
+      for (var subscription in _subscriptions) {
+        await subscription.cancel();
+      }
 
-    await widget.uploader.dispose();
-    await widget.infoReader.dispose();
-    await widget.bleConnector.disconnect();
-    await widget.bleConnector.dispose();
-    await Wakelock.disable();
+      await widget.uploader.dispose();
+      await widget.infoReader.dispose();
+      await widget.bleConnector.disconnect();
+      await widget.bleConnector.dispose();
+      await Wakelock.disable();
+    }.call();
+    super.dispose();
   }
 
   bool _canUpload() {
