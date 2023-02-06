@@ -15,7 +15,24 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
   @override
   RemoteInfoState get state => _state;
 
-  Future<void> _readSoftware(DeviceInfo deviceInfo, String hardwareUrl) async {
+  void _readNewestSoftware(DeviceInfo deviceInfo) {
+    final filteredBySoftwareList =
+        state.info.softwareList.where((Software software) {
+      return software.name == deviceInfo.softwareName;
+    }).toList();
+    if (filteredBySoftwareList.isEmpty) {
+      return;
+    }
+    final max = filteredBySoftwareList.reduce((Software a, Software b) {
+      return a.version >= b.version ? a : b;
+    });
+    if (max.version <= deviceInfo.softwareVersion) {
+      return;
+    }
+    state.info.newestSoftware = max;
+  }
+
+  Future<void> _readSoftwares(DeviceInfo deviceInfo, String hardwareUrl) async {
     try {
       final response = await http.get(Uri.parse(hardwareUrl));
       if (response.statusCode != 200) {
@@ -54,20 +71,9 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       }).toList();
       state.info.softwareList = filteredByHardwareList;
 
-      final filteredBySoftwareList =
-          filteredByHardwareList.where((Software software) {
-        return software.name == deviceInfo.softwareName;
-      }).toList();
-      if (filteredBySoftwareList.isEmpty) {
-        return;
-      }
-      final max = filteredBySoftwareList.reduce((Software a, Software b) {
-        return a.version >= b.version ? a : b;
-      });
-      if (max.version <= deviceInfo.softwareVersion) {
-        return;
-      }
-      state.info.newestSoftware = max;
+      _readNewestSoftware(deviceInfo);
+      state.status = WorkStatus.success;
+      addStateToStream(state);
     } catch (_) {
       _raiseError(InfoError.generalNetworkError);
     }
@@ -101,13 +107,12 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         final body = json.decode(response.body);
         final hardwareUrl = body[deviceInfo.hardwareName];
         if (hardwareUrl != null) {
-          await _readSoftware(deviceInfo, hardwareUrl);
+          await _readSoftwares(deviceInfo, hardwareUrl);
         } else {
           state.info.isHardwareUnregistered = true;
+          state.status = WorkStatus.success;
+          addStateToStream(state);
         }
-
-        state.status = WorkStatus.success;
-        addStateToStream(state);
       } catch (_) {
         _raiseError(InfoError.generalNetworkError);
       }
