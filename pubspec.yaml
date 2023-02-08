@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   flutter_reactive_ble: ^5.0.3
-  file_picker: ^5.2.5
+  file_picker: ^4.6.1
   archive: ^3.3.5
   permission_handler: ^10.2.0
   http: ^0.13.5
@@ -40,6 +40,10 @@ dependency_overrides:
     git:
       url: https://github.com/vovagorodok/flutter_reactive_ble.git
       path: packages/reactive_ble_web
+  reactive_ble_desktop:
+    git:
+      url: https://github.com/vovagorodok/flutter_reactive_ble.git
+      path: packages/reactive_ble_desktop
 
 flutter:
   uses-material-design: true

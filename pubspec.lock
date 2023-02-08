@@ -22,6 +22,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
+  bluez:
+    dependency: transitive
+    description:
+      name: bluez
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.9"
   boolean_selector:
     dependency: transitive
     description:
@@ -71,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  dbus:
+    dependency: transitive
+    description:
+      name: dbus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.8"
   easy_localization:
     dependency: "direct main"
     description:
@@ -105,7 +119,7 @@ packages:
       name: ffi
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "1.2.1"
   file:
     dependency: transitive
     description:
@@ -119,7 +133,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.5"
+    version: "4.6.1"
   fixnum:
     dependency: transitive
     description:
@@ -316,7 +330,7 @@ packages:
       name: path_provider_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.3"
+    version: "2.0.7"
   pedantic:
     dependency: transitive
     description:
@@ -359,6 +373,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  petitparser:
+    dependency: transitive
+    description:
+      name: petitparser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.1.0"
   platform:
     dependency: transitive
     description:
@@ -401,6 +422,50 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.5"
+  quick_blue:
+    dependency: transitive
+    description:
+      name: quick_blue
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1+1"
+  quick_blue_linux:
+    dependency: transitive
+    description:
+      name: quick_blue_linux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
+  quick_blue_macos:
+    dependency: transitive
+    description:
+      name: quick_blue_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1+2"
+  quick_blue_platform_interface:
+    dependency: transitive
+    description:
+      name: quick_blue_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
+  quick_blue_windows:
+    dependency: transitive
+    description:
+      name: quick_blue_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2+2"
+  reactive_ble_desktop:
+    dependency: "direct overridden"
+    description:
+      path: "packages/reactive_ble_desktop"
+      ref: HEAD
+      resolved-ref: f9da9e9fb75d58493fd6d33c2b6f32205dc318c8
+      url: "https://github.com/vovagorodok/flutter_reactive_ble.git"
+    source: git
+    version: "5.0.3"
   reactive_ble_mobile:
     dependency: "direct overridden"
     description:
@@ -577,14 +642,14 @@ packages:
       name: wakelock_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.1"
+    version: "0.2.0"
   win32:
     dependency: transitive
     description:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.3"
+    version: "2.6.1"
   xdg_directories:
     dependency: transitive
     description:
@@ -592,6 +657,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0+3"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.4.1"
 sdks:
   dart: ">=2.18.1 <3.0.0"
   flutter: ">=3.0.0"
