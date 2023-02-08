@@ -27,6 +27,20 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.0
 
+dependency_overrides:
+  flutter_reactive_ble:
+    git:
+      url: https://github.com/vovagorodok/flutter_reactive_ble.git
+      path: packages/flutter_reactive_ble
+  reactive_ble_mobile:
+    git:
+      url: https://github.com/vovagorodok/flutter_reactive_ble.git
+      path: packages/reactive_ble_mobile
+  reactive_ble_web:
+    git:
+      url: https://github.com/vovagorodok/flutter_reactive_ble.git
+      path: packages/reactive_ble_web
+
 flutter:
   uses-material-design: true
   assets:

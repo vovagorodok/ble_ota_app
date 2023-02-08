@@ -154,9 +154,11 @@ packages:
   flutter_reactive_ble:
     dependency: "direct main"
     description:
-      name: flutter_reactive_ble
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/flutter_reactive_ble"
+      ref: HEAD
+      resolved-ref: a348ad45f414eef3aa446c4bec718d3b28997f53
+      url: "https://github.com/vovagorodok/flutter_reactive_ble.git"
+    source: git
     version: "5.0.3"
   flutter_settings_screens:
     dependency: "direct main"
@@ -170,6 +172,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_bluetooth:
+    dependency: transitive
+    description:
+      name: flutter_web_bluetooth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -224,6 +233,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   matcher:
     dependency: transitive
     description:
@@ -386,11 +402,13 @@ packages:
     source: hosted
     version: "6.0.5"
   reactive_ble_mobile:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: reactive_ble_mobile
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/reactive_ble_mobile"
+      ref: HEAD
+      resolved-ref: a348ad45f414eef3aa446c4bec718d3b28997f53
+      url: "https://github.com/vovagorodok/flutter_reactive_ble.git"
+    source: git
     version: "5.0.3"
   reactive_ble_platform_interface:
     dependency: transitive
@@ -399,6 +417,22 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.3"
+  reactive_ble_web:
+    dependency: "direct overridden"
+    description:
+      path: "packages/reactive_ble_web"
+      ref: HEAD
+      resolved-ref: a348ad45f414eef3aa446c4bec718d3b28997f53
+      url: "https://github.com/vovagorodok/flutter_reactive_ble.git"
+    source: git
+    version: "0.0.2"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.7"
   shared_preferences:
     dependency: transitive
     description:
