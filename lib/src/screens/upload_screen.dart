@@ -37,7 +37,7 @@ class UploadScreenState extends State<UploadScreen> {
       if (state == BleConnectionState.disconnected) {
         widget.bleConnector.findAndConnect();
       } else if (state == BleConnectionState.connected) {
-        if (!skipInfoRead.value) {
+        if (!skipInfoReading.value) {
           widget.infoReader.read(hardwaresDictUrl.value);
         }
       }

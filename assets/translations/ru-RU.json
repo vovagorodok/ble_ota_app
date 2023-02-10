@@ -6,6 +6,7 @@
     "General": "Общие",
     "InfiniteScan": "Бесконечное сканирование",
     "DeveloperOptions": "Параметры разработчика",
+    "SkipInfoReading": "Пропустить чтение информации",
     "AlwaysAllowLocalFilesUpload": "Всегда разрешать локальную загрузку файлов",
     "HardwaresDictionaryLink": "Ссылка на словарь оборудований",
     "ThisDeviceDoesNotSupportBluetooth": "Это устройство не поддерживает Bluetooth",

@@ -40,9 +40,9 @@ class SettingsScreenState extends State<SettingsScreen> {
             title: tr('DeveloperOptions'),
             children: [
               CheckboxSettingsTile(
-                title: tr('SkipInfoRead'),
-                settingKey: skipInfoRead.key,
-                defaultValue: skipInfoRead.defaultValue,
+                title: tr('SkipInfoReading'),
+                settingKey: skipInfoReading.key,
+                defaultValue: skipInfoReading.defaultValue,
               ),
               CheckboxSettingsTile(
                 title: tr('AlwaysAllowLocalFilesUpload'),
