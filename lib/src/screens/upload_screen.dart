@@ -32,13 +32,22 @@ class UploadScreen extends StatefulWidget {
 class UploadScreenState extends State<UploadScreen> {
   late List<StreamSubscription> _subscriptions;
 
+  Uploader get uploader => widget.uploader;
+  InfoReader get infoReader => widget.infoReader;
+  BleConnector get bleConnector => widget.bleConnector;
+  UploadState get uploadState => uploader.state;
+  InfoState get infoState => infoReader.state;
+  BleConnectionState get connectionState => bleConnector.state;
+  WorkStatus get uploadStatus => uploadState.status;
+  WorkStatus get infoStatus => infoState.status;
+
   void _onConnectionStateChanged(BleConnectionState state) {
     setState(() {
       if (state == BleConnectionState.disconnected) {
-        widget.bleConnector.findAndConnect();
+        bleConnector.findAndConnect();
       } else if (state == BleConnectionState.connected) {
         if (!skipInfoReading.value) {
-          widget.infoReader.read(hardwaresDictUrl.value);
+          infoReader.read(hardwaresDictUrl.value);
         }
       }
     });
@@ -52,7 +61,7 @@ class UploadScreenState extends State<UploadScreen> {
     setState(() {
       if (state.status == WorkStatus.success ||
           state.status == WorkStatus.error) {
-        widget.bleConnector.disconnect();
+        bleConnector.disconnect();
         Wakelock.disable();
       }
     });
@@ -62,11 +71,11 @@ class UploadScreenState extends State<UploadScreen> {
   void initState() {
     super.initState();
     _subscriptions = [
-      widget.uploader.stateStream.listen(_onUploadStateChanged),
-      widget.infoReader.stateStream.listen(_onInfoStateChanged),
-      widget.bleConnector.stateStream.listen(_onConnectionStateChanged),
+      uploader.stateStream.listen(_onUploadStateChanged),
+      infoReader.stateStream.listen(_onInfoStateChanged),
+      bleConnector.stateStream.listen(_onConnectionStateChanged),
     ];
-    widget.bleConnector.connect();
+    bleConnector.connect();
   }
 
   @override
@@ -76,24 +85,24 @@ class UploadScreenState extends State<UploadScreen> {
         await subscription.cancel();
       }
 
-      await widget.uploader.dispose();
-      await widget.infoReader.dispose();
-      await widget.bleConnector.disconnect();
-      await widget.bleConnector.dispose();
+      await uploader.dispose();
+      await infoReader.dispose();
+      await bleConnector.disconnect();
+      await bleConnector.dispose();
       await Wakelock.disable();
     }.call();
     super.dispose();
   }
 
   bool _canUpload() {
-    return widget.bleConnector.state == BleConnectionState.connected &&
-        widget.uploader.state.status != WorkStatus.working &&
-        widget.infoReader.state.status != WorkStatus.working;
+    return connectionState == BleConnectionState.connected &&
+        uploadStatus != WorkStatus.working &&
+        infoStatus != WorkStatus.working;
   }
 
   bool _canUploadLocalFile() {
     return alwaysAllowLocalFilesUpload.value ||
-        widget.infoReader.state.remoteInfo.isHardwareUnregistered;
+        infoState.remoteInfo.isHardwareUnregistered;
   }
 
   Future<void> _pickFile() async {
@@ -104,19 +113,16 @@ class UploadScreenState extends State<UploadScreen> {
 
     if (result != null) {
       await Wakelock.enable();
-      await widget.uploader.uploadLocalFile(result.files.single.path!);
+      await uploader.uploadLocalFile(result.files.single.path!);
     }
   }
 
   Future<void> _uploadHttpFile(String url) async {
     await Wakelock.enable();
-    await widget.uploader.uploadHttpFile(url);
+    await uploader.uploadHttpFile(url);
   }
 
   MaterialColor _determinateStatusColor() {
-    final uploadStatus = widget.uploader.state.status;
-    final infoStatus = widget.infoReader.state.status;
-
     if (uploadStatus == WorkStatus.working) {
       return Colors.blue;
     } else if (uploadStatus == WorkStatus.error ||
@@ -130,10 +136,7 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildProgressInside() {
-    final uploadState = widget.uploader.state;
-    final infoState = widget.infoReader.state;
-
-    if (uploadState.status == WorkStatus.working) {
+    if (uploadStatus == WorkStatus.working) {
       return Text(
         (uploadState.progress * 100).toStringAsFixed(1),
         style: const TextStyle(
@@ -142,14 +145,14 @@ class UploadScreenState extends State<UploadScreen> {
           fontSize: 24,
         ),
       );
-    } else if (uploadState.status == WorkStatus.error ||
-        infoState.status == WorkStatus.error) {
+    } else if (uploadStatus == WorkStatus.error ||
+        infoStatus == WorkStatus.error) {
       return const Icon(
         Icons.error,
         color: Colors.red,
         size: 56,
       );
-    } else if (uploadState.status == WorkStatus.success) {
+    } else if (uploadStatus == WorkStatus.success) {
       return const Icon(
         Icons.done,
         color: Colors.green,
@@ -174,7 +177,7 @@ class UploadScreenState extends State<UploadScreen> {
         fit: StackFit.expand,
         children: [
           CircularProgressIndicator(
-            value: widget.uploader.state.progress,
+            value: uploadState.progress,
             color: _determinateStatusColor(),
             strokeWidth: 10,
             backgroundColor: _determinateStatusColor().shade200,
@@ -201,7 +204,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   Widget _buildSoftwareList() => Column(
         children: [
-          for (var sw in widget.infoReader.state.remoteInfo.softwareList)
+          for (var sw in infoState.remoteInfo.softwareList)
             _buildSoftwareCard(sw)
         ],
       );
@@ -218,21 +221,17 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildStatusWidget() {
-    final bleConnectionState = widget.bleConnector.state;
-    final uploadState = widget.uploader.state;
-    final infoState = widget.infoReader.state;
-
-    if (bleConnectionState == BleConnectionState.disconnected) {
+    if (connectionState == BleConnectionState.disconnected) {
       return _buildStatusText(tr('Connecting..'));
-    } else if (uploadState.status == WorkStatus.working) {
+    } else if (uploadStatus == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
-    } else if (uploadState.status == WorkStatus.error) {
+    } else if (uploadStatus == WorkStatus.error) {
       return _buildStatusText(determineUploadError(uploadState));
-    } else if (infoState.status == WorkStatus.error) {
+    } else if (infoStatus == WorkStatus.error) {
       return _buildStatusText(determineInfoError(infoState));
-    } else if (infoState.status == WorkStatus.idle) {
+    } else if (infoStatus == WorkStatus.idle) {
       return _buildStatusText(tr('Connected'));
-    } else if (infoState.status == WorkStatus.working) {
+    } else if (infoStatus == WorkStatus.working) {
       return _buildStatusText(tr('Loading..'));
     } else if (infoState.remoteInfo.softwareList.isEmpty) {
       return _buildStatusText(tr('NoAvailableSoftwares'));
@@ -275,15 +274,10 @@ class UploadScreenState extends State<UploadScreen> {
       );
 
   Widget _buildStatusWithOptionallySoftwareList() {
-    final bleConnectionState = widget.bleConnector.state;
-    final uploadState = widget.uploader.state;
-    final infoState = widget.infoReader.state;
-
-    final buildSoftwareList =
-        bleConnectionState == BleConnectionState.connected &&
-            infoState.status == WorkStatus.success &&
-            uploadState.status != WorkStatus.working &&
-            infoState.remoteInfo.softwareList.isNotEmpty;
+    final buildSoftwareList = connectionState == BleConnectionState.connected &&
+        infoStatus == WorkStatus.success &&
+        uploadStatus != WorkStatus.working &&
+        infoState.remoteInfo.softwareList.isNotEmpty;
     return buildSoftwareList
         ? _buildStatusWithSoftwareList()
         : _buildStatusWidget();
@@ -303,12 +297,10 @@ class UploadScreenState extends State<UploadScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  tr('Hardware:',
-                      args: [createHardwareString(widget.infoReader.state)]),
+                  tr('Hardware:', args: [createHardwareString(infoState)]),
                 ),
                 Text(
-                  tr('Software:',
-                      args: [createSoftwareString(widget.infoReader.state)]),
+                  tr('Software:', args: [createSoftwareString(infoState)]),
                 ),
                 const SizedBox(height: 25),
                 Row(
