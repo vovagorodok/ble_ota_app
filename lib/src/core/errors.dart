@@ -17,3 +17,10 @@ enum InfoError {
   unexpectedNetworkResponse,
   generalNetworkError,
 }
+
+enum PinChangeError {
+  unknown,
+  generalDeviceError,
+  noDeviceResponse,
+  unexpectedDeviceResponse,
+}
