@@ -288,6 +288,22 @@ class UploadScreenState extends State<UploadScreen> {
         appBar: AppBar(
           title: Text(widget.deviceName),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.pin),
+              onPressed: _canUpload()
+                  ? () async => await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UploadScreen(
+                            deviceId: widget.deviceId,
+                            deviceName: widget.deviceName,
+                          ),
+                        ),
+                      )
+                  : null,
+            ),
+          ],
         ),
         body: SafeArea(
           child: Padding(
