@@ -11,6 +11,7 @@ import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ble_ota/uploader.dart';
 import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
+import 'package:ble_ota_app/src/screens/pin_screen.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
 class UploadScreen extends StatefulWidget {
@@ -295,7 +296,7 @@ class UploadScreenState extends State<UploadScreen> {
                   ? () async => await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UploadScreen(
+                          builder: (context) => PinScreen(
                             deviceId: widget.deviceId,
                             deviceName: widget.deviceName,
                           ),
