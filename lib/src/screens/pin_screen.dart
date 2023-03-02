@@ -79,7 +79,7 @@ class PinScreenState extends State<PinScreen> {
     );
   }
 
-  _onChanged(String value) {
+  void _onChanged(String value) {
     setState(() {
       _pin = value.length >= 4 ? int.tryParse(value) : null;
     });
@@ -89,11 +89,15 @@ class PinScreenState extends State<PinScreen> {
     return blePinChangeStatus != WorkStatus.working;
   }
 
-  Future<void> _setPin() async {
+  bool _canSetPin() {
+    return _canChange() && _pin != null;
+  }
+
+  void _setPin() {
     blePinChanger.set(_pin!);
   }
 
-  Future<void> _clearPin() async {
+  void _clearPin() {
     blePinChanger.clear();
   }
 
@@ -140,7 +144,7 @@ class PinScreenState extends State<PinScreen> {
                     ElevatedButton.icon(
                       icon: const Icon(Icons.upload),
                       label: const Text('Set'),
-                      onPressed: _canChange() && _pin != null ? _setPin : null,
+                      onPressed: _canSetPin() ? _setPin : null,
                     ),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.delete),
