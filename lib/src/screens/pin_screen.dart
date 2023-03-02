@@ -143,7 +143,7 @@ class PinScreenState extends State<PinScreen> {
                       onPressed: _canChange() && _pin != null ? _setPin : null,
                     ),
                     ElevatedButton.icon(
-                      icon: const Icon(Icons.clear),
+                      icon: const Icon(Icons.delete),
                       label: const Text('Clear'),
                       onPressed: _canChange() ? _clearPin : null,
                     ),
