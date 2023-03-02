@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
 
@@ -26,15 +27,19 @@ class PinScreenState extends State<PinScreen> {
   BlePinChangeState get blePinChangeState => blePinChanger.state;
   WorkStatus get blePinChangeStatus => blePinChangeState.status;
 
-  void _onBlePinChangeStateChanged(BlePinChangeState state) {
-    setState(() {});
+  void _onBlePinStateChanged(BlePinChangeState state) {
+    setState(() {
+      if (blePinChangeStatus == WorkStatus.success ||
+          blePinChangeStatus == WorkStatus.error) {
+        _showMyDialog();
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _subscription =
-        blePinChanger.stateStream.listen(_onBlePinChangeStateChanged);
+    _subscription = blePinChanger.stateStream.listen(_onBlePinStateChanged);
   }
 
   @override
@@ -44,6 +49,34 @@ class PinScreenState extends State<PinScreen> {
       await blePinChanger.dispose();
     }.call();
     super.dispose();
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                if (blePinChangeStatus == WorkStatus.success)
+                  const Text('Success.'),
+                if (blePinChangeStatus == WorkStatus.error)
+                  Text(determinePinChangeError(blePinChangeState)),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   _onChanged(String value) {
