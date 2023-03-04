@@ -48,7 +48,7 @@ class PinScreenState extends State<PinScreen> {
 
   void _onChanged(String value) {
     setState(() {
-      _pin = value.length >= 4 ? int.tryParse(value) : null;
+      _pin = value.length >= 6 ? int.tryParse(value) : null;
     });
   }
 
