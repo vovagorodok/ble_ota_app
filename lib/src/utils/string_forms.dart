@@ -46,7 +46,7 @@ String determineUploadError(UploadState state) {
 String determinePinChangeError(BlePinChangeState state) {
   switch (state.error) {
     case PinChangeError.generalDeviceError:
-      return 'Pin does not changed';
+      return tr('PinWasntChanged');
     case PinChangeError.noDeviceResponse:
       return tr('NoDeviceResponse');
     case PinChangeError.unexpectedDeviceResponse:

@@ -26,6 +26,7 @@
     "NetworkError": "Network error",
     "UnknownError": "Unknown error: {}",
     "IncorrectJsonFileFormat": "Incorrect json file format",
+    "PinWasntChanged": "Pin wasn't changed",
     "NoInformation": "No information",
     "Loading..": "Loading..",
     "Connecting..": "Connecting..",

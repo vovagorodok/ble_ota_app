@@ -26,6 +26,7 @@
     "NetworkError": "Ошибка сети",
     "UnknownError": "Неизвестная ошибка: {}",
     "IncorrectJsonFileFormat": "Неправильный формат json файла",
+    "PinWasntChanged": "Пин не был изменен",
     "NoInformation": "Нет информации",
     "Loading..": "Загрузка..",
     "Connecting..": "Подключение..",
