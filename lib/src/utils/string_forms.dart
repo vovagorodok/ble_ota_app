@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
-import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
-import 'package:ble_ota_app/src/ble_ota/uploader.dart';
+import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
+import 'package:ble_ota_app/src/ota/info_reader.dart';
+import 'package:ble_ota_app/src/ota/uploader.dart';
 
 String determineInfoError(InfoState state) {
   switch (state.error) {
@@ -37,6 +38,19 @@ String determineUploadError(UploadState state) {
       return tr('UnexpectedNetworkResponse', args: ['${state.errorCode}']);
     case UploadError.generalNetworkError:
       return tr('NetworkError');
+    default:
+      return tr('UnknownError', args: ['${state.errorCode}']);
+  }
+}
+
+String determinePinChangeError(BlePinChangeState state) {
+  switch (state.error) {
+    case PinChangeError.generalDeviceError:
+      return tr('PinWasntChanged');
+    case PinChangeError.noDeviceResponse:
+      return tr('NoDeviceResponse');
+    case PinChangeError.unexpectedDeviceResponse:
+      return tr('UnexpectedDeviceResponse', args: ['${state.errorCode}']);
     default:
       return tr('UnknownError', args: ['${state.errorCode}']);
   }

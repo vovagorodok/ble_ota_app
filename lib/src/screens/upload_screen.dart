@@ -8,9 +8,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
-import 'package:ble_ota_app/src/ble_ota/uploader.dart';
-import 'package:ble_ota_app/src/ble_ota/info_reader.dart';
+import 'package:ble_ota_app/src/ota/uploader.dart';
+import 'package:ble_ota_app/src/ota/info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
+import 'package:ble_ota_app/src/screens/pin_screen.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
 class UploadScreen extends StatefulWidget {
@@ -101,7 +102,8 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUploadLocalFile() {
-    return alwaysAllowLocalFilesUpload.value ||
+    return skipInfoReading.value ||
+        alwaysAllowLocalFilesUpload.value ||
         infoState.remoteInfo.isHardwareUnregistered;
   }
 
@@ -288,6 +290,22 @@ class UploadScreenState extends State<UploadScreen> {
         appBar: AppBar(
           title: Text(widget.deviceName),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.pin),
+              onPressed: _canUpload()
+                  ? () async => await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PinScreen(
+                            deviceId: widget.deviceId,
+                            deviceName: widget.deviceName,
+                          ),
+                        ),
+                      )
+                  : null,
+            ),
+          ],
         ),
         body: SafeArea(
           child: Padding(

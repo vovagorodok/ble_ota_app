@@ -26,6 +26,7 @@
     "NetworkError": "Network error",
     "UnknownError": "Unknown error: {}",
     "IncorrectJsonFileFormat": "Incorrect json file format",
+    "PinWasntChanged": "Pin wasn't changed",
     "NoInformation": "No information",
     "Loading..": "Loading..",
     "Connecting..": "Connecting..",
@@ -37,5 +38,11 @@
     "AllAvailableSoftwares:" : "All available softwares:",
     "UploadFile": "Upload file",
     "Hardware:": "Hardware: {}",
-    "Software:": "Software: {}"
+    "Software:": "Software: {}",
+    "Changing..": "Changing..",
+    "Changed": "Changed",
+    "ChangePin:": "Change pin:",
+    "EnterPinHere": "Enter pin here",
+    "Set": "Set",
+    "Remove": "Remove"
 }
