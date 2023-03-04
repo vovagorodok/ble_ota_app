@@ -28,12 +28,7 @@ class PinScreenState extends State<PinScreen> {
   WorkStatus get blePinChangeStatus => blePinChangeState.status;
 
   void _onBlePinStateChanged(BlePinChangeState state) {
-    setState(() {
-      if (blePinChangeStatus == WorkStatus.success ||
-          blePinChangeStatus == WorkStatus.error) {
-        _showMyDialog();
-      }
-    });
+    setState(() {});
   }
 
   @override
@@ -49,34 +44,6 @@ class PinScreenState extends State<PinScreen> {
       await blePinChanger.dispose();
     }.call();
     super.dispose();
-  }
-
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                if (blePinChangeStatus == WorkStatus.success)
-                  const Text('Success.'),
-                if (blePinChangeStatus == WorkStatus.error)
-                  Text(determinePinChangeError(blePinChangeState)),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _onChanged(String value) {
@@ -101,6 +68,28 @@ class PinScreenState extends State<PinScreen> {
     blePinChanger.remove();
   }
 
+  String _determinateStatusText() {
+    if (blePinChangeStatus == WorkStatus.working) {
+      return 'Changing..';
+    } else if (blePinChangeStatus == WorkStatus.error) {
+      return determinePinChangeError(blePinChangeState);
+    } else if (blePinChangeStatus == WorkStatus.success) {
+      return 'Changed';
+    } else {
+      return 'Change pin:';
+    }
+  }
+
+  Color? _determinateStatusColor() {
+    if (blePinChangeStatus == WorkStatus.error) {
+      return Colors.red;
+    } else if (blePinChangeStatus == WorkStatus.success) {
+      return Colors.green;
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -114,6 +103,15 @@ class PinScreenState extends State<PinScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Text(
+                  _determinateStatusText(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: _determinateStatusColor(),
+                  ),
+                ),
+                const SizedBox(height: 8),
                 TextField(
                   onChanged: _onChanged,
                   style: const TextStyle(
@@ -135,7 +133,10 @@ class PinScreenState extends State<PinScreen> {
                           : oldValue;
                     }),
                   ],
-                  decoration: const InputDecoration(hintText: 'Enter pin here'),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter pin here',
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Row(
