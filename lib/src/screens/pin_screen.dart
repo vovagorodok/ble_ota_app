@@ -8,10 +8,9 @@ import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
 
 class PinScreen extends StatefulWidget {
-  PinScreen({required this.deviceId, required this.deviceName, super.key})
+  PinScreen({required deviceId, required this.deviceName, super.key})
       : blePinChanger = BlePinChanger(deviceId: deviceId);
 
-  final String deviceId;
   final String deviceName;
   final BlePinChanger blePinChanger;
 
