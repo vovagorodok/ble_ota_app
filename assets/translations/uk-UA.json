@@ -38,5 +38,11 @@
     "AllAvailableSoftwares:" : "Всі доступні прошивки:",
     "UploadFile": "Завантажити файл",
     "Hardware:": "Обладнання: {}",
-    "Software:": "Прошивка: {}"
+    "Software:": "Прошивка: {}",
+    "Changing..": "Зміна..",
+    "Changed": "Змінено",
+    "ChangePin:": "Зміни пін:",
+    "EnterPinHere": "Введіть пін тут",
+    "Set": "Встановити",
+    "Remove": "Видалити"
 }

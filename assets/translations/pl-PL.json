@@ -38,5 +38,11 @@
     "AllAvailableSoftwares:" : "Wszystkie dostępne oprogramowania:",
     "UploadFile": "Wgraj plik",
     "Hardware:": "Sprzęt: {}",
-    "Software:": "Oprogramowanie: {}"
+    "Software:": "Oprogramowanie: {}",
+    "Changing..": "Zmiana..",
+    "Changed": "Zmieniono",
+    "ChangePin:": "Zmień pin:",
+    "EnterPinHere": "Wpisz pin tutaj",
+    "Set": "Ustaw",
+    "Remove": "Usuń"
 }
