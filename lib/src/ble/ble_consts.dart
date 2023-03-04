@@ -25,7 +25,7 @@ class HeadCode {
   static const end = 0x12;
 
   static const setPin = 0x20;
-  static const clearPin = 0x21;
+  static const removePin = 0x21;
 }
 
 UploadError determineErrorHeadCode(int code) {

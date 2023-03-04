@@ -97,8 +97,8 @@ class PinScreenState extends State<PinScreen> {
     blePinChanger.set(_pin!);
   }
 
-  void _clearPin() {
-    blePinChanger.clear();
+  void _removePin() {
+    blePinChanger.remove();
   }
 
   @override
@@ -148,8 +148,8 @@ class PinScreenState extends State<PinScreen> {
                     ),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.delete),
-                      label: const Text('Clear'),
-                      onPressed: _canChange() ? _clearPin : null,
+                      label: const Text('Remove'),
+                      onPressed: _canChange() ? _removePin : null,
                     ),
                   ],
                 ),

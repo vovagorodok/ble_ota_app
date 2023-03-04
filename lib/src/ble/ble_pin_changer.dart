@@ -25,9 +25,9 @@ class BlePinChanger extends StatefulStream<BlePinChangeState> {
     _waitForResponse();
   }
 
-  void clear() {
+  void remove() {
     _begin();
-    _sendData(uint8ToBytes(HeadCode.clearPin));
+    _sendData(uint8ToBytes(HeadCode.removePin));
     _waitForResponse();
   }
 
