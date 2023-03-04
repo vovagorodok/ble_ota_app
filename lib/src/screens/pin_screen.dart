@@ -70,13 +70,13 @@ class PinScreenState extends State<PinScreen> {
 
   String _determinateStatusText() {
     if (blePinChangeStatus == WorkStatus.working) {
-      return 'Changing..';
+      return tr('Changing..');
     } else if (blePinChangeStatus == WorkStatus.error) {
       return determinePinChangeError(blePinChangeState);
     } else if (blePinChangeStatus == WorkStatus.success) {
-      return 'Changed';
+      return tr('Changed');
     } else {
-      return 'Change pin:';
+      return tr('ChangePin:');
     }
   }
 
@@ -133,9 +133,9 @@ class PinScreenState extends State<PinScreen> {
                           : oldValue;
                     }),
                   ],
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter pin here',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: tr('EnterPinHere'),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -144,12 +144,12 @@ class PinScreenState extends State<PinScreen> {
                   children: [
                     ElevatedButton.icon(
                       icon: const Icon(Icons.upload),
-                      label: const Text('Set'),
+                      label: Text(tr('Set')),
                       onPressed: _canSetPin() ? _setPin : null,
                     ),
                     ElevatedButton.icon(
                       icon: const Icon(Icons.delete),
-                      label: const Text('Remove'),
+                      label: Text(tr('Remove')),
                       onPressed: _canChange() ? _removePin : null,
                     ),
                   ],
