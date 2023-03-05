@@ -26,7 +26,7 @@
     "NetworkError": "Błąd sieci",
     "UnknownError": "Nieznany błąd: {}",
     "IncorrectJsonFileFormat": "Nieprawidłowy format pliku json",
-    "PinWasntChanged": "Pin nie został zmieniony",
+    "PinHasNotBeenChanged": "Pin nie został zmieniony",
     "NoInformation": "Brak informacji",
     "Loading..": "Ładowanie..",
     "Connecting..": "Łączenie..",
