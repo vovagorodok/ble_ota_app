@@ -20,6 +20,7 @@
     "IncorrectFirmwareSize": "Nieprawidłowy rozmiar oprogramowania",
     "ChecksumError": "Błąd sumy kontrolnej",
     "InternalStorageError": "Błąd pamięci wewnętrznej",
+    "UploadDisabled": "Wgrywanie wyłączone",
     "NoDeviceResponse": "Brak odpowiedzi urządzenia",
     "UnexpectedDeviceResponse": "Nieoczekiwana odpowiedź urządzenia: {}",
     "UnexpectedNetworkResponse": "Nieoczekiwana odpowiedź sieci: {}",

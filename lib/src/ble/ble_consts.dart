@@ -19,6 +19,7 @@ class HeadCode {
   static const incorrectFirmwareSize = 0x03;
   static const checksumError = 0x04;
   static const internalSrorageError = 0x05;
+  static const uploadDisabled = 0x06;
 
   static const begin = 0x10;
   static const package = 0x11;
@@ -40,6 +41,8 @@ UploadError determineErrorHeadCode(int code) {
       return UploadError.incorrectChecksum;
     case HeadCode.internalSrorageError:
       return UploadError.internalSrorageError;
+    case HeadCode.uploadDisabled:
+      return UploadError.uploadDisabled;
     default:
       return UploadError.unexpectedDeviceResponse;
   }

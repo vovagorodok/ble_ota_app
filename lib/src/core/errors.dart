@@ -5,6 +5,7 @@ enum UploadError {
   incorrectFirmwareSize,
   incorrectChecksum,
   internalSrorageError,
+  uploadDisabled,
   noDeviceResponse,
   unexpectedDeviceResponse,
   unexpectedNetworkResponse,

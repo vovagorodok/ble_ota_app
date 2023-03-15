@@ -30,6 +30,8 @@ String determineUploadError(UploadState state) {
       return tr('ChecksumError');
     case UploadError.internalSrorageError:
       return tr('InternalStorageError');
+    case UploadError.uploadDisabled:
+      return tr('UploadDisabled');
     case UploadError.noDeviceResponse:
       return tr('NoDeviceResponse');
     case UploadError.unexpectedDeviceResponse:
