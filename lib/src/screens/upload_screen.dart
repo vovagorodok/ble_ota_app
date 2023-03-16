@@ -60,9 +60,10 @@ class UploadScreenState extends State<UploadScreen> {
 
   void _onUploadStateChanged(UploadState state) {
     setState(() {
-      if (state.status == WorkStatus.success ||
-          state.status == WorkStatus.error) {
+      if (state.status == WorkStatus.success) {
         bleConnector.disconnect();
+        Wakelock.disable();
+      } else if (state.status == WorkStatus.error) {
         Wakelock.disable();
       }
     });
