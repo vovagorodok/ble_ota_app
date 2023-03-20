@@ -3,6 +3,7 @@
 ## Staps
 1. Create your hardware json
 2. Add link to your hardware json in `resources\hardwares.json`
+3. Push changes to this repo
 
 ## Hardware json
 Example in `resources\example_hardware_esp32.json`.\
