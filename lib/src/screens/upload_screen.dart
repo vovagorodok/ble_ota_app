@@ -11,8 +11,9 @@ import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ota/uploader.dart';
 import 'package:ble_ota_app/src/ota/info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
-import 'package:ble_ota_app/src/screens/pin_screen.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
+import 'package:ble_ota_app/src/screens/pin_screen.dart';
+import 'package:ble_ota_app/src/screens/software_screen.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, super.key})
@@ -200,6 +201,19 @@ class UploadScreenState extends State<UploadScreen> {
           ),
           title: Text(sw.name),
           subtitle: Text("v${sw.version}"),
+          trailing: sw.text != null
+              ? IconButton(
+                  icon: const Icon(Icons.info),
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SoftwareScreen(software: sw),
+                      ),
+                    );
+                  },
+                )
+              : null,
           onTap: () => _uploadHttpFile(sw.path),
           enabled: _canUpload(),
         ),
