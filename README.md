@@ -1,5 +1,7 @@
 # Ble Ota App
-Mobile application for upload firmware over Bluetooth.
+Graphical application for upload firmware over Bluetooth.\
+Fully works on Android and iOS. For other OS it depends on flutter_reactive_ble library.\
+Additionally support update machanism for specific hardwares. More about it in `doc/ADD_NEW_HARDWARE.md`.
 
-## Links
+## Device side
 https://github.com/vovagorodok/ArduinoBleOTA
