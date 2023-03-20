@@ -51,8 +51,7 @@ class BleConnector extends StatefulStream<BleConnectionState> {
   Future<void> disconnect() async {
     try {
       await _connection.cancel();
-    } catch (e) {
-      // TODO: handle exception
+    } catch (_) {
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated
       _notifyIfChanged(BleConnectionState.disconnected);
