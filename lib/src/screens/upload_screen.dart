@@ -204,14 +204,12 @@ class UploadScreenState extends State<UploadScreen> {
           trailing: sw.text != null
               ? IconButton(
                   icon: const Icon(Icons.info),
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SoftwareScreen(software: sw),
-                      ),
-                    );
-                  },
+                  onPressed: () async => await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SoftwareScreen(software: sw),
+                    ),
+                  ),
                 )
               : null,
           onTap: () => _uploadHttpFile(sw.path),
