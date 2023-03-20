@@ -41,7 +41,7 @@
             "software_name": "Experimental Software",
             "software_version" : [1, 1, 2],
             "software_path": "https://github.com/vovagorodok/ArduinoBleOTA/releases/download/v1.0.0/esp32_experimental_v1.1.2_firmware.bin",
-            "software_text": "Experimental branch of Example Software.\nChanges:\n- first\n- second"
+            "software_text": "Experimental branch of Example Software.\n\nChanges:\n- first\n- second"
         }
     ]
 }
