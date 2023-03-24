@@ -151,6 +151,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.14"
+  flutter_pin_code_fields:
+    dependency: "direct main"
+    description:
+      name: flutter_pin_code_fields
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

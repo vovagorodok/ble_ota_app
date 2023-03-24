@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
@@ -45,7 +45,7 @@ class PinScreenState extends State<PinScreen> {
     super.dispose();
   }
 
-  void _onChanged(String value) {
+  void _onChange(String value) {
     setState(() {
       _pin = value.length == 6 ? int.tryParse(value) : null;
     });
@@ -111,31 +111,11 @@ class PinScreenState extends State<PinScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                TextField(
-                  onChanged: _onChanged,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                  autofocus: true,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r"[0-9]")),
-                    TextInputFormatter.withFunction((oldValue, newValue) {
-                      if (newValue.text.isEmpty) {
-                        return newValue;
-                      }
-                      int? value = int.tryParse(newValue.text);
-                      return value != null && value <= 0xFFFFFFFF
-                          ? newValue
-                          : oldValue;
-                    }),
-                  ],
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintText: tr('EnterPinHere'),
-                  ),
+                PinCodeFields(
+                  length: 6,
+                  keyboardType: TextInputType.number,
+                  onChange: _onChange,
+                  onComplete: _onChange,
                 ),
                 const SizedBox(height: 8),
                 Row(

@@ -22,6 +22,7 @@ dependencies:
   jumping_dot: ^0.0.4
   easy_localization: ^3.0.1
   flutter_markdown: ^0.6.14
+  flutter_pin_code_fields: ^1.2.0
 
 dev_dependencies:
   flutter_test:
