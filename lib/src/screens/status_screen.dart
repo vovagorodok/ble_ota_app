@@ -50,6 +50,7 @@ class StatusScreenState extends State<StatusScreen> {
       await Permission.bluetooth.request();
       await Permission.bluetoothScan.request();
       await Permission.bluetoothAdvertise.request();
+      await Permission.bluetoothConnect.request();
     }.call();
     _evaluateBleStatus(ble.status);
   }
