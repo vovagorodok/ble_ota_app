@@ -27,12 +27,13 @@ class BleUploader extends StatefulStream<BleUploadState> {
   @override
   BleUploadState get state => _state;
 
-  void upload(Uint8List data) {
+  void upload(Uint8List data) async {
     _bleSerial.subscribe(
         onData: (event) => _handleResp(Uint8List.fromList(event)));
 
     _state = BleUploadState(status: BleUploadStatus.begin);
     addStateToStream(state);
+    _packageMaxSize = await _calcPackageMaxSize();
     _dataToSend = data;
     _sendBegin();
   }
@@ -41,6 +42,12 @@ class BleUploader extends StatefulStream<BleUploadState> {
   Future<void> dispose() async {
     _bleSerial.dispose();
     super.dispose();
+  }
+
+  Future<int> _calcPackageMaxSize() async {
+    var mtu = await ble.requestMtu(
+        deviceId: deviceId, mtu: 512 + mtuWriteOverheadBytesNum);
+    return mtu - mtuWriteOverheadBytesNum - headCodeBytesNum;
   }
 
   void _raiseError(UploadError error, {int errorCode = 0}) {
@@ -94,12 +101,9 @@ class BleUploader extends StatefulStream<BleUploadState> {
     addStateToStream(state);
     _currentDataPos = 0;
     _currentBufferSize = 0;
-    _packageMaxSize = bytesToUint32(data, attrSizePos) - headCodeBytesNum;
+    _packageMaxSize = min(
+        _packageMaxSize, bytesToUint32(data, attrSizePos) - headCodeBytesNum);
     _bufferMaxSize = bytesToUint32(data, bufferSizePos);
-
-    ble.requestMtu(
-        deviceId: deviceId,
-        mtu: _packageMaxSize + headCodeBytesNum + mtuOverheadBytesNum);
   }
 
   void _sendPackages() {
