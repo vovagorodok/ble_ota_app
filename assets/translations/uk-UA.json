@@ -9,6 +9,7 @@
     "SkipInfoReading": "Пропустити читання інформації",
     "AlwaysAllowLocalFilesUpload": "Завжди дозволяти локальне завантаження файлів",
     "HardwaresDictionaryLink": "Посилання на словник обладнанів",
+    "MaxMtuSize": "Максимальний розмір MTU",
     "ThisDeviceDoesNotSupportBluetooth": "Цей пристрій не підтримує Bluetooth",
     "AuthorizeApplicationToUseBluetoothAndLocation": "Авторизуйте програму для використання Bluetooth і розташування",
     "BluetoothIsDisabledTurnItOn": "Bluetooth вимкнено, увімкніть його",

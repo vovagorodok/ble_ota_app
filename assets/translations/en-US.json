@@ -9,6 +9,7 @@
     "SkipInfoReading": "Skip info reading",
     "AlwaysAllowLocalFilesUpload": "Always allow local files upload",
     "HardwaresDictionaryLink": "Hardwares dictionary link",
+    "MaxMtuSize": "Maximum MTU size",
     "ThisDeviceDoesNotSupportBluetooth": "This device does not support Bluetooth",
     "AuthorizeApplicationToUseBluetoothAndLocation": "Authorize application to use Bluetooth and location",
     "BluetoothIsDisabledTurnItOn": "Bluetooth is disabled, turn it on",

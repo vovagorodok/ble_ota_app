@@ -10,6 +10,7 @@ import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_serial.dart';
+import 'package:ble_ota_app/src/settings/settings.dart';
 
 class BleUploader extends StatefulStream<BleUploadState> {
   BleUploader({required this.deviceId})
@@ -45,8 +46,8 @@ class BleUploader extends StatefulStream<BleUploadState> {
   }
 
   Future<int> _calcPackageMaxSize() async {
-    var mtu = await ble.requestMtu(
-        deviceId: deviceId, mtu: 512 + mtuWriteOverheadBytesNum);
+    var mtu =
+        await ble.requestMtu(deviceId: deviceId, mtu: maxMtuSize.value.toInt());
     return mtu - mtuWriteOverheadBytesNum - headCodeBytesNum;
   }
 

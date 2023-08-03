@@ -9,6 +9,7 @@
     "SkipInfoReading": "Pomiń czytanie informacji",
     "AlwaysAllowLocalFilesUpload": "Zawsze zezwalaj na lokalne wgrywanie plików",
     "HardwaresDictionaryLink": "Link do słownika urządzeń",
+    "MaxMtuSize": "Maksymalny rozmiar MTU",
     "ThisDeviceDoesNotSupportBluetooth": "To urządzenie nie obsługuje Bluetooth",
     "AuthorizeApplicationToUseBluetoothAndLocation": "Autoryzuj aplikację do korzystania z Bluetooth i lokalizacji",
     "BluetoothIsDisabledTurnItOn": "Bluetooth jest wyłączony, włącz go",
