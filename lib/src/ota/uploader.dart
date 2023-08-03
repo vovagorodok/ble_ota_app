@@ -47,7 +47,7 @@ class Uploader extends StatefulStream<UploadState> {
 
     File file = File(localPath);
     var data = await file.readAsBytes();
-    _bleUploader.upload(data);
+    await _bleUploader.upload(data);
   }
 
   Future<void> uploadHttpFile(String url) async {
@@ -64,7 +64,7 @@ class Uploader extends StatefulStream<UploadState> {
         return;
       }
 
-      _bleUploader.upload(response.bodyBytes);
+      await _bleUploader.upload(response.bodyBytes);
     } catch (_) {
       _raiseError(UploadError.generalNetworkError);
     }

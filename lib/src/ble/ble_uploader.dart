@@ -28,7 +28,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
   @override
   BleUploadState get state => _state;
 
-  void upload(Uint8List data) async {
+  Future<void> upload(Uint8List data) async {
     _bleSerial.subscribe(
         onData: (event) => _handleResp(Uint8List.fromList(event)));
 
