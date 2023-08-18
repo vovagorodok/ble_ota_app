@@ -94,7 +94,7 @@ BEGIN
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "BleOta" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "ble_ota_app.exe" "\0"
+            VALUE "OriginalFilename", "BleOta.exe" "\0"
             VALUE "ProductName", "BleOta" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END

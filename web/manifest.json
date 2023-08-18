@@ -1,6 +1,6 @@
 {
-    "name": "ble_ota_app",
-    "short_name": "ble_ota_app",
+    "name": "BleOta",
+    "short_name": "BleOta",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
