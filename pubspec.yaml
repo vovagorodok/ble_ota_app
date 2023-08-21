@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
   flutter_reactive_ble: ^5.0.3
   file_picker: ^5.2.5
   archive: ^3.3.5
@@ -19,8 +19,8 @@ dependencies:
   expandable: ^5.0.1
   meta: ^1.8.0
   flutter_settings_screens: ^0.3.3-null-safety+2
-  jumping_dot: ^0.0.4
-  easy_localization: ^3.0.1
+  jumping_dot: ^0.0.6
+  easy_localization: ^3.0.2
   flutter_markdown: ^0.6.14
   flutter_pin_code_fields: ^1.2.0
 

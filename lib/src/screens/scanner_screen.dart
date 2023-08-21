@@ -77,8 +77,8 @@ class ScannerScreenState extends State<ScannerScreen> {
       itemCount: devices.length + additionalElement,
       itemBuilder: (context, index) => index != devices.length
           ? _buildDeviceCard(devices[index])
-          : const Padding(
-              padding: EdgeInsets.all(25.0),
+          : Padding(
+              padding: const EdgeInsets.all(25.0),
               child: JumpingDots(
                 color: Colors.grey,
                 radius: 6,
