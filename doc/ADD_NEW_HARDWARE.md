@@ -6,7 +6,7 @@
 3. Push change in  `resources\hardwares.json` to this repo
 
 ## Hardware json
-Example in `resources\example_hardware_esp32.json`.\
+Example in https://github.com/vovagorodok/ArduinoBleOTA/tree/main/tools/release_builder. \
 Required fields:
 ```
 {
