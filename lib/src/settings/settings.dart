@@ -24,7 +24,7 @@ const skipInfoReading = Setting<bool>(
 );
 const alwaysAllowLocalFilesUpload = Setting<bool>(
   key: 'key-allow-local-upload',
-  defaultValue: false,
+  defaultValue: true,
 );
 const hardwaresDictUrl = Setting<String>(
   key: 'key-dict-url',
