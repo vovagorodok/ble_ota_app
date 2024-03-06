@@ -1,5 +1,3 @@
 {
-    "Example ESP32": "https://raw.githubusercontent.com/vovagorodok/ArduinoBleOTA/main/tools/release_builder/example_hardware_esp32.json",
-    "Example ATMELSAM": "https://raw.githubusercontent.com/vovagorodok/ArduinoBleOTA/main/tools/release_builder/example_hardware_atmelsam.json",
     "ESP32": "https://raw.githubusercontent.com/faizannazir/ArduinoBleOTA/main/tools/release_builder/my_esp32.json"
 }  
