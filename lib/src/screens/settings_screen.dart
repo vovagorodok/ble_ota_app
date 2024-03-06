@@ -58,7 +58,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 title: tr('MaxMtuSize'),
                 settingKey: maxMtuSize.key,
                 min: 23,
-                max: 600,
+                max: 515,
                 decimalPrecision: 0,
                 defaultValue: maxMtuSize.defaultValue,
               ),
