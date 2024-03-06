@@ -75,7 +75,7 @@ class PinScreenState extends State<PinScreen> {
     } else if (blePinChangeStatus == WorkStatus.success) {
       return tr('Changed');
     } else {
-      return tr('ChangePin:');
+      return tr('ChangePinCode:');
     }
   }
 

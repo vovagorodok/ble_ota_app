@@ -28,7 +28,7 @@
     "NetworkError": "Network error",
     "UnknownError": "Unknown error: {}",
     "IncorrectJsonFileFormat": "Incorrect json file format",
-    "PinHasNotBeenChanged": "Pin has not been changed",
+    "PinCodeHasNotBeenChanged": "Pin code has not been changed",
     "NoInformation": "No information",
     "Loading..": "Loading..",
     "Connecting..": "Connecting..",
@@ -43,7 +43,7 @@
     "Software:": "Software: {}",
     "Changing..": "Changing..",
     "Changed": "Changed",
-    "ChangePin:": "Change pin:",
+    "ChangePinCode:": "Change pin code:",
     "Set": "Set",
     "Remove": "Remove"
 }

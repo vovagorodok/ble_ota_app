@@ -28,7 +28,7 @@
     "NetworkError": "Błąd sieci",
     "UnknownError": "Nieznany błąd: {}",
     "IncorrectJsonFileFormat": "Nieprawidłowy format pliku json",
-    "PinHasNotBeenChanged": "Pin nie został zmieniony",
+    "PinCodeHasNotBeenChanged": "Pin kod nie został zmieniony",
     "NoInformation": "Brak informacji",
     "Loading..": "Ładowanie..",
     "Connecting..": "Łączenie..",
@@ -43,7 +43,7 @@
     "Software:": "Oprogramowanie: {}",
     "Changing..": "Zmiana..",
     "Changed": "Zmieniono",
-    "ChangePin:": "Zmień pin:",
+    "ChangePinCode:": "Zmień pin kod:",
     "Set": "Ustaw",
     "Remove": "Usuń"
 }

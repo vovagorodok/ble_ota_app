@@ -28,7 +28,7 @@
     "NetworkError": "Ошибка сети",
     "UnknownError": "Неизвестная ошибка: {}",
     "IncorrectJsonFileFormat": "Неправильный формат json файла",
-    "PinHasNotBeenChanged": "Пин не был изменен",
+    "PinCodeHasNotBeenChanged": "Пин код не был изменен",
     "NoInformation": "Нет информации",
     "Loading..": "Загрузка..",
     "Connecting..": "Подключение..",
@@ -43,7 +43,7 @@
     "Software:": "Прошивка: {}",
     "Changing..": "Изменение..",
     "Changed": "Изменено",
-    "ChangePin:": "Смените пин:",
+    "ChangePinCode:": "Смените пин код:",
     "Set": "Установить",
     "Remove": "Удалить"
 }
