@@ -29,7 +29,7 @@ const alwaysAllowLocalFilesUpload = Setting<bool>(
 const hardwaresDictUrl = Setting<String>(
   key: 'key-dict-url',
   defaultValue:
-      "https://raw.githubusercontent.com/vovagorodok/ble_ota_app/main/resources/hardwares.json",
+      "https://raw.githubusercontent.com/faizannazir/ble_ota_app/main/resources/hardwares.json",
 );
 const maxMtuSize = Setting<double>(
   key: 'key-max-mtu-size',
