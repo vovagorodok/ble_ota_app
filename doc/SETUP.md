@@ -13,7 +13,7 @@ Create virtual device if needed.
 ### Flutter:
 ```
 sudo snap install flutter --classic
-flutter config --android-studio-dir /snap/android-studio/current/android-studio
+flutter config --android-studio-dir /snap/android-studio/current
 flutter doctor --android-licenses
 flutter doctor
 ```
