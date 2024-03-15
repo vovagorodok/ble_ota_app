@@ -56,8 +56,8 @@ class StatusScreenState extends State<StatusScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
-        onWillPop: () async => false,
+  Widget build(BuildContext context) => PopScope(
+        canPop: false,
         child: Scaffold(
           body: SafeArea(
             child: Padding(
