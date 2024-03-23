@@ -21,7 +21,7 @@ dependencies:
   flutter_settings_screens: ^0.3.3-null-safety+2
   jumping_dot: ^0.0.6
   easy_localization: ^3.0.5
-  flutter_markdown: ^0.6.21
+  flutter_markdown: ^0.6.22
   flutter_pin_code_fields: ^2.2.0
 
 dev_dependencies:
