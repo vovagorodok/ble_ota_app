@@ -32,8 +32,8 @@ jobs:
         run: flutter pub get
 
         #5 run test
-      # - name: Test flutter app
-      #   run: flutter test
+      - name: Test flutter app
+        run: flutter test
 
         #6 build apk
       - name: Build APK
