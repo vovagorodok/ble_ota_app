@@ -6,3 +6,6 @@ Additionally supports update functionality for specific hardwares. More about it
 
 ## Peripheral device side
 https://github.com/vovagorodok/ArduinoBleOTA
+
+## Build and release
+https://docs.flutter.dev/deployment/android
