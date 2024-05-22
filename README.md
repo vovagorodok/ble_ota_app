@@ -14,8 +14,10 @@ height="50">](https://f-droid.org/packages/com.vovagorodok.ble_ota_app/)&nbsp;&n
 alt="Download from App Store" 
 height="50">](https://itunes.apple.com/us/app/ble_ota_app/id0000000000)
 
-## Peripheral device side
-https://github.com/vovagorodok/ArduinoBleOTA
+REMARK: Application not released yet on F-Droid and App Store
 
-## Build and release
-https://docs.flutter.dev/deployment/android
+## Peripheral device side
+Arduino library: https://github.com/vovagorodok/ArduinoBleOTA
+
+## Links
+Build and release: https://docs.flutter.dev/deployment/android
