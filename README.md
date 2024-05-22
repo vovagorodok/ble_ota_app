@@ -4,31 +4,15 @@ Graphical application for upload firmware over Bluetooth.\
 Fully works on Android and iOS. For other OS it depends on flutter_reactive_ble library.\
 Additionally supports update functionality for specific hardwares. More about it in `doc/ADD_NEW_HARDWARE.md`.
 
-<table>
-  <tr>
-    <td>
-      <a href="https://play.google.com/store/apps/details?id=com.vovagorodok.ble_ota_app">
-        <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
-             alt="Download from Google Play"
-             height="80">
-      </a>
-    </td>
-    <td>
-      <a href="https://f-droid.org/packages/com.vovagorodok.ble_ota_app/">
-        <img src="https://f-droid.org/badge/get-it-on.png"
-             alt="Download from Google Play"
-             height="80">
-      </a>
-    </td>
-    <td>
-      <a href="https://itunes.apple.com/us/app/ble_ota_app/id0000000000">
-        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-             alt="Download from Google Play"
-             height="55">
-      </a>
-    </td> 
-  </tr>
-</table>
+[<img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
+alt="Download from Google Play" 
+height="50">](https://play.google.com/store/apps/details?id=com.vovagorodok.ble_ota_app)&nbsp;&nbsp;&nbsp;
+[<img src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Get_it_on_F-Droid_%28material_design%29.svg" 
+alt="Download from F-Droid" 
+height="50">](https://f-droid.org/packages/com.vovagorodok.ble_ota_app/)&nbsp;&nbsp;&nbsp;
+[<img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" 
+alt="Download from App Store" 
+height="50">](https://itunes.apple.com/us/app/ble_ota_app/id0000000000)
 
 ## Peripheral device side
 https://github.com/vovagorodok/ArduinoBleOTA
