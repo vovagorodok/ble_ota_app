@@ -9,25 +9,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
   flutter_reactive_ble: ^5.3.1
-  file_picker: ^5.2.5
-  archive: ^3.4.10
-  permission_handler: ^11.3.0
+  file_picker: ^5.2.10
+  archive: ^3.6.0
+  permission_handler: ^11.3.1
   http: ^1.2.1
   wakelock: ^0.6.2
   expandable: ^5.0.1
-  meta: ^1.11.0
+  meta: ^1.12.0
   flutter_settings_screens: ^0.3.4
   jumping_dot: ^0.0.6
-  easy_localization: ^3.0.5
-  flutter_markdown: ^0.6.22
+  easy_localization: ^3.0.7
+  flutter_markdown: ^0.7.1
   flutter_pin_code_fields: ^2.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
