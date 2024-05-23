@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/software.dart';
@@ -63,9 +63,9 @@ class UploadScreenState extends State<UploadScreen> {
     setState(() {
       if (state.status == WorkStatus.success) {
         bleConnector.disconnect();
-        Wakelock.disable();
+        WakelockPlus.disable();
       } else if (state.status == WorkStatus.error) {
-        Wakelock.disable();
+        WakelockPlus.disable();
       }
     });
   }
@@ -92,7 +92,7 @@ class UploadScreenState extends State<UploadScreen> {
       await infoReader.dispose();
       await bleConnector.disconnect();
       await bleConnector.dispose();
-      await Wakelock.disable();
+      await WakelockPlus.disable();
     }.call();
     super.dispose();
   }
@@ -116,13 +116,13 @@ class UploadScreenState extends State<UploadScreen> {
     );
 
     if (result != null) {
-      await Wakelock.enable();
+      await WakelockPlus.enable();
       await uploader.uploadLocalFile(result.files.single.path!);
     }
   }
 
   Future<void> _uploadHttpFile(String url) async {
-    await Wakelock.enable();
+    await WakelockPlus.enable();
     await uploader.uploadHttpFile(url);
   }
 

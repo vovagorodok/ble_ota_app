@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
@@ -37,7 +37,7 @@ class ScannerScreenState extends State<ScannerScreen> {
   }
 
   void _startScan() {
-    Wakelock.enable();
+    WakelockPlus.enable();
     bleScanner.startScan([serviceUuid]);
 
     if (!infiniteScan.value) {
@@ -47,7 +47,7 @@ class ScannerScreenState extends State<ScannerScreen> {
 
   void _stopScan() {
     scanTimer.stop();
-    Wakelock.disable();
+    WakelockPlus.disable();
     bleScanner.stopScan();
   }
 
