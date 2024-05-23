@@ -18,7 +18,7 @@ dependencies:
   wakelock: ^0.6.2
   expandable: ^5.0.1
   meta: ^1.11.0
-  flutter_settings_screens: ^0.3.3-null-safety+2
+  flutter_settings_screens: ^0.3.4
   jumping_dot: ^0.0.6
   easy_localization: ^3.0.5
   flutter_markdown: ^0.6.22
