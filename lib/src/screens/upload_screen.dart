@@ -139,6 +139,23 @@ class UploadScreenState extends State<UploadScreen> {
     }
   }
 
+  Widget _buildPripheralInfoWidget() => Card.outlined(
+        child: ListTile(
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                tr('Hardware:', args: [createHardwareString(infoState)]),
+              ),
+              const Divider(),
+              Text(
+                tr('Software:', args: [createSoftwareString(infoState)]),
+              ),
+            ],
+          ),
+        ),
+      );
+
   Widget _buildProgressInside() {
     if (uploadStatus == WorkStatus.working) {
       return Text(
@@ -327,13 +344,8 @@ class UploadScreenState extends State<UploadScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  tr('Hardware:', args: [createHardwareString(infoState)]),
-                ),
-                Text(
-                  tr('Software:', args: [createSoftwareString(infoState)]),
-                ),
-                const SizedBox(height: 25),
+                _buildPripheralInfoWidget(),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [_buildProgressWidget()],
