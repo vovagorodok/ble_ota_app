@@ -1,0 +1,2 @@
+Otwartoźródłowa aplikacja do wgrywania oprogramowania przez Bluetooth.
+Dodatkowo wspiera funkcjonalność aktualizacji dla niektórych urządzeń.

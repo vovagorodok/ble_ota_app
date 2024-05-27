@@ -1,0 +1,2 @@
+Open source application for upload firmware over Bluetooth.
+Additionally supports update functionality for specific hardwares.
