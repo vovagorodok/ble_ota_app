@@ -28,8 +28,36 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  icons_launcher: ^2.1.7
 
 flutter:
   uses-material-design: true
   assets:
     - assets/translations/
+
+icons_launcher:
+  image_path: "assets/images/icon_border.png"
+  platforms:
+    android:
+      enable: true
+      image_path: "assets/images/icon_border.png"
+      adaptive_background_color: '#2f4250'
+      adaptive_foreground_image: "assets/images/icon_round.png"
+      adaptive_round_image: "assets/images/icon_round.png"
+      adaptive_monochrome_image: "assets/images/icon_round_mono.png"
+    ios:
+      enable: true
+      image_path: "assets/images/icon_border.png"
+    web:
+      enable: true
+      image_path: "assets/images/icon_border.png"
+      favicon_path: "assets/images/icon_round.png"
+    macos:
+      enable: true
+      image_path: "assets/images/icon_border.png"
+    windows:
+      enable: true
+      image_path: "assets/images/icon_border.png"
+    linux:
+      enable: false
+      image_path: "assets/images/icon_border.png"
