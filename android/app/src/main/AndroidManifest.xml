@@ -6,7 +6,8 @@
         android:label="BleOta"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-		android:roundIcon="@mipmap/ic_launcher_rounded">
+		
+		>
         <activity
             android:name=".MainActivity"
             android:exported="true"

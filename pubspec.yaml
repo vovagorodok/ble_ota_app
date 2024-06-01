@@ -36,28 +36,27 @@ flutter:
     - assets/translations/
 
 icons_launcher:
-  image_path: "assets/images/icon_border.png"
+  image_path: "assets/images/icon.png"
   platforms:
     android:
       enable: true
-      image_path: "assets/images/icon_border.png"
-      adaptive_background_color: '#2f4250'
-      adaptive_foreground_image: "assets/images/icon_round.png"
-      adaptive_round_image: "assets/images/icon_round.png"
-      adaptive_monochrome_image: "assets/images/icon_round_mono.png"
+      image_path: "assets/images/icon.png"
+      adaptive_background_color: '#ffffff'
+      adaptive_foreground_image: "assets/images/icon_color_foreground.png"
+      adaptive_monochrome_image: "assets/images/icon_mono_foreground.png"
     ios:
       enable: true
-      image_path: "assets/images/icon_border.png"
+      image_path: "assets/images/icon.png"
     web:
       enable: true
-      image_path: "assets/images/icon_border.png"
-      favicon_path: "assets/images/icon_round.png"
+      image_path: "assets/images/icon.png"
+      favicon_path: "assets/images/icon.png"
     macos:
       enable: true
-      image_path: "assets/images/icon_border.png"
+      image_path: "assets/images/icon.png"
     windows:
       enable: true
-      image_path: "assets/images/icon_border.png"
+      image_path: "assets/images/icon.png"
     linux:
       enable: false
-      image_path: "assets/images/icon_border.png"
+      image_path: "assets/images/icon.png"
