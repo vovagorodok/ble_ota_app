@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_reactive_ble: ^5.3.1
   file_picker: ^8.0.3
-  archive: ^3.6.0
+  archive: ^3.6.1
   permission_handler: ^11.3.1
   http: ^1.2.1
   wakelock_plus: ^1.2.5
