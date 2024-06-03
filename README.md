@@ -1,4 +1,4 @@
-# Ble Ota App
+# BleOta
 <img src="./assets/images/icon_color.svg" width="100">\
 Graphical application for upload firmware over Bluetooth.\
 Fully works on Android and iOS. For other OS it depends on flutter_reactive_ble library.\
@@ -14,7 +14,9 @@ height="50">](https://f-droid.org/packages/com.vovagorodok.ble_ota_app/)&nbsp;&n
 alt="Download from App Store" 
 height="50">](https://itunes.apple.com/us/app/ble_ota_app/id0000000000)
 
-REMARK: Application not released yet on F-Droid and App Store
+> **REMARK**: Application not released on `App Store` yet.
+> Apple corporation require `100$/year` developer fees even for free and open source applications.
+> If you want to support project, fill free to send me small amout or help with idea how to release app in `iOS` without developer fees.
 
 ## Peripheral device side
 Arduino library: https://github.com/vovagorodok/ArduinoBleOTA
