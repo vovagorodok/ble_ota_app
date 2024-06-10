@@ -19,7 +19,7 @@ class SettingsScreenState extends State<SettingsScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.cached),
+            icon: const Icon(Icons.cached_rounded),
             onPressed: () => setState(Settings.clearCache),
           ),
         ],

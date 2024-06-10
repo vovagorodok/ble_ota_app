@@ -169,13 +169,13 @@ class UploadScreenState extends State<UploadScreen> {
     } else if (uploadStatus == WorkStatus.error ||
         infoStatus == WorkStatus.error) {
       return const Icon(
-        Icons.error,
+        Icons.error_rounded,
         color: Colors.red,
         size: 56,
       );
     } else if (uploadStatus == WorkStatus.success) {
       return const Icon(
-        Icons.done,
+        Icons.done_rounded,
         color: Colors.green,
         size: 56,
       );
@@ -220,7 +220,7 @@ class UploadScreenState extends State<UploadScreen> {
           subtitle: Text("v${sw.version}"),
           trailing: sw.text != null
               ? IconButton(
-                  icon: const Icon(Icons.info),
+                  icon: const Icon(Icons.info_rounded),
                   onPressed: () async => await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -322,7 +322,7 @@ class UploadScreenState extends State<UploadScreen> {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.pin),
+              icon: const Icon(Icons.pin_rounded),
               onPressed: _canUpload()
                   ? () async => await Navigator.push(
                         context,
@@ -360,7 +360,7 @@ class UploadScreenState extends State<UploadScreen> {
                 ),
                 if (_canUploadLocalFile())
                   ElevatedButton.icon(
-                    icon: const Icon(Icons.file_open),
+                    icon: const Icon(Icons.file_open_rounded),
                     label: Text(tr('UploadFile')),
                     onPressed: _canUpload() ? _pickFile : null,
                   ),

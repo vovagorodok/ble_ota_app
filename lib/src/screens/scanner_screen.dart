@@ -55,7 +55,7 @@ class ScannerScreenState extends State<ScannerScreen> {
         child: ListTile(
           title: Text(device.name),
           subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-          leading: const Icon(Icons.bluetooth),
+          leading: const Icon(Icons.bluetooth_rounded),
           onTap: () async {
             _stopScan();
             await Navigator.push(
@@ -103,7 +103,7 @@ class ScannerScreenState extends State<ScannerScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.settings_rounded),
             onPressed: () async {
               _stopScan();
               await Navigator.push(
@@ -132,14 +132,14 @@ class ScannerScreenState extends State<ScannerScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton.icon(
-                      icon: const Icon(Icons.search),
+                      icon: const Icon(Icons.search_rounded),
                       label: Text(tr('Scan')),
                       onPressed: !bleScanner.state.scanIsInProgress
                           ? _startScan
                           : null,
                     ),
                     ElevatedButton.icon(
-                      icon: const Icon(Icons.search_off),
+                      icon: const Icon(Icons.search_off_rounded),
                       label: Text(tr('Stop')),
                       onPressed:
                           bleScanner.state.scanIsInProgress ? _stopScan : null,

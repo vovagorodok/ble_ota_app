@@ -122,12 +122,12 @@ class PinScreenState extends State<PinScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton.icon(
-                      icon: const Icon(Icons.upload),
+                      icon: const Icon(Icons.upload_rounded),
                       label: Text(tr('Set')),
                       onPressed: _canSetPin() ? _setPin : null,
                     ),
                     ElevatedButton.icon(
-                      icon: const Icon(Icons.delete),
+                      icon: const Icon(Icons.delete_rounded),
                       label: Text(tr('Remove')),
                       onPressed: _canChange() ? _removePin : null,
                     ),

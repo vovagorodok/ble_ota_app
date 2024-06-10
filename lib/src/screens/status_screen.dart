@@ -31,6 +31,23 @@ class StatusScreenState extends State<StatusScreen> {
     }
   }
 
+  IconData _determineIcon(BleStatus status) {
+    switch (status) {
+      case BleStatus.unsupported:
+        return Icons.bluetooth_disabled_rounded;
+      case BleStatus.unauthorized:
+        return Icons.person_off_rounded;
+      case BleStatus.poweredOff:
+        return Icons.bluetooth_disabled_rounded;
+      case BleStatus.locationServicesDisabled:
+        return Icons.location_off_rounded;
+      case BleStatus.ready:
+        return Icons.bluetooth_rounded;
+      default:
+        return Icons.autorenew_rounded;
+    }
+  }
+
   void _evaluateBleStatus(BleStatus status) {
     setState(() {
       if (status == BleStatus.ready) {
@@ -62,15 +79,24 @@ class StatusScreenState extends State<StatusScreen> {
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(25.0),
-              child: Center(
-                child: Text(
-                  _determineText(ble.status),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _determineText(ble.status),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30.0,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 20),
+                  Icon(
+                    _determineIcon(ble.status),
+                    size: 100,
+                  ),
+                ],
               ),
             ),
           ),
