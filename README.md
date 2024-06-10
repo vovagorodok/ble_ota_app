@@ -22,6 +22,3 @@ height="50">](https://itunes.apple.com/us/app/ble_ota_app/id0000000000)
 
 ## Peripheral device side
 Arduino library: https://github.com/vovagorodok/ArduinoBleOTA
-
-## Links
-Build and release: https://docs.flutter.dev/deployment/android
