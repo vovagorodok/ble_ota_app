@@ -6,7 +6,7 @@
 sudo snap install android-studio --classic
 android-studio
 ```
-In SDK manager install `Android SDK Command-line Tools`.\
+In SDK manager install `Android SDK Command-line Tools`.  
 And `Android Emulator`/`Android SDK Build-Tools`/`Android SDK Platform-Tools` if needed.
 Create virtual device if needed.
 
