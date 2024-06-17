@@ -88,6 +88,50 @@ class ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
+  Widget _buildScanButton() => ElevatedButton.icon(
+        icon: const Icon(Icons.search_rounded),
+        label: Text(tr('Scan')),
+        onPressed: !bleScanner.state.scanIsInProgress ? _startScan : null,
+      );
+
+  Widget _buildStopButton() => ElevatedButton.icon(
+        icon: const Icon(Icons.search_off_rounded),
+        label: Text(tr('Stop')),
+        onPressed: bleScanner.state.scanIsInProgress ? _stopScan : null,
+      );
+
+  Widget _buildPortrait() => Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Flexible(
+            child: _buildDevicesList(),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildScanButton(),
+              _buildStopButton(),
+            ],
+          ),
+          const SizedBox(height: 25),
+        ],
+      );
+
+  Widget _buildLandscape() => Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _buildScanButton(),
+          const SizedBox(width: 25),
+          Flexible(
+            child: _buildDevicesList(),
+          ),
+          const SizedBox(width: 25),
+          _buildStopButton(),
+        ],
+      );
+
   @override
   void initState() {
     super.initState();
@@ -121,33 +165,11 @@ class ScannerScreenState extends State<ScannerScreen> {
           padding: const EdgeInsets.all(25.0),
           child: StreamBuilder<BleScanState>(
             stream: bleScanner.stateStream,
-            builder: (context, snapshot) => Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Flexible(
-                  child: _buildDevicesList(),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.search_rounded),
-                      label: Text(tr('Scan')),
-                      onPressed: !bleScanner.state.scanIsInProgress
-                          ? _startScan
-                          : null,
-                    ),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.search_off_rounded),
-                      label: Text(tr('Stop')),
-                      onPressed:
-                          bleScanner.state.scanIsInProgress ? _stopScan : null,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 25),
-              ],
+            builder: (context, snapshot) => OrientationBuilder(
+              builder: (context, orientation) =>
+                  orientation == Orientation.portrait
+                      ? _buildPortrait()
+                      : _buildLandscape(),
             ),
           ),
         ),

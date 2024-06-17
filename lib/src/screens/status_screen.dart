@@ -80,7 +80,7 @@ class StatusScreenState extends State<StatusScreen> {
             child: Padding(
               padding: const EdgeInsets.all(25.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
