@@ -34,6 +34,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 title: tr('InfiniteScan'),
                 settingKey: infiniteScan.key,
                 defaultValue: infiniteScan.defaultValue,
+                showDivider: true,
               ),
             ],
           ),
@@ -44,11 +45,13 @@ class SettingsScreenState extends State<SettingsScreen> {
                 title: tr('SkipInfoReading'),
                 settingKey: skipInfoReading.key,
                 defaultValue: skipInfoReading.defaultValue,
+                showDivider: false,
               ),
               SwitchSettingsTile(
                 title: tr('AlwaysAllowLocalFilesUpload'),
                 settingKey: alwaysAllowLocalFilesUpload.key,
                 defaultValue: alwaysAllowLocalFilesUpload.defaultValue,
+                showDivider: false,
               ),
               TextInputSettingsTile(
                 title: tr('HardwaresDictionaryLink'),
