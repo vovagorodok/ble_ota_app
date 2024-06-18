@@ -315,8 +315,68 @@ class UploadScreenState extends State<UploadScreen> {
         : _buildStatusWidget();
   }
 
+  Widget _buildSoftwareStatusWidget() => Expanded(
+        child: ListView(
+          children: [
+            _buildStatusWithOptionallySoftwareList(),
+          ],
+        ),
+      );
+
+  Widget _buildUploadFileButton() => ElevatedButton.icon(
+        icon: const Icon(Icons.file_open_rounded),
+        label: Text(tr('UploadFile')),
+        onPressed: _canUpload() ? _pickFile : null,
+      );
+
+  Widget _buildPortrait() => Column(
+        children: [
+          _buildPripheralInfoWidget(),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [_buildProgressWidget()],
+          ),
+          const SizedBox(height: 20),
+          _buildSoftwareStatusWidget(),
+          if (_canUploadLocalFile()) const SizedBox(height: 8),
+          if (_canUploadLocalFile()) _buildUploadFileButton(),
+        ],
+      );
+
+  Widget _buildLandscape() => Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                _buildPripheralInfoWidget(),
+                _buildSoftwareStatusWidget(),
+              ],
+            ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: _canUploadLocalFile()
+                  ? MainAxisAlignment.spaceBetween
+                  : MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [_buildProgressWidget()],
+                ),
+                const SizedBox(height: 20),
+                if (_canUploadLocalFile()) _buildUploadFileButton(),
+              ],
+            ),
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) => Scaffold(
+        primary: MediaQuery.of(context).orientation == Orientation.portrait,
         appBar: AppBar(
           title: Text(widget.deviceName),
           centerTitle: true,
@@ -340,31 +400,11 @@ class UploadScreenState extends State<UploadScreen> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(25.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _buildPripheralInfoWidget(),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [_buildProgressWidget()],
-                ),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      _buildStatusWithOptionallySoftwareList(),
-                    ],
-                  ),
-                ),
-                if (_canUploadLocalFile())
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.file_open_rounded),
-                    label: Text(tr('UploadFile')),
-                    onPressed: _canUpload() ? _pickFile : null,
-                  ),
-              ],
+            child: OrientationBuilder(
+              builder: (context, orientation) =>
+                  orientation == Orientation.portrait
+                      ? _buildPortrait()
+                      : _buildLandscape(),
             ),
           ),
         ),

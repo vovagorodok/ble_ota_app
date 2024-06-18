@@ -101,34 +101,39 @@ class ScannerScreenState extends State<ScannerScreen> {
       );
 
   Widget _buildPortrait() => Column(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Flexible(
+          Expanded(
             child: _buildDevicesList(),
           ),
           const SizedBox(height: 8),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildScanButton(),
+              const SizedBox(width: 25),
               _buildStopButton(),
             ],
           ),
-          const SizedBox(height: 25),
         ],
       );
 
   Widget _buildLandscape() => Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          _buildScanButton(),
-          const SizedBox(width: 25),
-          Flexible(
+          Expanded(
             child: _buildDevicesList(),
           ),
-          const SizedBox(width: 25),
-          _buildStopButton(),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildScanButton(),
+                const SizedBox(width: 25),
+                _buildStopButton(),
+              ],
+            ),
+          ),
         ],
       );
 
@@ -142,6 +147,7 @@ class ScannerScreenState extends State<ScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      primary: MediaQuery.of(context).orientation == Orientation.portrait,
       appBar: AppBar(
         title: Text(tr('Devices')),
         centerTitle: true,

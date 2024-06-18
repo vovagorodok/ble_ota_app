@@ -14,6 +14,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      primary: MediaQuery.of(context).orientation == Orientation.portrait,
       appBar: AppBar(
         title: Text(tr('Settings')),
         centerTitle: true,
@@ -29,7 +30,7 @@ class SettingsScreenState extends State<SettingsScreen> {
           SettingsGroup(
             title: tr('General'),
             children: [
-              CheckboxSettingsTile(
+              SwitchSettingsTile(
                 title: tr('InfiniteScan'),
                 settingKey: infiniteScan.key,
                 defaultValue: infiniteScan.defaultValue,
@@ -39,12 +40,12 @@ class SettingsScreenState extends State<SettingsScreen> {
           SettingsGroup(
             title: tr('DeveloperOptions'),
             children: [
-              CheckboxSettingsTile(
+              SwitchSettingsTile(
                 title: tr('SkipInfoReading'),
                 settingKey: skipInfoReading.key,
                 defaultValue: skipInfoReading.defaultValue,
               ),
-              CheckboxSettingsTile(
+              SwitchSettingsTile(
                 title: tr('AlwaysAllowLocalFilesUpload'),
                 settingKey: alwaysAllowLocalFilesUpload.key,
                 defaultValue: alwaysAllowLocalFilesUpload.defaultValue,

@@ -91,6 +91,7 @@ class PinScreenState extends State<PinScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        primary: MediaQuery.of(context).orientation == Orientation.portrait,
         appBar: AppBar(
           title: Text(widget.deviceName),
           centerTitle: true,
