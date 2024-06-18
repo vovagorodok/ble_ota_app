@@ -89,6 +89,77 @@ class PinScreenState extends State<PinScreen> {
     }
   }
 
+  Widget _buildStatusWidget() => Text(
+        _determinateStatusText(),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          color: _determinateStatusColor(),
+        ),
+      );
+
+  Widget _buildPinCodeWidget() => PinCodeFields(
+        length: 6,
+        keyboardType: TextInputType.number,
+        margin: const EdgeInsets.symmetric(
+          vertical: 0,
+          horizontal: 5,
+        ),
+        padding: const EdgeInsets.all(0),
+        onChange: _onChange,
+        onComplete: _onChange,
+      );
+
+  Widget _buildPinCodeWithStatusWidget() => Column(
+        children: [
+          _buildStatusWidget(),
+          _buildPinCodeWidget(),
+        ],
+      );
+
+  Widget _buildSetButton() => ElevatedButton.icon(
+        icon: const Icon(Icons.upload_rounded),
+        label: Text(tr('Set')),
+        onPressed: _canSetPin() ? _setPin : null,
+      );
+
+  Widget _buildRemoveButton() => ElevatedButton.icon(
+        icon: const Icon(Icons.delete_rounded),
+        label: Text(tr('Remove')),
+        onPressed: _canChange() ? _removePin : null,
+      );
+
+  Widget _buildControlButtons() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildSetButton(),
+          const SizedBox(width: 25),
+          _buildRemoveButton(),
+        ],
+      );
+
+  Widget _buildPortrait() => Column(
+        children: [
+          Expanded(
+            child: _buildPinCodeWithStatusWidget(),
+          ),
+          _buildControlButtons(),
+        ],
+      );
+
+  Widget _buildLandscape() => Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: _buildPinCodeWithStatusWidget(),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: _buildControlButtons(),
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) => Scaffold(
         primary: MediaQuery.of(context).orientation == Orientation.portrait,
@@ -99,42 +170,11 @@ class PinScreenState extends State<PinScreen> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(25.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  _determinateStatusText(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: _determinateStatusColor(),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                PinCodeFields(
-                  length: 6,
-                  keyboardType: TextInputType.number,
-                  onChange: _onChange,
-                  onComplete: _onChange,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.upload_rounded),
-                      label: Text(tr('Set')),
-                      onPressed: _canSetPin() ? _setPin : null,
-                    ),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.delete_rounded),
-                      label: Text(tr('Remove')),
-                      onPressed: _canChange() ? _removePin : null,
-                    ),
-                  ],
-                ),
-              ],
+            child: OrientationBuilder(
+              builder: (context, orientation) =>
+                  orientation == Orientation.portrait
+                      ? _buildPortrait()
+                      : _buildLandscape(),
             ),
           ),
         ),
