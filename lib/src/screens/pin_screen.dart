@@ -117,24 +117,27 @@ class PinScreenState extends State<PinScreen> {
         ],
       );
 
-  Widget _buildSetButton() => ElevatedButton.icon(
+  Widget _buildSetButton() => FilledButton.icon(
         icon: const Icon(Icons.upload_rounded),
         label: Text(tr('Set')),
         onPressed: _canSetPin() ? _setPin : null,
       );
 
-  Widget _buildRemoveButton() => ElevatedButton.icon(
+  Widget _buildRemoveButton() => FilledButton.icon(
         icon: const Icon(Icons.delete_rounded),
         label: Text(tr('Remove')),
         onPressed: _canChange() ? _removePin : null,
       );
 
   Widget _buildControlButtons() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildSetButton(),
+          Expanded(
+            child: _buildSetButton(),
+          ),
           const SizedBox(width: 25),
-          _buildRemoveButton(),
+          Expanded(
+            child: _buildRemoveButton(),
+          ),
         ],
       );
 
@@ -153,7 +156,7 @@ class PinScreenState extends State<PinScreen> {
           Expanded(
             child: _buildPinCodeWithStatusWidget(),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 25),
           Expanded(
             child: _buildControlButtons(),
           ),

@@ -323,13 +323,14 @@ class UploadScreenState extends State<UploadScreen> {
         ),
       );
 
-  Widget _buildUploadFileButton() => ElevatedButton.icon(
+  Widget _buildUploadFileButton() => FilledButton.icon(
         icon: const Icon(Icons.file_open_rounded),
         label: Text(tr('UploadFile')),
         onPressed: _canUpload() ? _pickFile : null,
       );
 
   Widget _buildPortrait() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildPripheralInfoWidget(),
           const SizedBox(height: 20),
@@ -354,10 +355,10 @@ class UploadScreenState extends State<UploadScreen> {
               ],
             ),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 25),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: _canUploadLocalFile()
                   ? MainAxisAlignment.spaceBetween
                   : MainAxisAlignment.spaceEvenly,

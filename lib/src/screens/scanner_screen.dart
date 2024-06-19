@@ -88,24 +88,27 @@ class ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
-  Widget _buildScanButton() => ElevatedButton.icon(
+  Widget _buildScanButton() => FilledButton.icon(
         icon: const Icon(Icons.search_rounded),
         label: Text(tr('Scan')),
         onPressed: !bleScanner.state.scanIsInProgress ? _startScan : null,
       );
 
-  Widget _buildStopButton() => ElevatedButton.icon(
+  Widget _buildStopButton() => FilledButton.icon(
         icon: const Icon(Icons.search_off_rounded),
         label: Text(tr('Stop')),
         onPressed: bleScanner.state.scanIsInProgress ? _stopScan : null,
       );
 
   Widget _buildControlButtons() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildScanButton(),
+          Expanded(
+            child: _buildScanButton(),
+          ),
           const SizedBox(width: 25),
-          _buildStopButton(),
+          Expanded(
+            child: _buildStopButton(),
+          ),
         ],
       );
 
@@ -125,7 +128,7 @@ class ScannerScreenState extends State<ScannerScreen> {
           Expanded(
             child: _buildDevicesList(),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 25),
           Expanded(
             child: _buildControlButtons(),
           ),
