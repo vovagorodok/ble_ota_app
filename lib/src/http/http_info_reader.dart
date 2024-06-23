@@ -55,6 +55,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         return;
       }
       _state.info.hardwareIcon = body["hardware_icon"];
+      _state.info.hardwareText = body["hardware_text"];
 
       final softwares = body["softwares"];
       final fullList = softwares.map<Software>(Software.fromJson).toList();

@@ -29,6 +29,7 @@ General fields:
 - required `hardware_name` - string
 - required `softwares` - list
 - optional `hardware_icon` - string contains path to icon
+- optional `hardware_text` - string contains path to text about hardware in markdown
 
 Software fields:
 - required `software_name` - string

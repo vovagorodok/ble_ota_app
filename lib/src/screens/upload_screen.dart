@@ -153,6 +153,19 @@ class UploadScreenState extends State<UploadScreen> {
               ),
             ],
           ),
+          onTap: infoState.status == WorkStatus.success &&
+                  infoState.remoteInfo.hardwareText != null
+              ? () async => await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InfoScreen(
+                        title: infoState.remoteInfo.hardwareName,
+                        url: infoState.remoteInfo.hardwareText!,
+                      ),
+                    ),
+                  )
+              : null,
+          enabled: _canUpload(),
         ),
       );
 

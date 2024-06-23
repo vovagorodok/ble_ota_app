@@ -4,6 +4,7 @@ class RemoteInfo {
   RemoteInfo({
     this.hardwareName = "",
     this.hardwareIcon,
+    this.hardwareText,
     this.softwareList = const [],
     this.newestSoftware,
     this.isHardwareUnregistered = false,
@@ -11,6 +12,7 @@ class RemoteInfo {
 
   String hardwareName;
   String? hardwareIcon;
+  String? hardwareText;
   List<Software> softwareList;
   Software? newestSoftware;
   bool isHardwareUnregistered;
