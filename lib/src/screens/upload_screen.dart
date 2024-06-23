@@ -13,7 +13,7 @@ import 'package:ble_ota_app/src/ota/info_reader.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/screens/pin_screen.dart';
-import 'package:ble_ota_app/src/screens/software_screen.dart';
+import 'package:ble_ota_app/src/screens/info_screen.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, super.key})
@@ -224,7 +224,10 @@ class UploadScreenState extends State<UploadScreen> {
                   onPressed: () async => await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SoftwareScreen(software: sw),
+                      builder: (context) => InfoScreen(
+                        title: sw.toString(),
+                        url: sw.text!,
+                      ),
                     ),
                   ),
                 )

@@ -35,7 +35,7 @@ Software fields:
 - required `software_version` - list of ints contains \[major, minor, patch\]
 - required `software_path` - string contains path to bin file
 - optional `software_icon` - string contains path to icon
-- optional `software_text` - string contains text about software in markdown
+- optional `software_text` - string contains path to text about software in markdown
 - optional `hardware_version` - specific version of hardware that software is for
 - optional `min_hardware_version` - min version of hardware that software is for
 - optional `max_hardware_version` - max version of hardware that software is for
