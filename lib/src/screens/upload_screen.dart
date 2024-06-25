@@ -339,10 +339,15 @@ class UploadScreenState extends State<UploadScreen> {
         ),
       );
 
-  Widget _buildUploadFileButton() => FilledButton.icon(
-        icon: const Icon(Icons.file_open_rounded),
-        label: Text(tr('UploadFile')),
-        onPressed: _canUpload() ? _pickFile : null,
+  Widget _buildUploadFileButton() => SizedBox(
+        height: 50,
+        child: Expanded(
+          child: FilledButton.icon(
+            icon: const Icon(Icons.file_open_rounded),
+            label: Text(tr('UploadFile')),
+            onPressed: _canUpload() ? _pickFile : null,
+          ),
+        ),
       );
 
   Widget _buildPortrait() => Column(

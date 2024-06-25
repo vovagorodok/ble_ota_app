@@ -100,16 +100,20 @@ class ScannerScreenState extends State<ScannerScreen> {
         onPressed: bleScanner.state.scanIsInProgress ? _stopScan : null,
       );
 
-  Widget _buildControlButtons() => Row(
-        children: [
-          Expanded(
-            child: _buildScanButton(),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: _buildStopButton(),
-          ),
-        ],
+  Widget _buildControlButtons() => SizedBox(
+        height: 50,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: _buildScanButton(),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildStopButton(),
+            ),
+          ],
+        ),
       );
 
   Widget _buildPortrait() => Column(

@@ -129,16 +129,20 @@ class PinScreenState extends State<PinScreen> {
         onPressed: _canChange() ? _removePin : null,
       );
 
-  Widget _buildControlButtons() => Row(
-        children: [
-          Expanded(
-            child: _buildSetButton(),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: _buildRemoveButton(),
-          ),
-        ],
+  Widget _buildControlButtons() => SizedBox(
+        height: 50,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: _buildSetButton(),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildRemoveButton(),
+            ),
+          ],
+        ),
       );
 
   Widget _buildPortrait() => Column(
