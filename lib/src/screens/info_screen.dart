@@ -56,7 +56,7 @@ class InfoScreenState extends State<InfoScreen> {
                 data: _text!,
               )
             : Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(16.0),
                 child: JumpingDots(
                   color: Colors.grey,
                   radius: 6,

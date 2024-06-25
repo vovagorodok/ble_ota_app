@@ -105,7 +105,7 @@ class ScannerScreenState extends State<ScannerScreen> {
           Expanded(
             child: _buildScanButton(),
           ),
-          const SizedBox(width: 25),
+          const SizedBox(width: 16),
           Expanded(
             child: _buildStopButton(),
           ),
@@ -128,7 +128,7 @@ class ScannerScreenState extends State<ScannerScreen> {
           Expanded(
             child: _buildDevicesList(),
           ),
-          const SizedBox(width: 25),
+          const SizedBox(width: 16),
           Expanded(
             child: _buildControlButtons(),
           ),
@@ -165,16 +165,14 @@ class ScannerScreenState extends State<ScannerScreen> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: StreamBuilder<BleScanState>(
-            stream: bleScanner.stateStream,
-            builder: (context, snapshot) => OrientationBuilder(
-              builder: (context, orientation) =>
-                  orientation == Orientation.portrait
-                      ? _buildPortrait()
-                      : _buildLandscape(),
-            ),
+        minimum: const EdgeInsets.all(16.0),
+        child: StreamBuilder<BleScanState>(
+          stream: bleScanner.stateStream,
+          builder: (context, snapshot) => OrientationBuilder(
+            builder: (context, orientation) =>
+                orientation == Orientation.portrait
+                    ? _buildPortrait()
+                    : _buildLandscape(),
           ),
         ),
       ),

@@ -134,7 +134,7 @@ class PinScreenState extends State<PinScreen> {
           Expanded(
             child: _buildSetButton(),
           ),
-          const SizedBox(width: 25),
+          const SizedBox(width: 16),
           Expanded(
             child: _buildRemoveButton(),
           ),
@@ -156,7 +156,7 @@ class PinScreenState extends State<PinScreen> {
           Expanded(
             child: _buildPinCodeWithStatusWidget(),
           ),
-          const SizedBox(width: 25),
+          const SizedBox(width: 16),
           Expanded(
             child: _buildControlButtons(),
           ),
@@ -171,14 +171,12 @@ class PinScreenState extends State<PinScreen> {
           centerTitle: true,
         ),
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: OrientationBuilder(
-              builder: (context, orientation) =>
-                  orientation == Orientation.portrait
-                      ? _buildPortrait()
-                      : _buildLandscape(),
-            ),
+          minimum: const EdgeInsets.all(16.0),
+          child: OrientationBuilder(
+            builder: (context, orientation) =>
+                orientation == Orientation.portrait
+                    ? _buildPortrait()
+                    : _buildLandscape(),
           ),
         ),
       );

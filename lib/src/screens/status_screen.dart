@@ -77,27 +77,25 @@ class StatusScreenState extends State<StatusScreen> {
         canPop: false,
         child: Scaffold(
           body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _determineText(ble.status),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30.0,
-                    ),
+            minimum: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _determineText(ble.status),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30.0,
                   ),
-                  const SizedBox(height: 20),
-                  Icon(
-                    _determineIcon(ble.status),
-                    size: 100,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 20),
+                Icon(
+                  _determineIcon(ble.status),
+                  size: 100,
+                ),
+              ],
             ),
           ),
         ),

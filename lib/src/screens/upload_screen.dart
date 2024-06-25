@@ -371,7 +371,7 @@ class UploadScreenState extends State<UploadScreen> {
               ],
             ),
           ),
-          const SizedBox(width: 25),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -415,14 +415,12 @@ class UploadScreenState extends State<UploadScreen> {
           ],
         ),
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: OrientationBuilder(
-              builder: (context, orientation) =>
-                  orientation == Orientation.portrait
-                      ? _buildPortrait()
-                      : _buildLandscape(),
-            ),
+          minimum: const EdgeInsets.all(16.0),
+          child: OrientationBuilder(
+            builder: (context, orientation) =>
+                orientation == Orientation.portrait
+                    ? _buildPortrait()
+                    : _buildLandscape(),
           ),
         ),
       );
