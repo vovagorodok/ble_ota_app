@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 
 class InfoScreen extends StatefulWidget {
@@ -54,6 +55,8 @@ class InfoScreenState extends State<InfoScreen> {
         child: _text != null
             ? Markdown(
                 data: _text!,
+                onTapLink: (String text, String? href, String title) async =>
+                    launchUrl(Uri.parse(href!)),
               )
             : Padding(
                 padding: const EdgeInsets.all(16.0),
