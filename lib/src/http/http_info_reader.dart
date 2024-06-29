@@ -87,7 +87,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
     addStateToStream(state);
   }
 
-  void read(DeviceInfo deviceInfo, String hardwaresDictUrl) {
+  void read(DeviceInfo deviceInfo, String manufacturesDictUrl) {
     _state = RemoteInfoState(
       status: WorkStatus.working,
       info: RemoteInfo(),
@@ -96,24 +96,42 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
 
     () async {
       try {
-        final response = await http.get(Uri.parse(hardwaresDictUrl));
-        if (response.statusCode != 200) {
+        final manufacturesResponse =
+            await http.get(Uri.parse(manufacturesDictUrl));
+        if (manufacturesResponse.statusCode != 200) {
           _raiseError(
             InfoError.unexpectedNetworkResponse,
-            errorCode: response.statusCode,
+            errorCode: manufacturesResponse.statusCode,
           );
           return;
         }
-
-        final body = json.decode(response.body);
-        final hardwareUrl = body[deviceInfo.hardwareName];
-        if (hardwareUrl != null) {
-          await _readSoftwares(deviceInfo, hardwareUrl);
-        } else {
+        final manufacturesBody = json.decode(manufacturesResponse.body);
+        final hardwaresUrl = manufacturesBody[deviceInfo.manufactureName];
+        if (hardwaresUrl == null) {
           state.info.isHardwareUnregistered = true;
           state.status = WorkStatus.success;
           addStateToStream(state);
+          return;
         }
+
+        final hardwaresResponse = await http.get(Uri.parse(hardwaresUrl));
+        if (hardwaresResponse.statusCode != 200) {
+          _raiseError(
+            InfoError.unexpectedNetworkResponse,
+            errorCode: hardwaresResponse.statusCode,
+          );
+          return;
+        }
+        final hardwaresBody = json.decode(hardwaresResponse.body);
+        final hardwareUrl = hardwaresBody[deviceInfo.hardwareName];
+        if (hardwareUrl == null) {
+          state.info.isHardwareUnregistered = true;
+          state.status = WorkStatus.success;
+          addStateToStream(state);
+          return;
+        }
+
+        await _readSoftwares(deviceInfo, hardwareUrl);
       } catch (_) {
         _raiseError(InfoError.generalNetworkError);
       }

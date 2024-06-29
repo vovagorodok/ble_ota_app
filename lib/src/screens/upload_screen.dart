@@ -49,7 +49,7 @@ class UploadScreenState extends State<UploadScreen> {
         bleConnector.findAndConnect();
       } else if (state == BleConnectionState.connected) {
         if (!skipInfoReading.value) {
-          infoReader.read(hardwaresDictUrl.value);
+          infoReader.read(manufacturesDictUrl.value);
         }
       }
     });

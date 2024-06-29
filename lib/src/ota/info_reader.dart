@@ -16,7 +16,7 @@ class InfoReader extends StatefulStream<InfoState> {
 
   final BleInfoReader _bleInfoReader;
   final HttpInfoReader _httpInfoReader;
-  late String _hardwaresDictUrl;
+  late String _manufacturesDictUrl;
   InfoState _state = InfoState(remoteInfo: RemoteInfo());
 
   @override
@@ -32,7 +32,7 @@ class InfoReader extends StatefulStream<InfoState> {
   void _onDeviceInfoStateChanged(DeviceInfoState deviceInfoState) {
     if (deviceInfoState.status == WorkStatus.success) {
       state.deviceInfo = deviceInfoState.info;
-      _httpInfoReader.read(state.deviceInfo, _hardwaresDictUrl);
+      _httpInfoReader.read(state.deviceInfo, _manufacturesDictUrl);
     } else if (deviceInfoState.status == WorkStatus.error) {
       _raiseError(deviceInfoState.error, deviceInfoState.errorCode);
     }
@@ -48,8 +48,8 @@ class InfoReader extends StatefulStream<InfoState> {
     }
   }
 
-  void read(String hardwaresDictUrl) {
-    _hardwaresDictUrl = hardwaresDictUrl;
+  void read(String manufacturesDictUrl) {
+    _manufacturesDictUrl = manufacturesDictUrl;
     _state = InfoState(
       status: WorkStatus.working,
       remoteInfo: RemoteInfo(),

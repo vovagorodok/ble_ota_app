@@ -9,7 +9,9 @@ import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 
 class BleInfoReader extends StatefulStream<DeviceInfoState> {
   BleInfoReader({required String deviceId})
-      : _characteristicHardwareName =
+      : _characteristicManufactureName =
+            _crateCharacteristic(characteristicUuidManufactureName, deviceId),
+        _characteristicHardwareName =
             _crateCharacteristic(characteristicUuidHardwareName, deviceId),
         _characteristicHardwareVersion =
             _crateCharacteristic(characteristicUuidHardwareVersion, deviceId),
@@ -18,6 +20,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
         _characteristicSoftwareVersion =
             _crateCharacteristic(characteristicUuidSoftwareVersion, deviceId);
 
+  final QualifiedCharacteristic _characteristicManufactureName;
   final QualifiedCharacteristic _characteristicHardwareName;
   final QualifiedCharacteristic _characteristicHardwareVersion;
   final QualifiedCharacteristic _characteristicSoftwareName;
@@ -33,6 +36,8 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
 
     () async {
       state.info = DeviceInfo(
+        manufactureName: String.fromCharCodes(
+            await ble.readCharacteristic(_characteristicManufactureName)),
         hardwareName: String.fromCharCodes(
             await ble.readCharacteristic(_characteristicHardwareName)),
         hardwareVersion: Version.fromList(

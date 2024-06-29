@@ -54,9 +54,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                 showDivider: false,
               ),
               TextInputSettingsTile(
-                title: tr('HardwaresDictionaryLink'),
-                settingKey: hardwaresDictUrl.key,
-                initialValue: hardwaresDictUrl.defaultValue,
+                title: tr('ManufacturesDictionaryLink'),
+                settingKey: manufacturesDictUrl.key,
+                initialValue: manufacturesDictUrl.defaultValue,
               ),
               SliderSettingsTile(
                 title: tr('MaxMtuSize'),

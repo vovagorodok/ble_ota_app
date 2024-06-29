@@ -1,12 +1,12 @@
-# Add new hardware
+# Register hardware
 
 ## Staps
-1. Create your hardware json
-2. Add link to your hardware json in `resources/hardwares.json`
-3. Push change in  `resources/hardwares.json` to this repo
+1. Create your hardware jsons for each device
+2. Create your hardwares json that contain links to your hardware jsons
+3. Add link to your hardwares json in `resources/manufactures.json`
+4. Push change in `resources/manufactures.json` to this repo
 
 ## Hardware json
-Example in https://github.com/vovagorodok/ArduinoBleOTA/tree/main/tools/release_builder.  
 Required fields:
 ```
 {
@@ -40,3 +40,11 @@ Software fields:
 - optional `hardware_version` - specific version of hardware that software is for
 - optional `min_hardware_version` - min version of hardware that software is for
 - optional `max_hardware_version` - max version of hardware that software is for
+
+## Examples
+### ArduinoBleOTA
+Files:
+- hardwares json: `example_hardwares.json`
+- hardware jsons: `example_hardware_esp32.json` and `example_hardware_samd.json`
+
+Link: https://github.com/vovagorodok/ArduinoBleOTA/tree/main/tools/release_builder.

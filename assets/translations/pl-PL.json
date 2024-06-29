@@ -8,7 +8,7 @@
     "DeveloperOptions": "Opcje programistyczne",
     "SkipInfoReading": "Pomiń czytanie informacji",
     "AlwaysAllowLocalFilesUpload": "Zawsze zezwalaj na lokalne wgrywanie plików",
-    "HardwaresDictionaryLink": "Link do słownika urządzeń",
+    "ManufacturesDictionaryLink": "Link do słownika producentów",
     "MaxMtuSize": "Maksymalny rozmiar MTU",
     "ThisDeviceDoesNotSupportBluetooth": "To urządzenie nie obsługuje Bluetooth",
     "AuthorizeApplicationToUseBluetoothAndLocation": "Autoryzuj aplikację do korzystania z Bluetooth i lokalizacji",
