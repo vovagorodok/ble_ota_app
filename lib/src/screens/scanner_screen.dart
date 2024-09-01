@@ -20,6 +20,7 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class ScannerScreenState extends State<ScannerScreen> {
+  final bleScanner = BleScanner(serviceIds: [serviceUuid]);
   final scanTimer = TimerWrapper();
 
   void _evaluateBleStatus(BleStatus status) {
@@ -38,7 +39,7 @@ class ScannerScreenState extends State<ScannerScreen> {
 
   void _startScan() {
     WakelockPlus.enable();
-    bleScanner.startScan([serviceUuid]);
+    bleScanner.scan();
 
     if (!infiniteScan.value) {
       scanTimer.start(const Duration(seconds: 10), _stopScan);
@@ -48,7 +49,7 @@ class ScannerScreenState extends State<ScannerScreen> {
   void _stopScan() {
     scanTimer.stop();
     WakelockPlus.disable();
-    bleScanner.stopScan();
+    bleScanner.stop();
   }
 
   Widget _buildDeviceCard(device) => Card(
@@ -70,7 +71,7 @@ class ScannerScreenState extends State<ScannerScreen> {
       );
 
   Widget _buildDevicesList() {
-    final devices = bleScanner.state.discoveredDevices;
+    final devices = bleScanner.state.peripherals;
     final additionalElement = bleScanner.state.scanIsInProgress ? 1 : 0;
 
     return ListView.builder(
@@ -170,7 +171,7 @@ class ScannerScreenState extends State<ScannerScreen> {
       ),
       body: SafeArea(
         minimum: const EdgeInsets.all(16.0),
-        child: StreamBuilder<BleScanState>(
+        child: StreamBuilder<BleScannerState>(
           stream: bleScanner.stateStream,
           builder: (context, snapshot) => OrientationBuilder(
             builder: (context, orientation) =>

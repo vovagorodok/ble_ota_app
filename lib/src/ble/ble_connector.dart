@@ -2,38 +2,38 @@ import 'dart:async';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
-import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 
-class BleConnector extends StatefulStream<BleConnectionState> {
-  BleConnector({required this.deviceId});
+class BleConnector extends StatefulStream<BleConnectorStatus> {
+  BleConnector({required this.deviceId, required this.serviceIds});
 
   final String deviceId;
-  BleConnectionState _state = BleConnectionState.disconnected;
+  final List<Uuid> serviceIds;
+  BleConnectorStatus _state = BleConnectorStatus.disconnected;
   late StreamSubscription<ConnectionStateUpdate> _connection;
 
   @override
-  BleConnectionState get state => _state;
+  BleConnectorStatus get state => _state;
 
   void _updateState(ConnectionStateUpdate update) {
     final newState = update.connectionState == DeviceConnectionState.connected
-        ? BleConnectionState.connected
-        : BleConnectionState.disconnected;
+        ? BleConnectorStatus.connected
+        : BleConnectorStatus.disconnected;
     _notifyIfChanged(newState);
   }
 
-  void _notifyIfChanged(BleConnectionState newState) {
+  void _notifyIfChanged(BleConnectorStatus newState) {
     if (newState != _state) {
       _state = newState;
       addStateToStream(state);
     }
   }
 
-  Future<void> findAndConnect() async {
+  Future<void> scanAndConnect() async {
     _connection = ble
         .connectToAdvertisingDevice(
             id: deviceId,
-            withServices: [serviceUuid],
+            withServices: serviceIds,
             prescanDuration: const Duration(seconds: 20))
         .listen(
           _updateState,
@@ -54,12 +54,16 @@ class BleConnector extends StatefulStream<BleConnectionState> {
     } catch (_) {
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated
-      _notifyIfChanged(BleConnectionState.disconnected);
+      _notifyIfChanged(BleConnectorStatus.disconnected);
     }
+  }
+
+  Future<int> requestMtu(int mtu) async {
+    return await ble.requestMtu(deviceId: deviceId, mtu: mtu);
   }
 }
 
-enum BleConnectionState {
+enum BleConnectorStatus {
   connected,
   disconnected,
 }
