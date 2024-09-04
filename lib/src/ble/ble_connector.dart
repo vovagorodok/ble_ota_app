@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
-import 'package:ble_ota_app/src/ble/ble.dart';
 
 class BleConnector extends StatefulStream<BleConnectorStatus> {
-  BleConnector({required this.deviceId, required this.serviceIds});
+  BleConnector(
+      {required this.backend,
+      required this.deviceId,
+      required this.serviceIds});
 
+  final FlutterReactiveBle backend;
   final String deviceId;
   final List<Uuid> serviceIds;
   BleConnectorStatus _state = BleConnectorStatus.disconnected;
@@ -30,7 +33,7 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
   }
 
   Future<void> scanAndConnect() async {
-    _connection = ble
+    _connection = backend
         .connectToAdvertisingDevice(
             id: deviceId,
             withServices: serviceIds,
@@ -42,7 +45,7 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
   }
 
   Future<void> connect() async {
-    _connection = ble.connectToDevice(id: deviceId).listen(
+    _connection = backend.connectToDevice(id: deviceId).listen(
           _updateState,
           onError: (Object e) {},
         );
@@ -59,7 +62,7 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
   }
 
   Future<int> requestMtu(int mtu) async {
-    return await ble.requestMtu(deviceId: deviceId, mtu: mtu);
+    return await backend.requestMtu(deviceId: deviceId, mtu: mtu);
   }
 }
 

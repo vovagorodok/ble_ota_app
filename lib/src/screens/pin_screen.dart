@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,8 +9,9 @@ import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
 
 class PinScreen extends StatefulWidget {
-  PinScreen({required deviceId, required this.deviceName, super.key})
-      : blePinChanger = BlePinChanger(deviceId: deviceId);
+  PinScreen({required String deviceId, required this.deviceName, super.key})
+      : blePinChanger =
+            BlePinChanger(bleCentral: bleCentral, deviceId: deviceId);
 
   final String deviceName;
   final BlePinChanger blePinChanger;

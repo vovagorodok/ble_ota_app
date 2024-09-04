@@ -6,13 +6,15 @@ import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
+import 'package:ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/ble/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_serial.dart';
 
 class BlePinChanger extends StatefulStream<BlePinChangeState> {
-  BlePinChanger({required this.deviceId})
-      : _bleSerial = BleSerial(deviceId: deviceId);
+  BlePinChanger({required BleCentral bleCentral, required String deviceId})
+      : _bleSerial = bleCentral.createSerial(
+            deviceId, serviceUuid, characteristicUuidRx, characteristicUuidTx);
 
-  final String deviceId;
   final BleSerial _bleSerial;
   BlePinChangeState _state = BlePinChangeState();
 

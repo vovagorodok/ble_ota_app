@@ -1,24 +1,21 @@
 import 'dart:async';
 
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/core/timer_wrapper.dart';
-import 'package:ble_ota_app/src/ble/ble.dart';
-import 'package:ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
 
 class BleSerial {
-  BleSerial({required deviceId})
-      : _characteristicRx =
-            _crateCharacteristic(characteristicUuidRx, deviceId),
-        _characteristicTx =
-            _crateCharacteristic(characteristicUuidTx, deviceId);
+  BleSerial(
+      {required BleCharacteristic characteristicRx,
+      required BleCharacteristic characteristicTx})
+      : _characteristicRx = characteristicRx,
+        _characteristicTx = characteristicTx;
 
-  final QualifiedCharacteristic _characteristicRx;
-  final QualifiedCharacteristic _characteristicTx;
+  final BleCharacteristic _characteristicRx;
+  final BleCharacteristic _characteristicTx;
   final _responseGuard = TimerWrapper();
-  late StreamSubscription _subscription;
 
-  void sendData(List<int> data) {
-    ble.writeCharacteristicWithoutResponse(_characteristicRx, value: data);
+  Future<void> sendData(List<int> data) async {
+    await _characteristicRx.writeWithoutResponse(data);
   }
 
   void waitForResponse({required void Function() timeoutCallback}) {
@@ -26,25 +23,18 @@ class BleSerial {
   }
 
   void subscribe({required void Function(List<int>) onData}) {
-    _subscription =
-        ble.subscribeToCharacteristic(_characteristicTx).listen((event) {
+    _characteristicTx.subscribe(onData: (event) {
       _responseGuard.stop();
       onData(event);
     });
   }
 
   void unsubscribe() {
-    _subscription.cancel();
+    _characteristicTx.unsubscribe();
   }
 
   void dispose() {
     unsubscribe();
     _responseGuard.stop();
   }
-
-  static _crateCharacteristic(Uuid charUuid, String deviceId) =>
-      QualifiedCharacteristic(
-          characteristicId: charUuid,
-          serviceId: serviceUuid,
-          deviceId: deviceId);
 }

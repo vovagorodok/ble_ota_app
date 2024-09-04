@@ -7,7 +7,8 @@ abstract class StatefulStream<State> extends StateStream<State> {
 }
 
 abstract class StateStream<State> {
-  final StreamController<State> _stateStreamController = StreamController();
+  final StreamController<State> _stateStreamController =
+      StreamController<State>.broadcast();
   Stream<State> get stateStream => _stateStreamController.stream;
 
   @protected

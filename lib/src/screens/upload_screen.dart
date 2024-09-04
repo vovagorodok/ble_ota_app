@@ -10,6 +10,7 @@ import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ota/uploader.dart';
 import 'package:ble_ota_app/src/ota/info_reader.dart';
+import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
@@ -18,16 +19,19 @@ import 'package:ble_ota_app/src/screens/info_screen.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, super.key})
-      : uploader = Uploader(deviceId: deviceId),
-        infoReader = InfoReader(deviceId: deviceId),
-        bleConnector =
-            BleConnector(deviceId: deviceId, serviceIds: [serviceUuid]);
+      : bleConnector = bleCentral.createConnector(deviceId, [serviceUuid]),
+        uploader = Uploader(
+            bleCentral: bleCentral,
+            bleConnector: bleCentral.createConnector(
+                deviceId, [serviceUuid]), // TODO: uese same instance
+            deviceId: deviceId),
+        infoReader = InfoReader(bleCentral: bleCentral, deviceId: deviceId);
 
   final String deviceId;
   final String deviceName;
+  final BleConnector bleConnector;
   final Uploader uploader;
   final InfoReader infoReader;
-  final BleConnector bleConnector;
 
   @override
   State<UploadScreen> createState() => UploadScreenState();
@@ -36,12 +40,12 @@ class UploadScreen extends StatefulWidget {
 class UploadScreenState extends State<UploadScreen> {
   late List<StreamSubscription> _subscriptions;
 
+  BleConnector get bleConnector => widget.bleConnector;
   Uploader get uploader => widget.uploader;
   InfoReader get infoReader => widget.infoReader;
-  BleConnector get bleConnector => widget.bleConnector;
+  BleConnectorStatus get connectionStatus => bleConnector.state;
   UploadState get uploadState => uploader.state;
   InfoState get infoState => infoReader.state;
-  BleConnectorStatus get connectionState => bleConnector.state;
   WorkStatus get uploadStatus => uploadState.status;
   WorkStatus get infoStatus => infoState.status;
 
@@ -100,7 +104,7 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   bool _canUpload() {
-    return connectionState == BleConnectorStatus.connected &&
+    return connectionStatus == BleConnectorStatus.connected &&
         uploadStatus != WorkStatus.working &&
         infoStatus != WorkStatus.working;
   }
@@ -271,7 +275,7 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildStatusWidget() {
-    if (connectionState == BleConnectorStatus.disconnected) {
+    if (connectionStatus == BleConnectorStatus.disconnected) {
       return _buildStatusText(tr('Connecting..'));
     } else if (uploadStatus == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
@@ -324,10 +328,11 @@ class UploadScreenState extends State<UploadScreen> {
       );
 
   Widget _buildStatusWithOptionallySoftwareList() {
-    final buildSoftwareList = connectionState == BleConnectorStatus.connected &&
-        infoStatus == WorkStatus.success &&
-        uploadStatus != WorkStatus.working &&
-        infoState.remoteInfo.softwareList.isNotEmpty;
+    final buildSoftwareList =
+        connectionStatus == BleConnectorStatus.connected &&
+            infoStatus == WorkStatus.success &&
+            uploadStatus != WorkStatus.working &&
+            infoState.remoteInfo.softwareList.isNotEmpty;
     return buildSoftwareList
         ? _buildStatusWithSoftwareList()
         : _buildStatusWidget();

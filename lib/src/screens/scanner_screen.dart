@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
+import 'package:ble_ota_app/src/ble/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/core/timer_wrapper.dart';
@@ -20,14 +20,14 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class ScannerScreenState extends State<ScannerScreen> {
-  final bleScanner = BleScanner(serviceIds: [serviceUuid]);
+  final bleScanner = bleCentral.createScaner([serviceUuid]);
   final scanTimer = TimerWrapper();
 
-  void _evaluateBleStatus(BleStatus status) {
+  void _evaluateBleCentralStatus(BleCentralStatus status) {
     setState(() {
-      if (status == BleStatus.ready) {
+      if (status == BleCentralStatus.ready) {
         _startScan();
-      } else if (status != BleStatus.unknown) {
+      } else if (status != BleCentralStatus.unknown) {
         _stopScan();
         Navigator.push(
           context,
@@ -71,7 +71,7 @@ class ScannerScreenState extends State<ScannerScreen> {
       );
 
   Widget _buildDevicesList() {
-    final devices = bleScanner.state.peripherals;
+    final devices = bleScanner.state.devices;
     final additionalElement = bleScanner.state.scanIsInProgress ? 1 : 0;
 
     return ListView.builder(
@@ -143,8 +143,8 @@ class ScannerScreenState extends State<ScannerScreen> {
   @override
   void initState() {
     super.initState();
-    ble.statusStream.listen(_evaluateBleStatus);
-    _evaluateBleStatus(ble.status);
+    bleCentral.stateStream.listen(_evaluateBleCentralStatus);
+    _evaluateBleCentralStatus(bleCentral.state);
   }
 
   @override

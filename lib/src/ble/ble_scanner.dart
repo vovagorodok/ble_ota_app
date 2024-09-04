@@ -3,18 +3,18 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
-import 'package:ble_ota_app/src/ble/ble.dart';
 
 class BleScanner extends StatefulStream<BleScannerState> {
-  BleScanner({required this.serviceIds});
+  BleScanner({required this.backend, required this.serviceIds});
 
+  final FlutterReactiveBle backend;
   final List<Uuid> serviceIds;
-  final _devices = <BlePeripheral>[];
+  final _devices = <BleScannedDevice>[];
   StreamSubscription? _subscription;
 
   @override
   BleScannerState get state => BleScannerState(
-        peripherals: _devices,
+        devices: _devices,
         scanIsInProgress: _subscription != null,
       );
 
@@ -22,12 +22,12 @@ class BleScanner extends StatefulStream<BleScannerState> {
     _devices.clear();
     _subscription?.cancel();
     _subscription =
-        ble.scanForDevices(withServices: serviceIds).listen((device) {
+        backend.scanForDevices(withServices: serviceIds).listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
-        _devices[knownDeviceIndex] = _createPeripheral(device);
+        _devices[knownDeviceIndex] = _createScannedDevice(device);
       } else {
-        _devices.add(_createPeripheral(device));
+        _devices.add(_createScannedDevice(device));
       }
       addStateToStream(state);
     }, onError: (Object e) {});
@@ -40,8 +40,8 @@ class BleScanner extends StatefulStream<BleScannerState> {
     addStateToStream(state);
   }
 
-  BlePeripheral _createPeripheral(DiscoveredDevice device) {
-    return BlePeripheral(
+  BleScannedDevice _createScannedDevice(DiscoveredDevice device) {
+    return BleScannedDevice(
       id: device.id,
       name: device.name,
       rssi: device.rssi,
@@ -50,8 +50,8 @@ class BleScanner extends StatefulStream<BleScannerState> {
 }
 
 @immutable
-class BlePeripheral {
-  const BlePeripheral({
+class BleScannedDevice {
+  const BleScannedDevice({
     required this.id,
     required this.name,
     required this.rssi,
@@ -65,10 +65,10 @@ class BlePeripheral {
 @immutable
 class BleScannerState {
   const BleScannerState({
-    required this.peripherals,
+    required this.devices,
     required this.scanIsInProgress,
   });
 
-  final List<BlePeripheral> peripherals;
+  final List<BleScannedDevice> devices;
   final bool scanIsInProgress;
 }
