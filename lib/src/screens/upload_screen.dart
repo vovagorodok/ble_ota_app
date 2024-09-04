@@ -20,11 +20,7 @@ import 'package:ble_ota_app/src/screens/info_screen.dart';
 class UploadScreen extends StatefulWidget {
   UploadScreen({required this.deviceId, required this.deviceName, super.key})
       : bleConnector = bleCentral.createConnector(deviceId, [serviceUuid]),
-        uploader = Uploader(
-            bleCentral: bleCentral,
-            bleConnector: bleCentral.createConnector(
-                deviceId, [serviceUuid]), // TODO: uese same instance
-            deviceId: deviceId),
+        uploader = Uploader(bleCentral: bleCentral, deviceId: deviceId),
         infoReader = InfoReader(bleCentral: bleCentral, deviceId: deviceId);
 
   final String deviceId;

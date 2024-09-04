@@ -10,20 +10,17 @@ import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ble/ble_central.dart';
-import 'package:ble_ota_app/src/ble/ble_connector.dart';
+import 'package:ble_ota_app/src/ble/ble_mtu.dart';
 import 'package:ble_ota_app/src/ble/ble_serial.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
 class BleUploader extends StatefulStream<BleUploadState> {
-  BleUploader(
-      {required BleCentral bleCentral,
-      required BleConnector bleConnector,
-      required String deviceId})
-      : _bleConnector = bleConnector,
+  BleUploader({required BleCentral bleCentral, required String deviceId})
+      : _bleMtu = bleCentral.createMtu(deviceId),
         _bleSerial = bleCentral.createSerial(
             deviceId, serviceUuid, characteristicUuidRx, characteristicUuidTx);
 
-  final BleConnector _bleConnector;
+  final BleMtu _bleMtu;
   final BleSerial _bleSerial;
   BleUploadState _state = BleUploadState();
   Uint8List _dataToSend = Uint8List(0);
@@ -53,7 +50,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
   }
 
   Future<int> _calcPackageMaxSize() async {
-    var mtu = await _bleConnector.requestMtu(maxMtuSize.value.toInt());
+    var mtu = await _bleMtu.request(maxMtuSize.value.toInt());
     return mtu - mtuWriteOverheadBytesNum - headCodeBytesNum;
   }
 

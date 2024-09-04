@@ -5,18 +5,11 @@ import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/state_stream.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_central.dart';
-import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 
 class Uploader extends StatefulStream<UploadState> {
-  Uploader(
-      {required BleCentral bleCentral,
-      required BleConnector bleConnector,
-      required String deviceId})
-      : _bleUploader = BleUploader(
-            bleCentral: bleCentral,
-            bleConnector: bleConnector,
-            deviceId: deviceId) {
+  Uploader({required BleCentral bleCentral, required String deviceId})
+      : _bleUploader = BleUploader(bleCentral: bleCentral, deviceId: deviceId) {
     _bleUploader.stateStream.listen(_onBleUploadStateChanged);
   }
 
