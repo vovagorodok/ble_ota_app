@@ -31,7 +31,7 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
     } catch (_) {
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated
-      _notifyIfChanged(BleConnectorStatus.disconnected);
+      _updateConnectorStatus(BleConnectorStatus.disconnected);
     }
   }
 
@@ -48,21 +48,32 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
   }
 
   void _updateState(ConnectionStateUpdate update) {
-    final newState = update.connectionState == DeviceConnectionState.connected
-        ? BleConnectorStatus.connected
-        : BleConnectorStatus.disconnected;
-    _notifyIfChanged(newState);
+    _updateConnectorStatus(_convertToConnecorStatus(update.connectionState));
   }
 
-  void _notifyIfChanged(BleConnectorStatus newState) {
-    if (newState != _state) {
-      _state = newState;
-      addStateToStream(state);
+  void _updateConnectorStatus(BleConnectorStatus state) {
+    _state = state;
+    addStateToStream(_state);
+  }
+
+  static BleConnectorStatus _convertToConnecorStatus(
+      DeviceConnectionState status) {
+    switch (status) {
+      case DeviceConnectionState.connecting:
+        return BleConnectorStatus.connecting;
+      case DeviceConnectionState.connected:
+        return BleConnectorStatus.connected;
+      case DeviceConnectionState.disconnecting:
+        return BleConnectorStatus.disconnecting;
+      default:
+        return BleConnectorStatus.disconnected;
     }
   }
 }
 
 enum BleConnectorStatus {
+  connecting,
   connected,
+  disconnecting,
   disconnected,
 }

@@ -271,8 +271,12 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildStatusWidget() {
-    if (connectionStatus == BleConnectorStatus.disconnected) {
+    if (connectionStatus == BleConnectorStatus.connecting) {
       return _buildStatusText(tr('Connecting..'));
+    } else if (connectionStatus == BleConnectorStatus.disconnecting) {
+      return _buildStatusText(tr('Disconnecting..'));
+    } else if (connectionStatus == BleConnectorStatus.disconnected) {
+      return _buildStatusText(tr('Disconnected'));
     } else if (uploadStatus == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
     } else if (uploadStatus == WorkStatus.error) {

@@ -54,14 +54,12 @@ class BleCentral extends StatefulStream<BleCentralStatus> {
   }
 
   void _updateState(BleStatus update) {
-    _notifyIfChanged(_convertToCentralStatus(update));
+    _updateCentralStatus(_convertToCentralStatus(update));
   }
 
-  void _notifyIfChanged(BleCentralStatus newStatus) {
-    if (newStatus != _status) {
-      _status = newStatus;
-      addStateToStream(state);
-    }
+  void _updateCentralStatus(BleCentralStatus newStatus) {
+    _status = newStatus;
+    addStateToStream(state);
   }
 
   static List<Uuid> _convertToUuids(List<String> ids) {
