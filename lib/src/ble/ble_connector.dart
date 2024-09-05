@@ -36,6 +36,7 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
   }
 
   Future<void> scanAndConnect() async {
+    _updateConnectorStatus(BleConnectorStatus.scanning);
     _connection = backend
         .connectToAdvertisingDevice(
             id: deviceId,
@@ -43,6 +44,7 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
             prescanDuration: const Duration(seconds: 20))
         .listen(
           _updateState,
+          onDone: () => _updateConnectorStatus(BleConnectorStatus.disconnected),
           onError: (Object e) {},
         );
   }
@@ -76,4 +78,5 @@ enum BleConnectorStatus {
   connected,
   disconnecting,
   disconnected,
+  scanning,
 }

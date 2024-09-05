@@ -281,12 +281,14 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText(tr('Uploading..'));
     } else if (uploadStatus == WorkStatus.error) {
       return _buildStatusText(determineUploadError(uploadState));
-    } else if (infoStatus == WorkStatus.error) {
-      return _buildStatusText(determineInfoError(infoState));
-    } else if (infoStatus == WorkStatus.idle) {
-      return _buildStatusText(tr('Connected'));
     } else if (infoStatus == WorkStatus.working) {
       return _buildStatusText(tr('Loading..'));
+    } else if (infoStatus == WorkStatus.error) {
+      return _buildStatusText(determineInfoError(infoState));
+    } else if (connectionStatus == BleConnectorStatus.scanning) {
+      return _buildStatusText(tr('Scanning..'));
+    } else if (infoStatus == WorkStatus.idle) {
+      return _buildStatusText(tr('Connected'));
     } else if (infoState.remoteInfo.softwareList.isEmpty) {
       return _buildStatusText(tr('NoAvailableSoftwares'));
     } else if (infoState.remoteInfo.newestSoftware == null) {
