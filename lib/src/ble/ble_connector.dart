@@ -18,32 +18,6 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
   @override
   BleConnectorStatus get state => _state;
 
-  void _updateState(ConnectionStateUpdate update) {
-    final newState = update.connectionState == DeviceConnectionState.connected
-        ? BleConnectorStatus.connected
-        : BleConnectorStatus.disconnected;
-    _notifyIfChanged(newState);
-  }
-
-  void _notifyIfChanged(BleConnectorStatus newState) {
-    if (newState != _state) {
-      _state = newState;
-      addStateToStream(state);
-    }
-  }
-
-  Future<void> scanAndConnect() async {
-    _connection = backend
-        .connectToAdvertisingDevice(
-            id: deviceId,
-            withServices: serviceIds,
-            prescanDuration: const Duration(seconds: 20))
-        .listen(
-          _updateState,
-          onError: (Object e) {},
-        );
-  }
-
   Future<void> connect() async {
     _connection = backend.connectToDevice(id: deviceId).listen(
           _updateState,
@@ -61,8 +35,30 @@ class BleConnector extends StatefulStream<BleConnectorStatus> {
     }
   }
 
-  Future<int> requestMtu(int mtu) async {
-    return await backend.requestMtu(deviceId: deviceId, mtu: mtu);
+  Future<void> scanAndConnect() async {
+    _connection = backend
+        .connectToAdvertisingDevice(
+            id: deviceId,
+            withServices: serviceIds,
+            prescanDuration: const Duration(seconds: 20))
+        .listen(
+          _updateState,
+          onError: (Object e) {},
+        );
+  }
+
+  void _updateState(ConnectionStateUpdate update) {
+    final newState = update.connectionState == DeviceConnectionState.connected
+        ? BleConnectorStatus.connected
+        : BleConnectorStatus.disconnected;
+    _notifyIfChanged(newState);
+  }
+
+  void _notifyIfChanged(BleConnectorStatus newState) {
+    if (newState != _state) {
+      _state = newState;
+      addStateToStream(state);
+    }
   }
 }
 

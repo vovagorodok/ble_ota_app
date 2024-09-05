@@ -15,6 +15,57 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
   @override
   RemoteInfoState get state => _state;
 
+  void read(DeviceInfo deviceInfo, String manufacturesDictUrl) {
+    _state = RemoteInfoState(
+      status: WorkStatus.working,
+      info: RemoteInfo(),
+    );
+    addStateToStream(state);
+
+    () async {
+      try {
+        final manufacturesResponse =
+            await http.get(Uri.parse(manufacturesDictUrl));
+        if (manufacturesResponse.statusCode != 200) {
+          _raiseError(
+            InfoError.unexpectedNetworkResponse,
+            errorCode: manufacturesResponse.statusCode,
+          );
+          return;
+        }
+        final manufacturesBody = json.decode(manufacturesResponse.body);
+        final hardwaresUrl = manufacturesBody[deviceInfo.manufactureName];
+        if (hardwaresUrl == null) {
+          state.info.isHardwareUnregistered = true;
+          state.status = WorkStatus.success;
+          addStateToStream(state);
+          return;
+        }
+
+        final hardwaresResponse = await http.get(Uri.parse(hardwaresUrl));
+        if (hardwaresResponse.statusCode != 200) {
+          _raiseError(
+            InfoError.unexpectedNetworkResponse,
+            errorCode: hardwaresResponse.statusCode,
+          );
+          return;
+        }
+        final hardwaresBody = json.decode(hardwaresResponse.body);
+        final hardwareUrl = hardwaresBody[deviceInfo.hardwareName];
+        if (hardwareUrl == null) {
+          state.info.isHardwareUnregistered = true;
+          state.status = WorkStatus.success;
+          addStateToStream(state);
+          return;
+        }
+
+        await _readSoftwares(deviceInfo, hardwareUrl);
+      } catch (_) {
+        _raiseError(InfoError.generalNetworkError);
+      }
+    }.call();
+  }
+
   void _readNewestSoftware(DeviceInfo deviceInfo) {
     final filteredBySoftwareList =
         state.info.softwareList.where((Software software) {
@@ -85,57 +136,6 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
     state.error = error;
     state.errorCode = errorCode;
     addStateToStream(state);
-  }
-
-  void read(DeviceInfo deviceInfo, String manufacturesDictUrl) {
-    _state = RemoteInfoState(
-      status: WorkStatus.working,
-      info: RemoteInfo(),
-    );
-    addStateToStream(state);
-
-    () async {
-      try {
-        final manufacturesResponse =
-            await http.get(Uri.parse(manufacturesDictUrl));
-        if (manufacturesResponse.statusCode != 200) {
-          _raiseError(
-            InfoError.unexpectedNetworkResponse,
-            errorCode: manufacturesResponse.statusCode,
-          );
-          return;
-        }
-        final manufacturesBody = json.decode(manufacturesResponse.body);
-        final hardwaresUrl = manufacturesBody[deviceInfo.manufactureName];
-        if (hardwaresUrl == null) {
-          state.info.isHardwareUnregistered = true;
-          state.status = WorkStatus.success;
-          addStateToStream(state);
-          return;
-        }
-
-        final hardwaresResponse = await http.get(Uri.parse(hardwaresUrl));
-        if (hardwaresResponse.statusCode != 200) {
-          _raiseError(
-            InfoError.unexpectedNetworkResponse,
-            errorCode: hardwaresResponse.statusCode,
-          );
-          return;
-        }
-        final hardwaresBody = json.decode(hardwaresResponse.body);
-        final hardwareUrl = hardwaresBody[deviceInfo.hardwareName];
-        if (hardwareUrl == null) {
-          state.info.isHardwareUnregistered = true;
-          state.status = WorkStatus.success;
-          addStateToStream(state);
-          return;
-        }
-
-        await _readSoftwares(deviceInfo, hardwareUrl);
-      } catch (_) {
-        _raiseError(InfoError.generalNetworkError);
-      }
-    }.call();
   }
 }
 

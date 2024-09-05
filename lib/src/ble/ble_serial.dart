@@ -14,7 +14,7 @@ class BleSerial {
   final BleCharacteristic _characteristicTx;
   final _responseGuard = TimerWrapper();
 
-  Future<void> sendData(List<int> data) async {
+  Future<void> send(List<int> data) async {
     await _characteristicRx.writeWithoutResponse(data);
   }
 

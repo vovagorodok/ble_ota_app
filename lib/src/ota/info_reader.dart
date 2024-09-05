@@ -24,6 +24,17 @@ class InfoReader extends StatefulStream<InfoState> {
   @override
   InfoState get state => _state;
 
+  void read(String manufacturesDictUrl) {
+    _manufacturesDictUrl = manufacturesDictUrl;
+    _state = InfoState(
+      status: WorkStatus.working,
+      remoteInfo: RemoteInfo(),
+    );
+    addStateToStream(state);
+
+    _bleInfoReader.read();
+  }
+
   void _raiseError(InfoError error, int errorCode) {
     state.status = WorkStatus.error;
     state.error = error;
@@ -48,17 +59,6 @@ class InfoReader extends StatefulStream<InfoState> {
     } else if (remoteInfoState.status == WorkStatus.error) {
       _raiseError(remoteInfoState.error, remoteInfoState.errorCode);
     }
-  }
-
-  void read(String manufacturesDictUrl) {
-    _manufacturesDictUrl = manufacturesDictUrl;
-    _state = InfoState(
-      status: WorkStatus.working,
-      remoteInfo: RemoteInfo(),
-    );
-    addStateToStream(state);
-
-    _bleInfoReader.read();
   }
 }
 

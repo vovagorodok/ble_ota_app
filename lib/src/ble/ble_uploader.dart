@@ -68,7 +68,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
   }
 
   void _sendData(List<int> data) {
-    _bleSerial.sendData(data);
+    _bleSerial.send(data);
   }
 
   void _sendBegin() {

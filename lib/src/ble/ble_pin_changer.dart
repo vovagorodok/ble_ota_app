@@ -33,18 +33,18 @@ class BlePinChanger extends StatefulStream<BlePinChangeState> {
     _waitForResponse();
   }
 
+  @override
+  Future<void> dispose() async {
+    _bleSerial.dispose();
+    super.dispose();
+  }
+
   void _begin() {
     _bleSerial.subscribe(
         onData: (event) => _handleResp(Uint8List.fromList(event)));
 
     _state = BlePinChangeState(status: WorkStatus.working);
     addStateToStream(state);
-  }
-
-  @override
-  Future<void> dispose() async {
-    _bleSerial.dispose();
-    super.dispose();
   }
 
   void _raiseError(PinChangeError error, {int errorCode = 0}) {
@@ -61,7 +61,7 @@ class BlePinChanger extends StatefulStream<BlePinChangeState> {
   }
 
   void _sendData(List<int> data) {
-    _bleSerial.sendData(data);
+    _bleSerial.send(data);
   }
 
   void _handleResp(Uint8List data) {
