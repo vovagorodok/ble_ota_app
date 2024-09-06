@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:jumping_dot/jumping_dot.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
@@ -25,10 +26,15 @@ class ScannerScreenState extends State<ScannerScreen> {
 
   void _evaluateBleCentralStatus(BleCentralStatus status) {
     setState(() {
-      if (status == BleCentralStatus.ready) {
+      if (kIsWeb) {
+      } else if (status == BleCentralStatus.ready) {
         _startScan();
       } else if (status != BleCentralStatus.unknown) {
         _stopScan();
+      }
+
+      if (status != BleCentralStatus.ready &&
+          status != BleCentralStatus.unknown) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const StatusScreen()),
@@ -110,9 +116,10 @@ class ScannerScreenState extends State<ScannerScreen> {
               child: _buildScanButton(),
             ),
             const SizedBox(width: 16),
-            Expanded(
-              child: _buildStopButton(),
-            ),
+            if (!kIsWeb)
+              Expanded(
+                child: _buildStopButton(),
+              ),
           ],
         ),
       );

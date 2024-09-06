@@ -17,7 +17,7 @@ class FlutterWebBluetoothCentral extends BaseBleCentral {
             ? BleCentralStatus.unknown
             : BleCentralStatus.unsupported {
     if (_status == BleCentralStatus.unsupported) return;
-    // FlutterWebBluetooth.instance.isAvailable.listen(_updateState);
+    FlutterWebBluetooth.instance.isAvailable.listen(_updateState);
     FlutterWebBluetooth.instance.devices.listen((devices) {
       for (var device in devices) {
         _addDevice(device);
