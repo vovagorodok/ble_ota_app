@@ -41,7 +41,7 @@ class FlutterReactiveBleScanner extends BleScanner {
     addStateToStream(state);
   }
 
-  BleScannedDevice _createScannedDevice(DiscoveredDevice device) {
+  static BleScannedDevice _createScannedDevice(DiscoveredDevice device) {
     return BleScannedDevice(
       id: device.id,
       name: device.name,

@@ -119,7 +119,9 @@ class UploadScreenState extends State<UploadScreen> {
 
     if (result != null) {
       await WakelockPlus.enable();
-      await uploader.uploadLocalFile(result.files.single.path!);
+      result.files.single.bytes == null
+          ? await uploader.uploadLocalFile(result.files.single.path!)
+          : await uploader.uploadBytes(result.files.single.bytes!);
     }
   }
 

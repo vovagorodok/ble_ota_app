@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/work_state.dart';
@@ -18,6 +19,13 @@ class Uploader extends StatefulStream<UploadState> {
 
   @override
   UploadState get state => _state;
+
+  Future<void> uploadBytes(Uint8List bytes) async {
+    _state = UploadState(status: WorkStatus.working);
+    addStateToStream(state);
+
+    await _bleUploader.upload(bytes);
+  }
 
   Future<void> uploadLocalFile(String localPath) async {
     _state = UploadState(status: WorkStatus.working);
