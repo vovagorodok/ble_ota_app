@@ -22,12 +22,13 @@ class FlutterWebBluetoothConnector extends BleConnector {
   @override
   Future<void> disconnect() async {
     device.disconnect();
-    _updateConnectorStatus(BleConnectorStatus.disconnected);
   }
 
   @override
   Future<void> scanAndConnect() async {
-    await FlutterWebBluetooth.instance.requestAdvertisementDevice(device);
+    _updateConnectorStatus(BleConnectorStatus.scanning);
+    await Future.delayed(const Duration(seconds: 2));
+    await connect();
   }
 
   void _updateConnected(bool connected) {
