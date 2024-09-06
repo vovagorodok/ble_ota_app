@@ -115,7 +115,7 @@ class ScannerScreenState extends State<ScannerScreen> {
             Expanded(
               child: _buildScanButton(),
             ),
-            const SizedBox(width: 16),
+            if (!kIsWeb) const SizedBox(width: 16),
             if (!kIsWeb)
               Expanded(
                 child: _buildStopButton(),
