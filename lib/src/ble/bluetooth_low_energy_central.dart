@@ -14,10 +14,12 @@ class BluetoothLowEnergyCentral extends BaseBleCentral {
   BluetoothLowEnergyCentral({required this.backend})
       : _status = _convertToCentralStatus(backend.state) {
     backend.stateChanged.listen(_updateState);
+    backend.discovered.listen(_addDevice);
   }
 
   final CentralManager backend;
   BleCentralStatus _status;
+  final _devices = <Peripheral>[];
 
   @override
   BleCentralStatus get state => _status;
@@ -32,15 +34,14 @@ class BluetoothLowEnergyCentral extends BaseBleCentral {
   BleConnector createConnector(String deviceId, List<String> serviceIds) {
     return BluetoothLowEnergyConnector(
         backend: backend,
-        peripheral: Peripheral(uuid: UUID.fromString(deviceId)),
+        peripheral: _getDevice(deviceId),
         serviceIds: _convertToUuids(serviceIds));
   }
 
   @override
   BleMtu createMtu(String deviceId) {
     return BluetoothLowEnergyMtu(
-        backend: backend,
-        peripheral: Peripheral(uuid: UUID.fromString(deviceId)));
+        backend: backend, peripheral: _getDevice(deviceId));
   }
 
   @override
@@ -48,7 +49,7 @@ class BluetoothLowEnergyCentral extends BaseBleCentral {
       String deviceId, String serviceId, String characteristicId) {
     return BluetoothLowEnergyCharacteristic(
         backend: backend,
-        peripheral: Peripheral(uuid: UUID.fromString(deviceId)),
+        peripheral: _getDevice(deviceId),
         serviceId: UUID.fromString(serviceId),
         characteristicId: UUID.fromString(characteristicId));
   }
@@ -80,5 +81,19 @@ class BluetoothLowEnergyCentral extends BaseBleCentral {
       default:
         return BleCentralStatus.unknown;
     }
+  }
+
+  void _addDevice(DiscoveredEventArgs device) {
+    final knownDeviceIndex =
+        _devices.indexWhere((d) => d.uuid == device.peripheral.uuid);
+    if (knownDeviceIndex >= 0) {
+      _devices[knownDeviceIndex] = device.peripheral;
+    } else {
+      _devices.add(device.peripheral);
+    }
+  }
+
+  Peripheral _getDevice(String deviceId) {
+    return _devices.firstWhere((d) => d.uuid.toString() == deviceId);
   }
 }

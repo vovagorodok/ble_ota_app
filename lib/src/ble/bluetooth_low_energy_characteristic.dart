@@ -20,9 +20,7 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
   @override
   Future<List<int>> read() async {
     final characteristic = await _getCharacteristic();
-    return (await backend.readCharacteristic(peripheral, characteristic))
-        .buffer
-        .asInt8List();
+    return (await backend.readCharacteristic(peripheral, characteristic));
   }
 
   @override
@@ -63,7 +61,7 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
         state: true);
     _subscription = backend.characteristicNotified.listen((data) {
       if (data.characteristic.uuid != characteristicId) return;
-      onData(data.value.buffer.asInt8List());
+      onData(data.value);
     });
   }
 
