@@ -5,7 +5,6 @@ import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_mtu.dart';
 import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
-import 'package:ble_ota_app/src/ble/ble_serial.dart';
 import 'package:ble_ota_app/src/ble/flutter_web_bluetooth_scanner.dart';
 import 'package:ble_ota_app/src/ble/flutter_web_bluetooth_connector.dart';
 import 'package:ble_ota_app/src/ble/flutter_web_bluetooth_mtu.dart';
@@ -53,17 +52,6 @@ class FlutterWebBluetoothCentral extends BaseBleCentral {
         device: _getDevice(deviceId),
         serviceId: serviceId,
         characteristicId: characteristicId);
-  }
-
-  @override
-  BleSerial createSerial(String deviceId, String serviceId,
-      String rxCharacteristicId, String txCharacteristicId) {
-    return BleSerial(
-      characteristicRx:
-          createCharacteristic(deviceId, serviceId, rxCharacteristicId),
-      characteristicTx:
-          createCharacteristic(deviceId, serviceId, txCharacteristicId),
-    );
   }
 
   void _addDevice(BluetoothDevice device) {

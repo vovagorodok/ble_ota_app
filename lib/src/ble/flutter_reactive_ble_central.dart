@@ -5,7 +5,6 @@ import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_mtu.dart';
 import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
-import 'package:ble_ota_app/src/ble/ble_serial.dart';
 import 'package:ble_ota_app/src/ble/flutter_reactive_ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/flutter_reactive_ble_connector.dart';
 import 'package:ble_ota_app/src/ble/flutter_reactive_ble_mtu.dart';
@@ -50,17 +49,6 @@ class FlutterReactiveBleCentral extends BaseBleCentral {
         deviceId: deviceId,
         serviceId: Uuid.parse(serviceId),
         characteristicId: Uuid.parse(characteristicId));
-  }
-
-  @override
-  BleSerial createSerial(String deviceId, String serviceId,
-      String rxCharacteristicId, String txCharacteristicId) {
-    return BleSerial(
-      characteristicRx:
-          createCharacteristic(deviceId, serviceId, rxCharacteristicId),
-      characteristicTx:
-          createCharacteristic(deviceId, serviceId, txCharacteristicId),
-    );
   }
 
   void _updateState(BleStatus update) {
