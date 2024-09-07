@@ -37,7 +37,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
         onData: (event) => _handleResp(Uint8List.fromList(event)));
 
     _state = BleUploadState(status: BleUploadStatus.begin);
-    addStateToStream(state);
+    notifyStateUpdate(state);
     _packageMaxSize = await _calcPackageMaxSize();
     _dataToSend = data;
     _sendBegin();
@@ -59,7 +59,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
     state.status = BleUploadStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    addStateToStream(state);
+    notifyStateUpdate(state);
   }
 
   void _waitForResponse() {
@@ -88,7 +88,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
         _bleSerial.unsubscribe();
         _dataToSend = Uint8List(0);
         state.status = BleUploadStatus.success;
-        addStateToStream(state);
+        notifyStateUpdate(state);
       } else {
         _raiseError(UploadError.unexpectedDeviceResponse);
       }
@@ -102,7 +102,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
 
   void _handleBeginResp(Uint8List data) {
     state.status = BleUploadStatus.upload;
-    addStateToStream(state);
+    notifyStateUpdate(state);
     _currentDataPos = 0;
     _currentBufferSize = 0;
     _packageMaxSize = min(
@@ -122,7 +122,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
 
       state.progress =
           _currentDataPos.toDouble() / _dataToSend.length.toDouble();
-      addStateToStream(state);
+      notifyStateUpdate(state);
 
       _currentBufferSize += packageSize;
       if (_currentBufferSize > _bufferMaxSize) {

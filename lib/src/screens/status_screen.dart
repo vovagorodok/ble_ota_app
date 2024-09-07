@@ -61,6 +61,8 @@ class StatusScreenState extends State<StatusScreen> {
     super.initState();
     bleCentral.stateStream.listen(_evaluateBleCentralStatus);
     () async {
+      if (!Platform.isAndroid && !Platform.isIOS && !Platform.isWindows) return;
+
       if (Platform.isAndroid) {
         await Permission.location.request();
       }

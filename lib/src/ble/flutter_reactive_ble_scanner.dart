@@ -21,24 +21,29 @@ class FlutterReactiveBleScanner extends BleScanner {
   Future<void> scan() async {
     _devices.clear();
     _subscription?.cancel();
-    _subscription =
-        backend.scanForDevices(withServices: serviceIds).listen((device) {
-      final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
-      if (knownDeviceIndex >= 0) {
-        _devices[knownDeviceIndex] = _createScannedDevice(device);
-      } else {
-        _devices.add(_createScannedDevice(device));
-      }
-      addStateToStream(state);
-    }, onError: (Object e) {});
-    addStateToStream(state);
+    _subscription = backend
+        .scanForDevices(withServices: serviceIds)
+        .listen(_addScannedDevice, onError: (Object e) {});
+    notifyStateUpdate(state);
+  }
+
+  void _addScannedDevice(DiscoveredDevice device) {
+    final scannedDevice = _createScannedDevice(device);
+    final knownDeviceIndex =
+        _devices.indexWhere((d) => d.id == scannedDevice.id);
+    if (knownDeviceIndex >= 0) {
+      _devices[knownDeviceIndex] = scannedDevice;
+    } else {
+      _devices.add(scannedDevice);
+    }
+    notifyStateUpdate(state);
   }
 
   @override
   Future<void> stop() async {
     await _subscription?.cancel();
     _subscription = null;
-    addStateToStream(state);
+    notifyStateUpdate(state);
   }
 
   static BleScannedDevice _createScannedDevice(DiscoveredDevice device) {

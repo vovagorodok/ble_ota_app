@@ -30,7 +30,7 @@ class InfoReader extends StatefulStream<InfoState> {
       status: WorkStatus.working,
       remoteInfo: RemoteInfo(),
     );
-    addStateToStream(state);
+    notifyStateUpdate(state);
 
     _bleInfoReader.read();
   }
@@ -39,7 +39,7 @@ class InfoReader extends StatefulStream<InfoState> {
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    addStateToStream(state);
+    notifyStateUpdate(state);
   }
 
   void _onDeviceInfoStateChanged(DeviceInfoState deviceInfoState) {
@@ -55,7 +55,7 @@ class InfoReader extends StatefulStream<InfoState> {
     if (remoteInfoState.status == WorkStatus.success) {
       state.remoteInfo = remoteInfoState.info;
       state.status = WorkStatus.success;
-      addStateToStream(state);
+      notifyStateUpdate(state);
     } else if (remoteInfoState.status == WorkStatus.error) {
       _raiseError(remoteInfoState.error, remoteInfoState.errorCode);
     }

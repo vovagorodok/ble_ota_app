@@ -40,6 +40,6 @@ class FlutterWebBluetoothConnector extends BleConnector {
   void _updateConnectorStatus(BleConnectorStatus status) {
     if (_state == status) return;
     _state = status;
-    addStateToStream(_state);
+    notifyStateUpdate(_state);
   }
 }

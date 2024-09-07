@@ -48,7 +48,7 @@ class UploadScreenState extends State<UploadScreen> {
   void _onConnectionStateChanged(BleConnectorStatus state) {
     setState(() {
       if (state == BleConnectorStatus.disconnected) {
-        bleConnector.scanAndConnect();
+        bleConnector.scanAndConnect(); // TODO: Just delay and connect?
       } else if (state == BleConnectorStatus.connected) {
         if (!skipInfoReading.value) {
           infoReader.read(manufacturesDictUrl.value);

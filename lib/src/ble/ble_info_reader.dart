@@ -32,7 +32,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
 
   void read() {
     state.status = WorkStatus.working;
-    addStateToStream(state);
+    notifyStateUpdate(state);
 
     () async {
       state.info = DeviceInfo(
@@ -49,7 +49,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
       );
       state.status = WorkStatus.success;
 
-      addStateToStream(state);
+      notifyStateUpdate(state);
     }.call();
   }
 }

@@ -12,8 +12,13 @@ abstract class StateStream<State> {
   Stream<State> get stateStream => _stateStreamController.stream;
 
   @protected
-  void addStateToStream(State state) {
+  void notifyStateUpdate(State state) {
     _stateStreamController.add(state);
+  }
+
+  @protected
+  bool canNotifyStateUpdate() {
+    return !_stateStreamController.isClosed;
   }
 
   @mustCallSuper

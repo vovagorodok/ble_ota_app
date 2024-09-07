@@ -70,7 +70,7 @@ class FlutterWebBluetoothCentral extends BaseBleCentral {
   void _updateCentralStatus(BleCentralStatus status) {
     if (_status == status) return;
     _status = status;
-    addStateToStream(_status);
+    notifyStateUpdate(_status);
   }
 
   BluetoothDevice _getDevice(String deviceId) {

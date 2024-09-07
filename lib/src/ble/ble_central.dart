@@ -16,6 +16,7 @@ abstract class BleCentral extends StatefulStream<BleCentralStatus> {
 }
 
 enum BleCentralStatus {
+  // TODO: Add unsupportedBrowser
   unknown,
   unsupported,
   unauthorized,

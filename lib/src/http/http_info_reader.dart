@@ -20,7 +20,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       status: WorkStatus.working,
       info: RemoteInfo(),
     );
-    addStateToStream(state);
+    notifyStateUpdate(state);
 
     () async {
       try {
@@ -38,7 +38,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         if (hardwaresUrl == null) {
           state.info.isHardwareUnregistered = true;
           state.status = WorkStatus.success;
-          addStateToStream(state);
+          notifyStateUpdate(state);
           return;
         }
 
@@ -55,7 +55,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         if (hardwareUrl == null) {
           state.info.isHardwareUnregistered = true;
           state.status = WorkStatus.success;
-          addStateToStream(state);
+          notifyStateUpdate(state);
           return;
         }
 
@@ -125,7 +125,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
 
       _readNewestSoftware(deviceInfo);
       state.status = WorkStatus.success;
-      addStateToStream(state);
+      notifyStateUpdate(state);
     } catch (_) {
       _raiseError(InfoError.generalNetworkError);
     }
@@ -135,7 +135,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    addStateToStream(state);
+    notifyStateUpdate(state);
   }
 }
 

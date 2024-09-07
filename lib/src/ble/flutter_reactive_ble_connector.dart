@@ -58,7 +58,7 @@ class FlutterReactiveBleConnector extends BleConnector {
 
   void _updateConnectorStatus(BleConnectorStatus status) {
     _state = status;
-    addStateToStream(_state);
+    notifyStateUpdate(_state);
   }
 
   static BleConnectorStatus _convertToConnecorStatus(

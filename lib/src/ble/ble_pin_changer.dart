@@ -44,7 +44,7 @@ class BlePinChanger extends StatefulStream<BlePinChangeState> {
         onData: (event) => _handleResp(Uint8List.fromList(event)));
 
     _state = BlePinChangeState(status: WorkStatus.working);
-    addStateToStream(state);
+    notifyStateUpdate(state);
   }
 
   void _raiseError(PinChangeError error, {int errorCode = 0}) {
@@ -52,7 +52,7 @@ class BlePinChanger extends StatefulStream<BlePinChangeState> {
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    addStateToStream(state);
+    notifyStateUpdate(state);
   }
 
   void _waitForResponse() {
@@ -74,7 +74,7 @@ class BlePinChanger extends StatefulStream<BlePinChangeState> {
     if (headCode == HeadCode.ok) {
       _bleSerial.unsubscribe();
       state.status = WorkStatus.success;
-      addStateToStream(state);
+      notifyStateUpdate(state);
     } else {
       _raiseError(
         PinChangeError.generalDeviceError,

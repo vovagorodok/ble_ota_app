@@ -57,7 +57,7 @@ class FlutterReactiveBleCentral extends BaseBleCentral {
 
   void _updateCentralStatus(BleCentralStatus status) {
     _status = status;
-    addStateToStream(_status);
+    notifyStateUpdate(_status);
   }
 
   static List<Uuid> _convertToUuids(List<String> ids) {
