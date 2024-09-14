@@ -1,13 +1,13 @@
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/device_info.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/version.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/ble/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
 
-class BleInfoReader extends StatefulStream<DeviceInfoState> {
+class BleInfoReader extends StatefulNotifier<DeviceInfoState> {
   BleInfoReader({required BleCentral bleCentral, required String deviceId})
       : _characteristicManufactureName = bleCentral.createCharacteristic(
             deviceId, serviceUuid, characteristicUuidManufactureName),
@@ -32,7 +32,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
 
   void read() {
     state.status = WorkStatus.working;
-    notifyStateUpdate(state);
+    notifyState(state);
 
     () async {
       state.info = DeviceInfo(
@@ -49,7 +49,7 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
       );
       state.status = WorkStatus.success;
 
-      notifyStateUpdate(state);
+      notifyState(state);
     }.call();
   }
 }

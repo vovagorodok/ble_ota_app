@@ -3,12 +3,12 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/work_state.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 
-class Uploader extends StatefulStream<UploadState> {
+class Uploader extends StatefulNotifier<UploadState> {
   Uploader({required BleCentral bleCentral, required String deviceId})
       : _bleUploader = BleUploader(bleCentral: bleCentral, deviceId: deviceId) {
     _bleUploader.stateStream.listen(_onBleUploadStateChanged);
@@ -22,14 +22,14 @@ class Uploader extends StatefulStream<UploadState> {
 
   Future<void> uploadBytes(Uint8List bytes) async {
     _state = UploadState(status: WorkStatus.working);
-    notifyStateUpdate(state);
+    notifyState(state);
 
     await _bleUploader.upload(bytes);
   }
 
   Future<void> uploadLocalFile(String localPath) async {
     _state = UploadState(status: WorkStatus.working);
-    notifyStateUpdate(state);
+    notifyState(state);
 
     File file = File(localPath);
     var data = await file.readAsBytes();
@@ -39,7 +39,7 @@ class Uploader extends StatefulStream<UploadState> {
   Future<void> uploadHttpFile(String url) async {
     try {
       _state = UploadState(status: WorkStatus.working);
-      notifyStateUpdate(state);
+      notifyState(state);
 
       final response = await http.get(Uri.parse(url));
       if (response.statusCode != 200) {
@@ -60,7 +60,7 @@ class Uploader extends StatefulStream<UploadState> {
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   void _onBleUploadStateChanged(BleUploadState bleUploadState) {
@@ -68,14 +68,14 @@ class Uploader extends StatefulStream<UploadState> {
 
     if (bleUploadState.status == BleUploadStatus.success) {
       state.status = WorkStatus.success;
-      notifyStateUpdate(state);
+      notifyState(state);
     } else if (bleUploadState.status == BleUploadStatus.error) {
       _raiseError(
         bleUploadState.error,
         errorCode: bleUploadState.errorCode,
       );
     } else {
-      notifyStateUpdate(state);
+      notifyState(state);
     }
   }
 }

@@ -47,9 +47,7 @@ class UploadScreenState extends State<UploadScreen> {
 
   void _onConnectionStateChanged(BleConnectorStatus state) {
     setState(() {
-      if (state == BleConnectorStatus.disconnected) {
-        bleConnector.scanAndConnect(); // TODO: Just delay and connect?
-      } else if (state == BleConnectorStatus.connected) {
+      if (state == BleConnectorStatus.connected) {
         if (!skipInfoReading.value) {
           infoReader.read(manufacturesDictUrl.value);
         }
@@ -64,7 +62,10 @@ class UploadScreenState extends State<UploadScreen> {
   void _onUploadStateChanged(UploadState state) {
     setState(() {
       if (state.status == WorkStatus.success) {
-        bleConnector.disconnect();
+        () async {
+          await bleConnector.disconnect();
+          await bleConnector.scanAndConnect();
+        }.call();
         WakelockPlus.disable();
       } else if (state.status == WorkStatus.error) {
         WakelockPlus.disable();
@@ -86,16 +87,16 @@ class UploadScreenState extends State<UploadScreen> {
   @override
   void dispose() {
     () async {
+      await bleConnector.disconnect();
       for (var subscription in _subscriptions) {
         await subscription.cancel();
       }
-
-      await uploader.dispose();
-      await infoReader.dispose();
-      await bleConnector.disconnect();
-      await bleConnector.dispose();
-      await WakelockPlus.disable();
     }.call();
+    WakelockPlus.disable();
+
+    uploader.dispose();
+    infoReader.dispose();
+    bleConnector.dispose();
     super.dispose();
   }
 
@@ -277,8 +278,6 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText(tr('Connecting..'));
     } else if (connectionStatus == BleConnectorStatus.disconnecting) {
       return _buildStatusText(tr('Disconnecting..'));
-    } else if (connectionStatus == BleConnectorStatus.disconnected) {
-      return _buildStatusText(tr('Disconnected'));
     } else if (uploadStatus == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
     } else if (uploadStatus == WorkStatus.error) {
@@ -287,6 +286,8 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText(tr('Loading..'));
     } else if (infoStatus == WorkStatus.error) {
       return _buildStatusText(determineInfoError(infoState));
+    } else if (connectionStatus == BleConnectorStatus.disconnected) {
+      return _buildStatusText(tr('Disconnected'));
     } else if (connectionStatus == BleConnectorStatus.scanning) {
       return _buildStatusText(tr('Scanning..'));
     } else if (infoStatus == WorkStatus.idle) {

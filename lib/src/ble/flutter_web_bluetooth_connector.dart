@@ -25,9 +25,10 @@ class FlutterWebBluetoothConnector extends BleConnector {
   }
 
   @override
-  Future<void> scanAndConnect() async {
+  Future<void> scanAndConnect(
+      {Duration duration = const Duration(seconds: 2)}) async {
     _updateConnectorStatus(BleConnectorStatus.scanning);
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(duration);
     await connect();
   }
 
@@ -40,6 +41,6 @@ class FlutterWebBluetoothConnector extends BleConnector {
   void _updateConnectorStatus(BleConnectorStatus status) {
     if (_state == status) return;
     _state = status;
-    notifyStateUpdate(_state);
+    notifyState(_state);
   }
 }

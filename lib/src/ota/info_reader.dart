@@ -2,12 +2,12 @@ import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/ble/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/http/http_info_reader.dart';
 
-class InfoReader extends StatefulStream<InfoState> {
+class InfoReader extends StatefulNotifier<InfoState> {
   InfoReader({required BleCentral bleCentral, required String deviceId})
       : _bleInfoReader =
             BleInfoReader(bleCentral: bleCentral, deviceId: deviceId),
@@ -30,7 +30,7 @@ class InfoReader extends StatefulStream<InfoState> {
       status: WorkStatus.working,
       remoteInfo: RemoteInfo(),
     );
-    notifyStateUpdate(state);
+    notifyState(state);
 
     _bleInfoReader.read();
   }
@@ -39,7 +39,7 @@ class InfoReader extends StatefulStream<InfoState> {
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   void _onDeviceInfoStateChanged(DeviceInfoState deviceInfoState) {
@@ -55,7 +55,7 @@ class InfoReader extends StatefulStream<InfoState> {
     if (remoteInfoState.status == WorkStatus.success) {
       state.remoteInfo = remoteInfoState.info;
       state.status = WorkStatus.success;
-      notifyStateUpdate(state);
+      notifyState(state);
     } else if (remoteInfoState.status == WorkStatus.error) {
       _raiseError(remoteInfoState.error, remoteInfoState.errorCode);
     }

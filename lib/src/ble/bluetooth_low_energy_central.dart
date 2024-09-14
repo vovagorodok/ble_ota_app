@@ -60,7 +60,7 @@ class BluetoothLowEnergyCentral extends BaseBleCentral {
 
   void _updateCentralStatus(BleCentralStatus status) {
     _status = status;
-    notifyStateUpdate(_status);
+    notifyState(_status);
   }
 
   static List<UUID> _convertToUuids(List<String> ids) {

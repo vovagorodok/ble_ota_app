@@ -15,7 +15,7 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
   final Peripheral peripheral;
   final UUID serviceId;
   final UUID characteristicId;
-  late StreamSubscription _subscription;
+  StreamSubscription? _subscription;
 
   @override
   Future<List<int>> read() async {
@@ -40,36 +40,22 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
   }
 
   @override
-  void subscribe({required void Function(List<int>) onData}) {
-    subscribeAsync(onData: onData);
-  }
-
-  @override
-  void unsubscribe() {
-    unsubscribeAsync();
-  }
-
-  @override
-  void dispose() {
-    unsubscribe();
-  }
-
-  Future<void> subscribeAsync(
-      {required void Function(List<int>) onData}) async {
+  Future<void> startNotifications() async {
     final characteristic = await _getCharacteristic();
     await backend.setCharacteristicNotifyState(peripheral, characteristic,
         state: true);
     _subscription = backend.characteristicNotified.listen((data) {
       if (data.characteristic.uuid != characteristicId) return;
-      onData(data.value);
+      notifyData(data.value);
     });
   }
 
-  Future<void> unsubscribeAsync() async {
+  @override
+  Future<void> stopNotifications() async {
     final characteristic = await _getCharacteristic();
     await backend.setCharacteristicNotifyState(peripheral, characteristic,
         state: false);
-    _subscription.cancel();
+    await _subscription?.cancel();
   }
 
   Future<GATTCharacteristic> _getCharacteristic() async {

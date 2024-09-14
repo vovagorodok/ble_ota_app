@@ -32,7 +32,8 @@ class BluetoothLowEnergyConnector extends BleConnector {
   }
 
   @override
-  Future<void> scanAndConnect() async {}
+  Future<void> scanAndConnect(
+      {Duration duration = const Duration(seconds: 0)}) async {}
 
   void _updateState(PeripheralConnectionStateChangedEventArgs update) {
     if (update.peripheral != peripheral) return;
@@ -41,7 +42,7 @@ class BluetoothLowEnergyConnector extends BleConnector {
 
   void _updateConnectorStatus(BleConnectorStatus status) {
     _state = status;
-    notifyStateUpdate(_state);
+    notifyState(_state);
   }
 
   static BleConnectorStatus _convertToConnecorStatus(ConnectionState state) {

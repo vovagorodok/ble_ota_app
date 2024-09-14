@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 
-abstract class BleScanner extends StatefulStream<BleScannerState> {
+abstract class BleScanner extends StatefulNotifier<BleScannerState> {
   Future<void> scan();
   Future<void> stop();
 }

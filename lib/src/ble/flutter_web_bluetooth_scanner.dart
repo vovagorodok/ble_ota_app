@@ -10,7 +10,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
       for (var device in devices) {
         _addScannedDevice(_createScannedDevice(device));
       }
-      notifyStateUpdate(state);
+      notifyState(state);
     });
   }
 
@@ -32,7 +32,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
         RequestOptionsBuilder([RequestFilterBuilder(services: serviceIds)]);
 
     _scanIsInProgress = true;
-    notifyStateUpdate(state);
+    notifyState(state);
 
     try {
       await FlutterWebBluetooth.instance.requestDevice(requestOptions);
@@ -42,7 +42,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
     } on DeviceNotFoundError {}
 
     _scanIsInProgress = false;
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   @override

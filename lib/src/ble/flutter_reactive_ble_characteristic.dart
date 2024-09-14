@@ -16,7 +16,7 @@ class FlutterReactiveBleCharacteristic extends BleCharacteristic {
 
   final FlutterReactiveBle backend;
   final QualifiedCharacteristic _characteristic;
-  late StreamSubscription _subscription;
+  StreamSubscription? _subscription;
 
   @override
   Future<List<int>> read() async {
@@ -35,20 +35,13 @@ class FlutterReactiveBleCharacteristic extends BleCharacteristic {
   }
 
   @override
-  void subscribe({required void Function(List<int>) onData}) {
+  Future<void> startNotifications() async {
     _subscription =
-        backend.subscribeToCharacteristic(_characteristic).listen((event) {
-      onData(event);
-    });
+        backend.subscribeToCharacteristic(_characteristic).listen(notifyData);
   }
 
   @override
-  void unsubscribe() {
-    _subscription.cancel();
-  }
-
-  @override
-  void dispose() {
-    unsubscribe();
+  Future<void> stopNotifications() async {
+    await _subscription?.cancel();
   }
 }

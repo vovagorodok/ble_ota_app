@@ -7,9 +7,9 @@ import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
 import 'package:ble_ota_app/src/core/software.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 
-class HttpInfoReader extends StatefulStream<RemoteInfoState> {
+class HttpInfoReader extends StatefulNotifier<RemoteInfoState> {
   RemoteInfoState _state = RemoteInfoState(info: RemoteInfo());
 
   @override
@@ -20,7 +20,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
       status: WorkStatus.working,
       info: RemoteInfo(),
     );
-    notifyStateUpdate(state);
+    notifyState(state);
 
     () async {
       try {
@@ -38,7 +38,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         if (hardwaresUrl == null) {
           state.info.isHardwareUnregistered = true;
           state.status = WorkStatus.success;
-          notifyStateUpdate(state);
+          notifyState(state);
           return;
         }
 
@@ -55,7 +55,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
         if (hardwareUrl == null) {
           state.info.isHardwareUnregistered = true;
           state.status = WorkStatus.success;
-          notifyStateUpdate(state);
+          notifyState(state);
           return;
         }
 
@@ -125,7 +125,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
 
       _readNewestSoftware(deviceInfo);
       state.status = WorkStatus.success;
-      notifyStateUpdate(state);
+      notifyState(state);
     } catch (_) {
       _raiseError(InfoError.generalNetworkError);
     }
@@ -135,7 +135,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 }
 

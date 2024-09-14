@@ -13,7 +13,7 @@ class FlutterReactiveBleConnector extends BleConnector {
   final String deviceId;
   final List<Uuid> serviceIds;
   BleConnectorStatus _state = BleConnectorStatus.disconnected;
-  late StreamSubscription<ConnectionStateUpdate> _connection;
+  StreamSubscription? _connection;
 
   @override
   BleConnectorStatus get state => _state;
@@ -29,7 +29,7 @@ class FlutterReactiveBleConnector extends BleConnector {
   @override
   Future<void> disconnect() async {
     try {
-      await _connection.cancel();
+      await _connection?.cancel();
     } catch (_) {
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated
@@ -38,17 +38,17 @@ class FlutterReactiveBleConnector extends BleConnector {
   }
 
   @override
-  Future<void> scanAndConnect() async {
+  Future<void> scanAndConnect(
+      {Duration duration = const Duration(seconds: 20)}) async {
     _updateConnectorStatus(BleConnectorStatus.scanning);
     _connection = backend
         .connectToAdvertisingDevice(
-            id: deviceId,
-            withServices: serviceIds,
-            prescanDuration: const Duration(seconds: 20))
+            id: deviceId, withServices: serviceIds, prescanDuration: duration)
         .listen(
           _updateState,
           onDone: () => _updateConnectorStatus(BleConnectorStatus.disconnected),
-          onError: (Object e) {},
+          onError: (Object e) =>
+              _updateConnectorStatus(BleConnectorStatus.disconnected),
         );
   }
 
@@ -58,7 +58,7 @@ class FlutterReactiveBleConnector extends BleConnector {
 
   void _updateConnectorStatus(BleConnectorStatus status) {
     _state = status;
-    notifyStateUpdate(_state);
+    notifyState(_state);
   }
 
   static BleConnectorStatus _convertToConnecorStatus(

@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
 import 'package:ble_ota_app/src/utils/converters.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
@@ -14,7 +14,7 @@ import 'package:ble_ota_app/src/ble/ble_mtu.dart';
 import 'package:ble_ota_app/src/ble/ble_serial.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
-class BleUploader extends StatefulStream<BleUploadState> {
+class BleUploader extends StatefulNotifier<BleUploadState> {
   BleUploader({required BleCentral bleCentral, required String deviceId})
       : _bleMtu = bleCentral.createMtu(deviceId),
         _bleSerial = bleCentral.createSerial(
@@ -22,6 +22,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
 
   final BleMtu _bleMtu;
   final BleSerial _bleSerial;
+  StreamSubscription? _subscription;
   BleUploadState _state = BleUploadState();
   Uint8List _dataToSend = Uint8List(0);
   int _currentDataPos = 0;
@@ -33,18 +34,23 @@ class BleUploader extends StatefulStream<BleUploadState> {
   BleUploadState get state => _state;
 
   Future<void> upload(Uint8List data) async {
-    _bleSerial.subscribe(
-        onData: (event) => _handleResp(Uint8List.fromList(event)));
-
-    _state = BleUploadState(status: BleUploadStatus.begin);
-    notifyStateUpdate(state);
-    _packageMaxSize = await _calcPackageMaxSize();
-    _dataToSend = data;
-    _sendBegin();
+    try {
+      await _bleSerial.startNotifications();
+      _subscription = _bleSerial.dataStream
+          .listen((data) => _handleResp(Uint8List.fromList(data)));
+      _state = BleUploadState(status: BleUploadStatus.begin);
+      notifyState(state);
+      _packageMaxSize = await _calcPackageMaxSize();
+      _dataToSend = data;
+      _sendBegin();
+    } catch (_) {
+      _raiseError(UploadError.generalDeviceError);
+    }
   }
 
   @override
-  Future<void> dispose() async {
+  void dispose() {
+    _unsubscribe();
     _bleSerial.dispose();
     super.dispose();
   }
@@ -55,15 +61,15 @@ class BleUploader extends StatefulStream<BleUploadState> {
   }
 
   void _raiseError(UploadError error, {int errorCode = 0}) {
-    _bleSerial.unsubscribe();
+    _unsubscribe();
     state.status = BleUploadStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   void _waitForResponse() {
-    _bleSerial.waitForResponse(
+    _bleSerial.waitData(
         timeoutCallback: () => _raiseError(UploadError.noDeviceResponse));
   }
 
@@ -85,10 +91,10 @@ class BleUploader extends StatefulStream<BleUploadState> {
       } else if (state.status == BleUploadStatus.upload) {
         _sendPackages();
       } else if (state.status == BleUploadStatus.end) {
-        _bleSerial.unsubscribe();
+        _unsubscribe();
         _dataToSend = Uint8List(0);
         state.status = BleUploadStatus.success;
-        notifyStateUpdate(state);
+        notifyState(state);
       } else {
         _raiseError(UploadError.unexpectedDeviceResponse);
       }
@@ -102,7 +108,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
 
   void _handleBeginResp(Uint8List data) {
     state.status = BleUploadStatus.upload;
-    notifyStateUpdate(state);
+    notifyState(state);
     _currentDataPos = 0;
     _currentBufferSize = 0;
     _packageMaxSize = min(
@@ -122,7 +128,7 @@ class BleUploader extends StatefulStream<BleUploadState> {
 
       state.progress =
           _currentDataPos.toDouble() / _dataToSend.length.toDouble();
-      notifyStateUpdate(state);
+      notifyState(state);
 
       _currentBufferSize += packageSize;
       if (_currentBufferSize > _bufferMaxSize) {
@@ -140,6 +146,11 @@ class BleUploader extends StatefulStream<BleUploadState> {
         uint8ToBytes(HeadCode.end) + uint32ToBytes(getCrc32(_dataToSend)));
     state.status = BleUploadStatus.end;
     _waitForResponse();
+  }
+
+  void _unsubscribe() {
+    _bleSerial.stopNotifications();
+    _subscription?.cancel();
   }
 }
 

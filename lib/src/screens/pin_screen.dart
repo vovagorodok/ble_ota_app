@@ -22,7 +22,7 @@ class PinScreen extends StatefulWidget {
 
 class PinScreenState extends State<PinScreen> {
   int? _pin;
-  late StreamSubscription _subscription;
+  StreamSubscription? _subscription;
 
   BlePinChanger get blePinChanger => widget.blePinChanger;
   BlePinChangeState get blePinChangeState => blePinChanger.state;
@@ -40,10 +40,8 @@ class PinScreenState extends State<PinScreen> {
 
   @override
   void dispose() {
-    () async {
-      await _subscription.cancel();
-      await blePinChanger.dispose();
-    }.call();
+    _subscription?.cancel();
+    blePinChanger.dispose();
     super.dispose();
   }
 

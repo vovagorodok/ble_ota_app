@@ -24,7 +24,7 @@ class BluetoothLowEnergyScanner extends BleScanner {
     _devices.clear();
     _scanIsInProgress = true;
     await backend.startDiscovery(serviceUUIDs: serviceIds);
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   @override
@@ -32,7 +32,7 @@ class BluetoothLowEnergyScanner extends BleScanner {
     if (!_scanIsInProgress) return;
     _scanIsInProgress = false;
     await backend.stopDiscovery();
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   void _addScannedDevice(DiscoveredEventArgs device) {
@@ -44,7 +44,7 @@ class BluetoothLowEnergyScanner extends BleScanner {
     } else {
       _devices.add(scannedDevice);
     }
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   static BleScannedDevice _createScannedDevice(DiscoveredEventArgs device) {

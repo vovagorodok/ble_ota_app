@@ -1,11 +1,11 @@
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_mtu.dart';
 import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
 import 'package:ble_ota_app/src/ble/ble_serial.dart';
 
-abstract class BleCentral extends StatefulStream<BleCentralStatus> {
+abstract class BleCentral extends StatefulNotifier<BleCentralStatus> {
   BleScanner createScaner(List<String> serviceIds);
   BleConnector createConnector(String deviceId, List<String> serviceIds);
   BleMtu createMtu(String deviceId);

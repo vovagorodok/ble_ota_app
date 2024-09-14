@@ -24,7 +24,7 @@ class FlutterReactiveBleScanner extends BleScanner {
     _subscription = backend
         .scanForDevices(withServices: serviceIds)
         .listen(_addScannedDevice, onError: (Object e) {});
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   void _addScannedDevice(DiscoveredDevice device) {
@@ -36,14 +36,14 @@ class FlutterReactiveBleScanner extends BleScanner {
     } else {
       _devices.add(scannedDevice);
     }
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   @override
   Future<void> stop() async {
     await _subscription?.cancel();
     _subscription = null;
-    notifyStateUpdate(state);
+    notifyState(state);
   }
 
   static BleScannedDevice _createScannedDevice(DiscoveredDevice device) {
