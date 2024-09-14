@@ -100,6 +100,11 @@ class UploadScreenState extends State<UploadScreen> {
     super.dispose();
   }
 
+  bool _canPop() {
+    return uploadStatus != WorkStatus.working &&
+        infoStatus != WorkStatus.working;
+  }
+
   bool _canUpload() {
     return connectionStatus == BleConnectorStatus.connected &&
         uploadStatus != WorkStatus.working &&
@@ -419,6 +424,14 @@ class UploadScreenState extends State<UploadScreen> {
         appBar: AppBar(
           title: Text(widget.deviceName),
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: _canPop()
+                ? () {
+                    Navigator.pop(context);
+                  }
+                : null,
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.pin_rounded),

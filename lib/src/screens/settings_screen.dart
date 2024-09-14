@@ -18,6 +18,11 @@ class SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: Text(tr('Settings')),
         centerTitle: true,
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
         actions: [
           IconButton(
             icon: const Icon(Icons.cached_rounded),

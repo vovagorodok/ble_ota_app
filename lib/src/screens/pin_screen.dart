@@ -173,6 +173,14 @@ class PinScreenState extends State<PinScreen> {
         appBar: AppBar(
           title: Text(widget.deviceName),
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: _canChange()
+                ? () {
+                    Navigator.pop(context);
+                  }
+                : null,
+          ),
         ),
         body: SafeArea(
           minimum: const EdgeInsets.all(16.0),
