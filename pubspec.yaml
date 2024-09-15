@@ -13,6 +13,7 @@ dependencies:
   flutter_reactive_ble: ^5.3.1
   flutter_web_bluetooth: ^0.2.3
   bluetooth_low_energy: ^6.0.2
+  universal_ble: ^0.12.0
   file_picker: ^8.0.5
   archive: ^3.6.1
   permission_handler: ^11.3.1
