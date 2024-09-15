@@ -24,13 +24,13 @@ class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
 
   void set(int pin) {
     _begin();
-    _sendData(uint8ToBytes(HeadCode.setPin) + uint32ToBytes(pin));
+    _send(HeadCode.setPin, uint32ToBytes(pin));
     _waitForResponse();
   }
 
   void remove() {
     _begin();
-    _sendData(uint8ToBytes(HeadCode.removePin));
+    _send(HeadCode.removePin, Uint8List(0));
     _waitForResponse();
   }
 
@@ -63,8 +63,8 @@ class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
         timeoutCallback: () => _raiseError(PinChangeError.noDeviceResponse));
   }
 
-  void _sendData(List<int> data) {
-    _bleSerial.send(data);
+  void _send(int head, Uint8List data) {
+    _bleSerial.send(Uint8List.fromList(uint8ToBytes(head) + data));
   }
 
   void _handleResp(Uint8List data) {

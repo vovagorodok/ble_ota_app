@@ -36,8 +36,7 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
   Future<void> upload(Uint8List data) async {
     try {
       await _bleSerial.startNotifications();
-      _subscription = _bleSerial.dataStream
-          .listen((data) => _handleResp(Uint8List.fromList(data)));
+      _subscription = _bleSerial.dataStream.listen(_handleResp);
       _state = BleUploadState(status: BleUploadStatus.begin);
       notifyState(state);
       _packageMaxSize = await _calcPackageMaxSize();
@@ -73,12 +72,12 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
         timeoutCallback: () => _raiseError(UploadError.noDeviceResponse));
   }
 
-  void _sendData(List<int> data) {
-    _bleSerial.send(data);
+  void _send(int head, Uint8List data) {
+    _bleSerial.send(Uint8List.fromList(uint8ToBytes(head) + data));
   }
 
   void _sendBegin() {
-    _sendData(uint8ToBytes(HeadCode.begin) + uint32ToBytes(_dataToSend.length));
+    _send(HeadCode.begin, uint32ToBytes(_dataToSend.length));
     _waitForResponse();
   }
 
@@ -122,7 +121,7 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
           min(_dataToSend.length - _currentDataPos, _packageMaxSize);
       var packageEndPos = _currentDataPos + packageSize;
 
-      _sendData(uint8ToBytes(HeadCode.package) +
+      _send(HeadCode.package,
           _dataToSend.sublist(_currentDataPos, packageEndPos));
       _currentDataPos = packageEndPos;
 
@@ -142,8 +141,7 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
   }
 
   void _sendEnd() {
-    _sendData(
-        uint8ToBytes(HeadCode.end) + uint32ToBytes(getCrc32(_dataToSend)));
+    _send(HeadCode.end, uint32ToBytes(getCrc32(_dataToSend)));
     state.status = BleUploadStatus.end;
     _waitForResponse();
   }

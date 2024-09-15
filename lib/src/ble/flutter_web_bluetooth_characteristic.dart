@@ -16,21 +16,21 @@ class FlutterWebBluetoothCharacteristic extends BleCharacteristic {
   StreamSubscription? _subscription;
 
   @override
-  Future<List<int>> read() async {
+  Future<Uint8List> read() async {
     final characteristic = await _getCharacteristic();
-    return (await characteristic.readValue()).buffer.asInt8List();
+    return (await characteristic.readValue()).buffer.asUint8List();
   }
 
   @override
-  Future<void> write(List<int> data) async {
+  Future<void> write(Uint8List data) async {
     final characteristic = await _getCharacteristic();
-    await characteristic.writeValueWithResponse(Uint8List.fromList(data));
+    await characteristic.writeValueWithResponse(data);
   }
 
   @override
-  Future<void> writeWithoutResponse(List<int> data) async {
+  Future<void> writeWithoutResponse(Uint8List data) async {
     final characteristic = await _getCharacteristic();
-    await characteristic.writeValueWithoutResponse(Uint8List.fromList(data));
+    await characteristic.writeValueWithoutResponse(data);
   }
 
   @override
@@ -38,7 +38,7 @@ class FlutterWebBluetoothCharacteristic extends BleCharacteristic {
     final characteristic = await _getCharacteristic();
     await characteristic.startNotifications();
     _subscription = characteristic.value
-        .listen((data) => notifyData(data.buffer.asInt8List()));
+        .listen((data) => notifyData(data.buffer.asUint8List()));
   }
 
   @override

@@ -19,25 +19,23 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
   GATTCharacteristic? _characteristic;
 
   @override
-  Future<List<int>> read() async {
+  Future<Uint8List> read() async {
     final characteristic = await _getCharacteristic();
-    return (await backend.readCharacteristic(peripheral, characteristic));
+    return await backend.readCharacteristic(peripheral, characteristic);
   }
 
   @override
-  Future<void> write(List<int> data) async {
+  Future<void> write(Uint8List data) async {
     final characteristic = await _getCharacteristic();
     await backend.writeCharacteristic(peripheral, characteristic,
-        value: Uint8List.fromList(data),
-        type: GATTCharacteristicWriteType.withResponse);
+        value: data, type: GATTCharacteristicWriteType.withResponse);
   }
 
   @override
-  Future<void> writeWithoutResponse(List<int> data) async {
+  Future<void> writeWithoutResponse(Uint8List data) async {
     final characteristic = await _getCharacteristic();
     await backend.writeCharacteristic(peripheral, characteristic,
-        value: Uint8List.fromList(data),
-        type: GATTCharacteristicWriteType.withoutResponse);
+        value: data, type: GATTCharacteristicWriteType.withoutResponse);
   }
 
   @override

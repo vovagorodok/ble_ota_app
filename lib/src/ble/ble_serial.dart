@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:ble_ota_app/src/core/data_notifier.dart';
 import 'package:ble_ota_app/src/core/timer_wrapper.dart';
 import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
 
-class BleSerial extends DataNotifier<List<int>> {
+class BleSerial extends DataNotifier<Uint8List> {
   BleSerial(
       {required BleCharacteristic characteristicRx,
       required BleCharacteristic characteristicTx})
@@ -21,7 +22,7 @@ class BleSerial extends DataNotifier<List<int>> {
   final _responseGuard = TimerWrapper();
   StreamSubscription? _subscription;
 
-  Future<void> send(List<int> data) async {
+  Future<void> send(Uint8List data) async {
     await _characteristicRx.writeWithoutResponse(data);
   }
 
