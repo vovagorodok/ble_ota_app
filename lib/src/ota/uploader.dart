@@ -32,7 +32,7 @@ class Uploader extends StatefulNotifier<UploadState> {
     notifyState(state);
 
     File file = File(localPath);
-    var data = await file.readAsBytes();
+    final data = await file.readAsBytes();
     await _bleUploader.upload(data);
   }
 

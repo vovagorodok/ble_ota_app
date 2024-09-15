@@ -73,7 +73,7 @@ class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
       return;
     }
 
-    var headCode = bytesToUint8(data, headCodePos);
+    final headCode = bytesToUint8(data, headCodePos);
     if (headCode == HeadCode.ok) {
       _unsubscribe();
       state.status = WorkStatus.success;

@@ -44,7 +44,8 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
     await backend.setCharacteristicNotifyState(peripheral, characteristic,
         state: true);
     _subscription = backend.characteristicNotified.listen((data) {
-      if (data.characteristic.uuid != characteristicId) return;
+      if (data.peripheral.uuid != peripheral.uuid ||
+          data.characteristic.uuid != characteristicId) return;
       notifyData(data.value);
     });
   }

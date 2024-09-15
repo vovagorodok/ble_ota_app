@@ -55,7 +55,7 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
   }
 
   Future<int> _calcPackageMaxSize() async {
-    var mtu = await _bleMtu.request(maxMtuSize.value.toInt());
+    final mtu = await _bleMtu.request(maxMtuSize.value.toInt());
     return mtu - mtuWriteOverheadBytesNum - headCodeBytesNum;
   }
 
@@ -82,7 +82,7 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
   }
 
   void _handleResp(Uint8List data) {
-    var headCode = bytesToUint8(data, headCodePos);
+    final headCode = bytesToUint8(data, headCodePos);
     if (headCode == HeadCode.ok) {
       if (state.status == BleUploadStatus.begin) {
         _handleBeginResp(data);
@@ -117,9 +117,9 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
 
   void _sendPackages() {
     while (_currentDataPos < _dataToSend.length) {
-      var packageSize =
+      final packageSize =
           min(_dataToSend.length - _currentDataPos, _packageMaxSize);
-      var packageEndPos = _currentDataPos + packageSize;
+      final packageEndPos = _currentDataPos + packageSize;
 
       _send(HeadCode.package,
           _dataToSend.sublist(_currentDataPos, packageEndPos));
