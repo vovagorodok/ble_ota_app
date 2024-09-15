@@ -9,10 +9,10 @@ class FlutterWebBluetoothConnector extends BleConnector {
   }
 
   final BluetoothDevice device;
-  BleConnectorStatus _state = BleConnectorStatus.disconnected;
+  BleConnectorStatus _status = BleConnectorStatus.disconnected;
 
   @override
-  BleConnectorStatus get state => _state;
+  BleConnectorStatus get state => _status;
 
   @override
   Future<void> connect() async {
@@ -21,7 +21,7 @@ class FlutterWebBluetoothConnector extends BleConnector {
 
   @override
   Future<void> disconnect() async {
-    device.disconnect();
+    if (_status == BleConnectorStatus.connected) device.disconnect();
   }
 
   @override
@@ -39,8 +39,8 @@ class FlutterWebBluetoothConnector extends BleConnector {
   }
 
   void _updateConnectorStatus(BleConnectorStatus status) {
-    if (_state == status) return;
-    _state = status;
-    notifyState(_state);
+    if (_status == status) return;
+    _status = status;
+    notifyState(_status);
   }
 }
