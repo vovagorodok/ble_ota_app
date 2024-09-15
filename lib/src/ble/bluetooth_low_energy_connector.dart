@@ -33,7 +33,11 @@ class BluetoothLowEnergyConnector extends BleConnector {
 
   @override
   Future<void> scanAndConnect(
-      {Duration duration = const Duration(seconds: 0)}) async {}
+      {Duration duration = const Duration(seconds: 2)}) async {
+    _updateConnectorStatus(BleConnectorStatus.scanning);
+    await Future.delayed(duration);
+    await connect();
+  }
 
   void _updateState(PeripheralConnectionStateChangedEventArgs update) {
     if (update.peripheral != peripheral) return;

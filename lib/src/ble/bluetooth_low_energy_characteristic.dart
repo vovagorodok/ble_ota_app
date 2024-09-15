@@ -16,6 +16,7 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
   final UUID serviceId;
   final UUID characteristicId;
   StreamSubscription? _subscription;
+  GATTCharacteristic? _characteristic;
 
   @override
   Future<List<int>> read() async {
@@ -59,10 +60,15 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
   }
 
   Future<GATTCharacteristic> _getCharacteristic() async {
-    final services = await backend.discoverGATT(peripheral);
-    final service = services.firstWhere((d) => d.uuid == serviceId);
-    final characteristic =
-        service.characteristics.firstWhere((d) => d.uuid == characteristicId);
-    return characteristic;
+    // Library internal exception when writing large amount of data quickly
+    Future.delayed(const Duration(milliseconds: 10));
+    if (_characteristic == null) {
+      final services = await backend.discoverGATT(peripheral);
+      final service = services.firstWhere((d) => d.uuid == serviceId);
+      final characteristic =
+          service.characteristics.firstWhere((d) => d.uuid == characteristicId);
+      _characteristic = characteristic;
+    }
+    return _characteristic!;
   }
 }
