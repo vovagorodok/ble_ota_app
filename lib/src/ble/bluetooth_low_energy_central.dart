@@ -19,7 +19,7 @@ class BluetoothLowEnergyCentral extends BaseBleCentral {
 
   final CentralManager backend;
   BleCentralStatus _status;
-  final _devices = <Peripheral>[];
+  final List<Peripheral> _devices = [];
 
   @override
   BleCentralStatus get state => _status;

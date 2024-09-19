@@ -15,7 +15,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
   }
 
   List<String> serviceIds;
-  final _devices = <BleScannedDevice>[];
+  final List<BleScannedDevice> _devices = [];
   bool _scanIsInProgress = false;
 
   @override

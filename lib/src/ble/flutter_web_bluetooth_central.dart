@@ -25,7 +25,7 @@ class FlutterWebBluetoothCentral extends BaseBleCentral {
   }
 
   BleCentralStatus _status;
-  final _devices = <BluetoothDevice>[];
+  final List<BluetoothDevice> _devices = [];
 
   @override
   BleCentralStatus get state => _status;

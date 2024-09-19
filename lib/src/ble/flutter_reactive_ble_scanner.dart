@@ -8,7 +8,7 @@ class FlutterReactiveBleScanner extends BleScanner {
 
   final FlutterReactiveBle backend;
   final List<Uuid> serviceIds;
-  final _devices = <BleScannedDevice>[];
+  final List<BleScannedDevice> _devices = [];
   StreamSubscription? _subscription;
 
   @override

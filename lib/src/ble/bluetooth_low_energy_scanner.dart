@@ -10,7 +10,7 @@ class BluetoothLowEnergyScanner extends BleScanner {
 
   final CentralManager backend;
   final List<UUID> serviceIds;
-  final _devices = <BleScannedDevice>[];
+  final List<BleScannedDevice> _devices = [];
   bool _scanIsInProgress = false;
 
   @override

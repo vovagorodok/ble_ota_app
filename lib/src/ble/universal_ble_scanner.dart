@@ -17,7 +17,7 @@ class UniversalBleScanner extends BleScanner {
   }
 
   final List<String> serviceIds;
-  final _devices = <BleScannedDevice>[];
+  final List<BleScannedDevice> _devices = [];
   bool _scanIsInProgress = false;
 
   @override
