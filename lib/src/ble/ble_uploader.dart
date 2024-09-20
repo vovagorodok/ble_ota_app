@@ -148,7 +148,7 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
   }
 
   void _unsubscribe() {
-    _bleSerial.stopNotifications(); // TODO: is deleted in WEB?
+    _bleSerial.stopNotifications();
     _subscription?.cancel();
   }
 }

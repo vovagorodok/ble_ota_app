@@ -11,6 +11,7 @@
     "ManufacturesDictionaryLink": "Ссылка на словарь производителей",
     "MaxMtuSize": "Максимальный размер MTU",
     "ThisDeviceDoesNotSupportBluetooth": "Это устройство не поддерживает Bluetooth",
+    "ThisBrowserDoesNotSupportBluetooth": "Этот браузер не поддерживает Bluetooth",
     "AuthorizeApplicationToUseBluetoothAndLocation": "Разрешите приложению использовать Bluetooth и геолокацию",
     "BluetoothIsDisabledTurnItOn": "Bluetooth отключен, включите его",
     "LocationServicesAreDisabledEnableThem": "Службы геолокации отключены, включите их",

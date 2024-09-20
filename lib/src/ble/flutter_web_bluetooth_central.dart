@@ -7,8 +7,8 @@ class FlutterWebBluetoothCentral extends BleCentral {
   FlutterWebBluetoothCentral()
       : _status = FlutterWebBluetooth.instance.isBluetoothApiSupported
             ? BleCentralStatus.unknown
-            : BleCentralStatus.unsupported {
-    if (_status == BleCentralStatus.unsupported) return;
+            : BleCentralStatus.unsupportedBrowser {
+    if (_status == BleCentralStatus.unsupportedBrowser) return;
     FlutterWebBluetooth.instance.isAvailable.listen(_updateState);
   }
 

@@ -11,6 +11,7 @@
     "ManufacturesDictionaryLink": "Посилання на словник виробників",
     "MaxMtuSize": "Максимальний розмір MTU",
     "ThisDeviceDoesNotSupportBluetooth": "Цей пристрій не підтримує Bluetooth",
+    "ThisBrowserDoesNotSupportBluetooth": "Цей браузер не підтримує Bluetooth",
     "AuthorizeApplicationToUseBluetoothAndLocation": "Авторизуйте програму для використання Bluetooth і розташування",
     "BluetoothIsDisabledTurnItOn": "Bluetooth вимкнено, увімкніть його",
     "LocationServicesAreDisabledEnableThem": "Служби локації вимкнено, увімкніть їх",

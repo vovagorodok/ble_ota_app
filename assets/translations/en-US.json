@@ -11,6 +11,7 @@
     "ManufacturesDictionaryLink": "Manufactures dictionary link",
     "MaxMtuSize": "Maximum MTU size",
     "ThisDeviceDoesNotSupportBluetooth": "This device does not support Bluetooth",
+    "ThisBrowserDoesNotSupportBluetooth": "This browser does not support Bluetooth",
     "AuthorizeApplicationToUseBluetoothAndLocation": "Authorize application to use Bluetooth and location",
     "BluetoothIsDisabledTurnItOn": "Bluetooth is disabled, turn it on",
     "LocationServicesAreDisabledEnableThem": "Location services are disabled, enable them",

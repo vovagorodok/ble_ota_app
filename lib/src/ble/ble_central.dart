@@ -6,9 +6,9 @@ abstract class BleCentral extends StatefulNotifier<BleCentralStatus> {
 }
 
 enum BleCentralStatus {
-  // TODO: Add unsupportedBrowser
   unknown,
   unsupported,
+  unsupportedBrowser,
   unauthorized,
   poweredOff,
   locationServicesDisabled,

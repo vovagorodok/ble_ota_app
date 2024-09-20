@@ -18,6 +18,8 @@ class StatusScreenState extends State<StatusScreen> {
     switch (status) {
       case BleCentralStatus.unsupported:
         return tr('ThisDeviceDoesNotSupportBluetooth');
+      case BleCentralStatus.unsupportedBrowser:
+        return tr('ThisBrowserDoesNotSupportBluetooth');
       case BleCentralStatus.unauthorized:
         return tr('AuthorizeApplicationToUseBluetoothAndLocation');
       case BleCentralStatus.poweredOff:
@@ -35,6 +37,8 @@ class StatusScreenState extends State<StatusScreen> {
     switch (status) {
       case BleCentralStatus.unsupported:
         return Icons.bluetooth_disabled_rounded;
+      case BleCentralStatus.unsupportedBrowser:
+        return Icons.browser_not_supported_rounded;
       case BleCentralStatus.unauthorized:
         return Icons.person_off_rounded;
       case BleCentralStatus.poweredOff:

@@ -11,6 +11,7 @@
     "ManufacturesDictionaryLink": "Link do słownika producentów",
     "MaxMtuSize": "Maksymalny rozmiar MTU",
     "ThisDeviceDoesNotSupportBluetooth": "To urządzenie nie obsługuje Bluetooth",
+    "ThisBrowserDoesNotSupportBluetooth": "Ta przeglądarka nie obsługuje Bluetooth",
     "AuthorizeApplicationToUseBluetoothAndLocation": "Autoryzuj aplikację do korzystania z Bluetooth i lokalizacji",
     "BluetoothIsDisabledTurnItOn": "Bluetooth jest wyłączony, włącz go",
     "LocationServicesAreDisabledEnableThem": "Usługi lokalizacyjne są wyłączone, włącz je",
