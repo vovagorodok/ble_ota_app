@@ -15,10 +15,6 @@ class UniversalBleConnector extends BaseBleConnector {
       if (deviceId != this.deviceId) return;
       if (isConnected) return;
       _updateConnectorStatus(BleConnectorStatus.disconnected);
-      // Library require discover services bifore use
-      // _updateConnectorStatus(isConnected
-      //     ? BleConnectorStatus.connected
-      //     : BleConnectorStatus.disconnected);
     };
   }
 
