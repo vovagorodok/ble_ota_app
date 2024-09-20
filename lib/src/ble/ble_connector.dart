@@ -9,7 +9,7 @@ abstract class BleConnector extends StatefulNotifier<BleConnectorStatus> {
   Future<void> connect();
   Future<void> disconnect();
   Future<void> scanAndConnect({Duration duration});
-  // TODO: Add discoverServices()
+  Future<List<String>> discoverServices();
 
   BleMtu createMtu();
   BleCharacteristic createCharacteristic(

@@ -41,6 +41,13 @@ class FlutterWebBluetoothConnector extends BaseBleConnector {
   }
 
   @override
+  Future<List<String>> discoverServices() async {
+    return (await device.discoverServices())
+        .map((service) => service.uuid)
+        .toList();
+  }
+
+  @override
   BleMtu createMtu() {
     return FlutterWebBluetoothMtu();
   }

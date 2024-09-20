@@ -58,6 +58,13 @@ class FlutterReactiveBleConnector extends BaseBleConnector {
   }
 
   @override
+  Future<List<String>> discoverServices() async {
+    return (await backend.getDiscoveredServices(deviceId))
+        .map((service) => service.id.toString())
+        .toList();
+  }
+
+  @override
   BleMtu createMtu() {
     return FlutterReactiveBleMtu(backend: backend, deviceId: deviceId);
   }

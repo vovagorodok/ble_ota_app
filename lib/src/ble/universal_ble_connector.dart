@@ -43,6 +43,13 @@ class UniversalBleConnector extends BaseBleConnector {
       {Duration duration = const Duration(seconds: 2)}) async {}
 
   @override
+  Future<List<String>> discoverServices() async {
+    return (await backend.UniversalBle.discoverServices(deviceId))
+        .map((service) => service.uuid)
+        .toList();
+  }
+
+  @override
   BleMtu createMtu() {
     return UniversalBleMtu(deviceId: deviceId);
   }

@@ -44,6 +44,11 @@ class BluetoothLowEnergyConnector extends BaseBleConnector {
   }
 
   @override
+  Future<List<String>> discoverServices() async {
+    return _services!.map((service) => service.uuid.toString()).toList();
+  }
+
+  @override
   BleMtu createMtu() {
     return BluetoothLowEnergyMtu(backend: backend, peripheral: peripheral);
   }
