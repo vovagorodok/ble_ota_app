@@ -13,4 +13,7 @@ class BluetoothLowEnergyMtu extends BleMtu {
   Future<int> request(int mtu) async {
     return await backend.requestMTU(peripheral, mtu: mtu);
   }
+
+  @override
+  bool isSupported() => true;
 }

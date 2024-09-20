@@ -9,4 +9,7 @@ class FlutterWebBluetoothMtu extends BleMtu {
   Future<int> request(int mtu) async {
     return mtu;
   }
+
+  @override
+  bool isSupported() => false;
 }

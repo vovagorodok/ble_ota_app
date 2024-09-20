@@ -12,4 +12,7 @@ class UniversalBleMtu extends BleMtu {
   Future<int> request(int mtu) async {
     return await UniversalBle.requestMtu(deviceId, mtu);
   }
+
+  @override
+  bool isSupported() => true;
 }

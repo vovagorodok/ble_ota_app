@@ -13,4 +13,7 @@ class FlutterReactiveBleMtu extends BleMtu {
   Future<int> request(int mtu) async {
     return await backend.requestMtu(deviceId: deviceId, mtu: mtu);
   }
+
+  @override
+  bool isSupported() => true;
 }
