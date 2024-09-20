@@ -19,27 +19,26 @@ class BluetoothLowEnergyConnector extends BaseBleConnector {
   final CentralManager backend;
   final List<UUID> serviceIds;
   final Peripheral peripheral;
-  BleConnectorStatus _state = BleConnectorStatus.disconnected;
+  BleConnectorStatus _status = BleConnectorStatus.disconnected;
+  List<GATTService>? _services;
 
   @override
-  BleConnectorStatus get state => _state;
+  BleConnectorStatus get state => _status;
 
   @override
   Future<void> connect() async {
-    // _updateConnectorStatus(BleConnectorStatus.connecting);
+    _updateConnectorStatus(BleConnectorStatus.connecting);
     await backend.connect(peripheral);
   }
 
   @override
   Future<void> disconnect() async {
-    // _updateConnectorStatus(BleConnectorStatus.disconnecting);
     await backend.disconnect(peripheral);
   }
 
   @override
   Future<void> scanAndConnect(
       {Duration duration = const Duration(seconds: 2)}) async {
-    _updateConnectorStatus(BleConnectorStatus.scanning);
     await Future.delayed(duration);
     await connect();
   }
@@ -54,24 +53,35 @@ class BluetoothLowEnergyConnector extends BaseBleConnector {
       String serviceId, String characteristicId) {
     return BluetoothLowEnergyCharacteristic(
         backend: backend,
+        connector: this,
         peripheral: peripheral,
         serviceId: UUID.fromString(serviceId),
         characteristicId: UUID.fromString(characteristicId));
   }
 
+  GATTCharacteristic? getCharacteristic(UUID serviceId, UUID characteristicId) {
+    if (_status != BleConnectorStatus.connected) return null;
+    final service = _services!.firstWhere((d) => d.uuid == serviceId);
+    return service.characteristics
+        .firstWhere((d) => d.uuid == characteristicId);
+  }
+
   void _updateState(PeripheralConnectionStateChangedEventArgs update) {
     if (update.peripheral != peripheral) return;
-    _updateConnectorStatus(_convertToConnecorStatus(update.state));
+
+    if (update.state == ConnectionState.connected) {
+      backend.discoverGATT(peripheral).then((services) {
+        _services = services;
+        _updateConnectorStatus(BleConnectorStatus.connected);
+      });
+    } else {
+      _updateConnectorStatus(BleConnectorStatus.disconnected);
+      _services = null;
+    }
   }
 
   void _updateConnectorStatus(BleConnectorStatus status) {
-    _state = status;
-    notifyState(_state);
-  }
-
-  static BleConnectorStatus _convertToConnecorStatus(ConnectionState state) {
-    return state == ConnectionState.connected
-        ? BleConnectorStatus.connected
-        : BleConnectorStatus.disconnected;
+    _status = status;
+    notifyState(_status);
   }
 }

@@ -3,45 +3,47 @@ import 'dart:typed_data';
 
 import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
+import 'package:ble_ota_app/src/ble/bluetooth_low_energy_connector.dart';
 
 class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
   BluetoothLowEnergyCharacteristic(
       {required this.backend,
+      required this.connector,
       required this.peripheral,
       required this.serviceId,
       required this.characteristicId});
 
   final CentralManager backend;
+  final BluetoothLowEnergyConnector connector;
   final Peripheral peripheral;
   final UUID serviceId;
   final UUID characteristicId;
   StreamSubscription? _subscription;
-  GATTCharacteristic? _characteristic;
 
   @override
   Future<Uint8List> read() async {
-    final characteristic = await _getCharacteristic();
-    return await backend.readCharacteristic(peripheral, characteristic);
+    final characteristic = _getCharacteristic();
+    return await backend.readCharacteristic(peripheral, characteristic!);
   }
 
   @override
   Future<void> write(Uint8List data) async {
-    final characteristic = await _getCharacteristic();
-    await backend.writeCharacteristic(peripheral, characteristic,
+    final characteristic = _getCharacteristic();
+    await backend.writeCharacteristic(peripheral, characteristic!,
         value: data, type: GATTCharacteristicWriteType.withResponse);
   }
 
   @override
   Future<void> writeWithoutResponse(Uint8List data) async {
-    final characteristic = await _getCharacteristic();
-    await backend.writeCharacteristic(peripheral, characteristic,
+    final characteristic = _getCharacteristic();
+    await backend.writeCharacteristic(peripheral, characteristic!,
         value: data, type: GATTCharacteristicWriteType.withoutResponse);
   }
 
   @override
   Future<void> startNotifications() async {
-    final characteristic = await _getCharacteristic();
-    await backend.setCharacteristicNotifyState(peripheral, characteristic,
+    final characteristic = _getCharacteristic();
+    await backend.setCharacteristicNotifyState(peripheral, characteristic!,
         state: true);
     _subscription = backend.characteristicNotified.listen((data) {
       if (data.peripheral.uuid != peripheral.uuid ||
@@ -52,22 +54,13 @@ class BluetoothLowEnergyCharacteristic extends BleCharacteristic {
 
   @override
   Future<void> stopNotifications() async {
-    final characteristic = await _getCharacteristic();
-    await backend.setCharacteristicNotifyState(peripheral, characteristic,
+    final characteristic = _getCharacteristic();
+    await backend.setCharacteristicNotifyState(peripheral, characteristic!,
         state: false);
     await _subscription?.cancel();
   }
 
-  Future<GATTCharacteristic> _getCharacteristic() async {
-    // Library internal exception when writing large amount of data quickly
-    Future.delayed(const Duration(milliseconds: 10));
-    if (_characteristic == null) {
-      final services = await backend.discoverGATT(peripheral);
-      final service = services.firstWhere((d) => d.uuid == serviceId);
-      final characteristic =
-          service.characteristics.firstWhere((d) => d.uuid == characteristicId);
-      _characteristic = characteristic;
-    }
-    return _characteristic!;
+  GATTCharacteristic? _getCharacteristic() {
+    return connector.getCharacteristic(serviceId, characteristicId);
   }
 }
