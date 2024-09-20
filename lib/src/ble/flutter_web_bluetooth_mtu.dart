@@ -11,5 +11,5 @@ class FlutterWebBluetoothMtu extends BleMtu {
   }
 
   @override
-  bool isSupported() => false;
+  bool get isSupported => false;
 }

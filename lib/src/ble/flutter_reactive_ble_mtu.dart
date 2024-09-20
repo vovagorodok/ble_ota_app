@@ -15,5 +15,5 @@ class FlutterReactiveBleMtu extends BleMtu {
   }
 
   @override
-  bool isSupported() => true;
+  bool get isSupported => true;
 }

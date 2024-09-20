@@ -56,7 +56,7 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
 
   Future<int> _calcPackageMaxSize() async {
     final maxMtu = maxMtuSize.value.toInt();
-    final mtu = _bleMtu.isSupported() ? await _bleMtu.request(maxMtu) : maxMtu;
+    final mtu = _bleMtu.isSupported ? await _bleMtu.request(maxMtu) : maxMtu;
     return mtu - mtuWriteOverheadBytesNum - headCodeBytesNum;
   }
 
