@@ -14,9 +14,9 @@ class BluetoothLowEnergyPeripheral extends BlePeripheral {
   @override
   String get id => device.peripheral.uuid.toString();
   @override
-  String get name => device.advertisement.name ?? "";
+  String? get name => device.advertisement.name;
   @override
-  int get rssi => device.rssi;
+  int? get rssi => device.rssi;
 
   @override
   BleConnector createConnector() {

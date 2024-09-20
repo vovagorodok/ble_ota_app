@@ -11,9 +11,9 @@ class FlutterWebBluetoothPeripheral extends BlePeripheral {
   @override
   String get id => device.id;
   @override
-  String get name => device.name ?? "";
+  String? get name => device.name;
   @override
-  int get rssi => 0;
+  int? get rssi => null;
 
   @override
   BleConnector createConnector() {

@@ -12,9 +12,9 @@ class UniversalBlePeripheral extends BlePeripheral {
   @override
   String get id => device.deviceId;
   @override
-  String get name => device.name ?? "";
+  String? get name => device.name;
   @override
-  int get rssi => device.rssi ?? 0;
+  int? get rssi => device.rssi;
 
   @override
   BleConnector createConnector() {

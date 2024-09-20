@@ -16,9 +16,9 @@ class FlutterReactiveBlePeripheral extends BlePeripheral {
   @override
   String get id => discoveredDevice.id;
   @override
-  String get name => discoveredDevice.name;
+  String? get name => discoveredDevice.name;
   @override
-  int get rssi => discoveredDevice.rssi;
+  int? get rssi => discoveredDevice.rssi;
 
   @override
   BleConnector createConnector() {

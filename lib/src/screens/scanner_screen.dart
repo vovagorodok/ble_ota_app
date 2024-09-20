@@ -60,8 +60,8 @@ class ScannerScreenState extends State<ScannerScreen> {
 
   Widget _buildDeviceCard(device) => Card(
         child: ListTile(
-          title: Text(device.name),
-          subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
+          title: Text(device.name ?? ''),
+          subtitle: Text("${device.id}\nRSSI: ${device.rssi ?? ''}"),
           leading: const Icon(Icons.bluetooth_rounded),
           onTap: () async {
             _stopScan();

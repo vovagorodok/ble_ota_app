@@ -421,7 +421,7 @@ class UploadScreenState extends State<UploadScreen> {
   Widget build(BuildContext context) => Scaffold(
         primary: MediaQuery.of(context).orientation == Orientation.portrait,
         appBar: AppBar(
-          title: Text(blePeripheral.name),
+          title: Text(blePeripheral.name ?? ''),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),

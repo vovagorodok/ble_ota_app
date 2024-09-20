@@ -174,7 +174,7 @@ class PinScreenState extends State<PinScreen> {
   Widget build(BuildContext context) => Scaffold(
         primary: MediaQuery.of(context).orientation == Orientation.portrait,
         appBar: AppBar(
-          title: Text(widget.blePeripheral.name),
+          title: Text(widget.blePeripheral.name ?? ''),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
