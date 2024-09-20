@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble_peripheral.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
@@ -13,7 +11,7 @@ class FlutterReactiveBlePeripheral extends BlePeripheral {
 
   final FlutterReactiveBle backend;
   final List<Uuid> serviceIds;
-  DiscoveredDevice discoveredDevice;
+  final DiscoveredDevice discoveredDevice;
 
   @override
   String get id => discoveredDevice.id;
@@ -23,7 +21,7 @@ class FlutterReactiveBlePeripheral extends BlePeripheral {
   int get rssi => discoveredDevice.rssi;
 
   @override
-  Future<BleConnector> createConnector() async {
+  BleConnector createConnector() {
     return FlutterReactiveBleConnector(
         backend: backend, deviceId: id, serviceIds: serviceIds);
   }

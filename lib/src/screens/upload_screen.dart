@@ -10,21 +10,19 @@ import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ota/uploader.dart';
 import 'package:ble_ota_app/src/ota/info_reader.dart';
-import 'package:ble_ota_app/src/ble/ble.dart';
-import 'package:ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/ble/ble_peripheral.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/screens/pin_screen.dart';
 import 'package:ble_ota_app/src/screens/info_screen.dart';
 
 class UploadScreen extends StatefulWidget {
-  UploadScreen({required this.deviceId, required this.deviceName, super.key})
-      : bleConnector = bleCentral.createConnector(deviceId, [serviceUuid]),
-        uploader = Uploader(bleCentral: bleCentral, deviceId: deviceId),
-        infoReader = InfoReader(bleCentral: bleCentral, deviceId: deviceId);
+  UploadScreen(
+      {required this.blePeripheral, required this.bleConnector, super.key})
+      : uploader = Uploader(bleConnector: bleConnector),
+        infoReader = InfoReader(bleConnector: bleConnector);
 
-  final String deviceId;
-  final String deviceName;
+  final BlePeripheral blePeripheral;
   final BleConnector bleConnector;
   final Uploader uploader;
   final InfoReader infoReader;
@@ -36,6 +34,7 @@ class UploadScreen extends StatefulWidget {
 class UploadScreenState extends State<UploadScreen> {
   late List<StreamSubscription> _subscriptions;
 
+  BlePeripheral get blePeripheral => widget.blePeripheral;
   BleConnector get bleConnector => widget.bleConnector;
   Uploader get uploader => widget.uploader;
   InfoReader get infoReader => widget.infoReader;
@@ -422,7 +421,7 @@ class UploadScreenState extends State<UploadScreen> {
   Widget build(BuildContext context) => Scaffold(
         primary: MediaQuery.of(context).orientation == Orientation.portrait,
         appBar: AppBar(
-          title: Text(widget.deviceName),
+          title: Text(blePeripheral.name),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
@@ -440,8 +439,8 @@ class UploadScreenState extends State<UploadScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PinScreen(
-                            deviceId: widget.deviceId,
-                            deviceName: widget.deviceName,
+                            blePeripheral: blePeripheral,
+                            bleConnector: bleConnector,
                           ),
                         ),
                       )

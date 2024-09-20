@@ -7,13 +7,13 @@ import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
-import 'package:ble_ota_app/src/ble/ble_central.dart';
+import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_serial.dart';
 
 class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
-  BlePinChanger({required BleCentral bleCentral, required String deviceId})
-      : _bleSerial = bleCentral.createSerial(
-            deviceId, serviceUuid, characteristicUuidRx, characteristicUuidTx);
+  BlePinChanger({required BleConnector bleConnector})
+      : _bleSerial = bleConnector.createSerial(
+            serviceUuid, characteristicUuidRx, characteristicUuidTx);
 
   final BleSerial _bleSerial;
   StreamSubscription? _subscription;

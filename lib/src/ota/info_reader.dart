@@ -3,14 +3,13 @@ import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/state_notifier.dart';
-import 'package:ble_ota_app/src/ble/ble_central.dart';
+import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/http/http_info_reader.dart';
 
 class InfoReader extends StatefulNotifier<InfoState> {
-  InfoReader({required BleCentral bleCentral, required String deviceId})
-      : _bleInfoReader =
-            BleInfoReader(bleCentral: bleCentral, deviceId: deviceId),
+  InfoReader({required BleConnector bleConnector})
+      : _bleInfoReader = BleInfoReader(bleConnector: bleConnector),
         _httpInfoReader = HttpInfoReader() {
     _bleInfoReader.stateStream.listen(_onDeviceInfoStateChanged);
     _httpInfoReader.stateStream.listen(_onRemoteInfoStateChanged);

@@ -4,21 +4,21 @@ import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/version.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
-import 'package:ble_ota_app/src/ble/ble_central.dart';
+import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
 
 class BleInfoReader extends StatefulNotifier<DeviceInfoState> {
-  BleInfoReader({required BleCentral bleCentral, required String deviceId})
-      : _characteristicManufactureName = bleCentral.createCharacteristic(
-            deviceId, serviceUuid, characteristicUuidManufactureName),
-        _characteristicHardwareName = bleCentral.createCharacteristic(
-            deviceId, serviceUuid, characteristicUuidHardwareName),
-        _characteristicHardwareVersion = bleCentral.createCharacteristic(
-            deviceId, serviceUuid, characteristicUuidHardwareVersion),
-        _characteristicSoftwareName = bleCentral.createCharacteristic(
-            deviceId, serviceUuid, characteristicUuidSoftwareName),
-        _characteristicSoftwareVersion = bleCentral.createCharacteristic(
-            deviceId, serviceUuid, characteristicUuidSoftwareVersion);
+  BleInfoReader({required BleConnector bleConnector})
+      : _characteristicManufactureName = bleConnector.createCharacteristic(
+            serviceUuid, characteristicUuidManufactureName),
+        _characteristicHardwareName = bleConnector.createCharacteristic(
+            serviceUuid, characteristicUuidHardwareName),
+        _characteristicHardwareVersion = bleConnector.createCharacteristic(
+            serviceUuid, characteristicUuidHardwareVersion),
+        _characteristicSoftwareName = bleConnector.createCharacteristic(
+            serviceUuid, characteristicUuidSoftwareName),
+        _characteristicSoftwareVersion = bleConnector.createCharacteristic(
+            serviceUuid, characteristicUuidSoftwareVersion);
 
   final BleCharacteristic _characteristicManufactureName;
   final BleCharacteristic _characteristicHardwareName;

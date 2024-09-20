@@ -2,8 +2,13 @@ import 'dart:async';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
+import 'package:ble_ota_app/src/ble/base_ble_connector.dart';
+import 'package:ble_ota_app/src/ble/ble_mtu.dart';
+import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
+import 'package:ble_ota_app/src/ble/flutter_reactive_ble_mtu.dart';
+import 'package:ble_ota_app/src/ble/flutter_reactive_ble_characteristic.dart';
 
-class FlutterReactiveBleConnector extends BleConnector {
+class FlutterReactiveBleConnector extends BaseBleConnector {
   FlutterReactiveBleConnector(
       {required this.backend,
       required this.deviceId,
@@ -50,6 +55,21 @@ class FlutterReactiveBleConnector extends BleConnector {
           onError: (Object e) =>
               _updateConnectorStatus(BleConnectorStatus.disconnected),
         );
+  }
+
+  @override
+  BleMtu createMtu() {
+    return FlutterReactiveBleMtu(backend: backend, deviceId: deviceId);
+  }
+
+  @override
+  BleCharacteristic createCharacteristic(
+      String serviceId, String characteristicId) {
+    return FlutterReactiveBleCharacteristic(
+        backend: backend,
+        deviceId: deviceId,
+        serviceId: Uuid.parse(serviceId),
+        characteristicId: Uuid.parse(characteristicId));
   }
 
   void _updateState(ConnectionStateUpdate update) {

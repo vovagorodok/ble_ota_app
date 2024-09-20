@@ -1,11 +1,17 @@
 import 'dart:async';
 
-import 'package:universal_ble/universal_ble.dart';
+import 'package:universal_ble/universal_ble.dart' as backend;
+import 'package:ble_ota_app/src/ble/base_ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_connector.dart';
+import 'package:ble_ota_app/src/ble/ble_mtu.dart';
+import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
+import 'package:ble_ota_app/src/ble/universal_ble_mtu.dart';
+import 'package:ble_ota_app/src/ble/universal_ble_characteristic.dart';
 
-class UniversalBleConnector extends BleConnector {
+class UniversalBleConnector extends BaseBleConnector {
   UniversalBleConnector({required this.deviceId, required this.serviceIds}) {
-    UniversalBle.onConnectionChange = (String deviceId, bool isConnected) {
+    backend.UniversalBle.onConnectionChange =
+        (String deviceId, bool isConnected) {
       if (deviceId != this.deviceId) return;
       if (isConnected) return;
       _updateConnectorStatus(BleConnectorStatus.disconnected);
@@ -25,20 +31,34 @@ class UniversalBleConnector extends BleConnector {
 
   @override
   Future<void> connect() async {
-    if (!await UniversalBle.connect(deviceId)) return;
-    await UniversalBle.discoverServices(deviceId);
+    if (!await backend.UniversalBle.connect(deviceId)) return;
+    await backend.UniversalBle.discoverServices(deviceId);
     _updateConnectorStatus(BleConnectorStatus.connected);
   }
 
   @override
   Future<void> disconnect() async {
-    await UniversalBle.disconnect(deviceId);
+    await backend.UniversalBle.disconnect(deviceId);
     _updateConnectorStatus(BleConnectorStatus.disconnected);
   }
 
   @override
   Future<void> scanAndConnect(
       {Duration duration = const Duration(seconds: 2)}) async {}
+
+  @override
+  BleMtu createMtu() {
+    return UniversalBleMtu(deviceId: deviceId);
+  }
+
+  @override
+  BleCharacteristic createCharacteristic(
+      String serviceId, String characteristicId) {
+    return UniversalBleCharacteristic(
+        deviceId: deviceId,
+        serviceId: serviceId,
+        characteristicId: characteristicId);
+  }
 
   void _updateConnectorStatus(BleConnectorStatus status) {
     if (_state == status) return;

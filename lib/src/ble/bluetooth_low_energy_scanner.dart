@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_peripheral.dart';
+import 'package:ble_ota_app/src/ble/bluetooth_low_energy_peripheral.dart';
 
 class BluetoothLowEnergyScanner extends BleScanner {
   BluetoothLowEnergyScanner({required this.backend, required this.serviceIds}) {
@@ -10,7 +12,7 @@ class BluetoothLowEnergyScanner extends BleScanner {
 
   final CentralManager backend;
   final List<UUID> serviceIds;
-  final List<BleScannedDevice> _devices = [];
+  final List<BlePeripheral> _devices = [];
   bool _scanIsInProgress = false;
 
   @override
@@ -47,11 +49,11 @@ class BluetoothLowEnergyScanner extends BleScanner {
     notifyState(state);
   }
 
-  static BleScannedDevice _createScannedDevice(DiscoveredEventArgs device) {
-    return BleScannedDevice(
-      id: device.peripheral.uuid.toString(),
-      name: device.advertisement.name ?? "",
-      rssi: device.rssi,
+  BlePeripheral _createScannedDevice(DiscoveredEventArgs device) {
+    return BluetoothLowEnergyPeripheral(
+      backend: backend,
+      serviceIds: serviceIds,
+      device: device,
     );
   }
 }

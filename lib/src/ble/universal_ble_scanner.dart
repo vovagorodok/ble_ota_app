@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:universal_ble/universal_ble.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_peripheral.dart';
+import 'package:ble_ota_app/src/ble/universal_ble_peripheral.dart';
 
 class UniversalBleScanner extends BleScanner {
   UniversalBleScanner({required this.serviceIds}) {
@@ -17,7 +19,7 @@ class UniversalBleScanner extends BleScanner {
   }
 
   final List<String> serviceIds;
-  final List<BleScannedDevice> _devices = [];
+  final List<BlePeripheral> _devices = [];
   bool _scanIsInProgress = false;
 
   @override
@@ -44,11 +46,10 @@ class UniversalBleScanner extends BleScanner {
     notifyState(state);
   }
 
-  BleScannedDevice _createScannedDevice(BleDevice device) {
-    return BleScannedDevice(
-      id: device.deviceId,
-      name: device.name!,
-      rssi: device.rssi!,
+  BlePeripheral _createScannedDevice(BleDevice device) {
+    return UniversalBlePeripheral(
+      device: device,
+      serviceIds: serviceIds,
     );
   }
 }

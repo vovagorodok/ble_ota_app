@@ -1,19 +1,22 @@
 import 'dart:async';
 
-import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
+import 'package:ble_ota_app/src/ble/ble_peripheral.dart';
+import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
 
 class PinScreen extends StatefulWidget {
-  PinScreen({required String deviceId, required this.deviceName, super.key})
-      : blePinChanger =
-            BlePinChanger(bleCentral: bleCentral, deviceId: deviceId);
+  PinScreen(
+      {required this.blePeripheral,
+      required BleConnector bleConnector,
+      super.key})
+      : blePinChanger = BlePinChanger(bleConnector: bleConnector);
 
-  final String deviceName;
+  final BlePeripheral blePeripheral;
   final BlePinChanger blePinChanger;
 
   @override
@@ -171,7 +174,7 @@ class PinScreenState extends State<PinScreen> {
   Widget build(BuildContext context) => Scaffold(
         primary: MediaQuery.of(context).orientation == Orientation.portrait,
         appBar: AppBar(
-          title: Text(widget.deviceName),
+          title: Text(widget.blePeripheral.name),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),

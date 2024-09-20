@@ -1,16 +1,9 @@
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:ble_ota_app/src/ble/base_ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
-import 'package:ble_ota_app/src/ble/ble_connector.dart';
-import 'package:ble_ota_app/src/ble/ble_mtu.dart';
-import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
 import 'package:ble_ota_app/src/ble/flutter_reactive_ble_scanner.dart';
-import 'package:ble_ota_app/src/ble/flutter_reactive_ble_connector.dart';
-import 'package:ble_ota_app/src/ble/flutter_reactive_ble_mtu.dart';
-import 'package:ble_ota_app/src/ble/flutter_reactive_ble_characteristic.dart';
 
-class FlutterReactiveBleCentral extends BaseBleCentral {
+class FlutterReactiveBleCentral extends BleCentral {
   FlutterReactiveBleCentral({required this.backend})
       : _status = _convertToCentralStatus(backend.status) {
     backend.statusStream.listen(_updateState);
@@ -26,29 +19,6 @@ class FlutterReactiveBleCentral extends BaseBleCentral {
   BleScanner createScaner(List<String> serviceIds) {
     return FlutterReactiveBleScanner(
         backend: backend, serviceIds: _convertToUuids(serviceIds));
-  }
-
-  @override
-  BleConnector createConnector(String deviceId, List<String> serviceIds) {
-    return FlutterReactiveBleConnector(
-        backend: backend,
-        deviceId: deviceId,
-        serviceIds: _convertToUuids(serviceIds));
-  }
-
-  @override
-  BleMtu createMtu(String deviceId) {
-    return FlutterReactiveBleMtu(backend: backend, deviceId: deviceId);
-  }
-
-  @override
-  BleCharacteristic createCharacteristic(
-      String deviceId, String serviceId, String characteristicId) {
-    return FlutterReactiveBleCharacteristic(
-        backend: backend,
-        deviceId: deviceId,
-        serviceId: Uuid.parse(serviceId),
-        characteristicId: Uuid.parse(characteristicId));
   }
 
   void _updateState(BleStatus update) {

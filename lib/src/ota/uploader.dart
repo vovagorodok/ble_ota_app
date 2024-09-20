@@ -5,12 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
-import 'package:ble_ota_app/src/ble/ble_central.dart';
+import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 
 class Uploader extends StatefulNotifier<UploadState> {
-  Uploader({required BleCentral bleCentral, required String deviceId})
-      : _bleUploader = BleUploader(bleCentral: bleCentral, deviceId: deviceId) {
+  Uploader({required BleConnector bleConnector})
+      : _bleUploader = BleUploader(bleConnector: bleConnector) {
     _bleUploader.stateStream.listen(_onBleUploadStateChanged);
   }
 

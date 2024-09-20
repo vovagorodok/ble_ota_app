@@ -9,16 +9,16 @@ import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
-import 'package:ble_ota_app/src/ble/ble_central.dart';
+import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_mtu.dart';
 import 'package:ble_ota_app/src/ble/ble_serial.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
 class BleUploader extends StatefulNotifier<BleUploadState> {
-  BleUploader({required BleCentral bleCentral, required String deviceId})
-      : _bleMtu = bleCentral.createMtu(deviceId),
-        _bleSerial = bleCentral.createSerial(
-            deviceId, serviceUuid, characteristicUuidRx, characteristicUuidTx);
+  BleUploader({required BleConnector bleConnector})
+      : _bleMtu = bleConnector.createMtu(),
+        _bleSerial = bleConnector.createSerial(
+            serviceUuid, characteristicUuidRx, characteristicUuidTx);
 
   final BleMtu _bleMtu;
   final BleSerial _bleSerial;

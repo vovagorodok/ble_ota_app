@@ -68,8 +68,10 @@ class ScannerScreenState extends State<ScannerScreen> {
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    UploadScreen(deviceId: device.id, deviceName: device.name),
+                builder: (context) => UploadScreen(
+                  blePeripheral: device,
+                  bleConnector: device.createConnector(),
+                ),
               ),
             );
           },

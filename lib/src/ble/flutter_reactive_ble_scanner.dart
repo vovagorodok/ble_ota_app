@@ -2,13 +2,15 @@ import 'dart:async';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_peripheral.dart';
+import 'package:ble_ota_app/src/ble/flutter_reactive_ble_peripheral.dart';
 
 class FlutterReactiveBleScanner extends BleScanner {
   FlutterReactiveBleScanner({required this.backend, required this.serviceIds});
 
   final FlutterReactiveBle backend;
   final List<Uuid> serviceIds;
-  final List<BleScannedDevice> _devices = [];
+  final List<BlePeripheral> _devices = [];
   StreamSubscription? _subscription;
 
   @override
@@ -46,11 +48,11 @@ class FlutterReactiveBleScanner extends BleScanner {
     notifyState(state);
   }
 
-  static BleScannedDevice _createScannedDevice(DiscoveredDevice device) {
-    return BleScannedDevice(
-      id: device.id,
-      name: device.name,
-      rssi: device.rssi,
+  BlePeripheral _createScannedDevice(DiscoveredDevice device) {
+    return FlutterReactiveBlePeripheral(
+      backend: backend,
+      serviceIds: serviceIds,
+      discoveredDevice: device,
     );
   }
 }
