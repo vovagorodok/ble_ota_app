@@ -6,6 +6,9 @@ import 'package:ble_ota_app/src/ble/flutter_reactive_ble_central.dart';
 import 'package:ble_ota_app/src/ble/flutter_web_bluetooth_central.dart';
 import 'package:ble_ota_app/src/ble/bluetooth_low_energy_central.dart';
 
+final isSequentialUploadRequiredByBleLibrary =
+    !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
+
 final bleCentral = kIsWeb
     ? FlutterWebBluetoothCentral()
     : (Platform.isAndroid || Platform.isIOS)
