@@ -41,6 +41,10 @@ class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
     super.dispose();
   }
 
+  void _send(int head, Uint8List data) {
+    _bleSerial.send(Uint8List.fromList(uint8ToBytes(head) + data));
+  }
+
   void _begin() {
     _bleSerial.startNotifications();
     _subscription = _bleSerial.dataStream
@@ -61,10 +65,6 @@ class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
   void _waitForResponse() {
     _bleSerial.waitData(
         timeoutCallback: () => _raiseError(PinChangeError.noDeviceResponse));
-  }
-
-  void _send(int head, Uint8List data) {
-    _bleSerial.send(Uint8List.fromList(uint8ToBytes(head) + data));
   }
 
   void _handleResp(Uint8List data) {

@@ -58,6 +58,12 @@ class SettingsScreenState extends State<SettingsScreen> {
                 defaultValue: alwaysAllowLocalFilesUpload.defaultValue,
                 showDivider: false,
               ),
+              SwitchSettingsTile(
+                title: tr('SequentialUpload'),
+                settingKey: sequentialUpload.key,
+                defaultValue: sequentialUpload.defaultValue,
+                showDivider: false,
+              ),
               TextInputSettingsTile(
                 title: tr('ManufacturesDictionaryLink'),
                 settingKey: manufacturesDictUrl.key,

@@ -9,8 +9,9 @@ import 'package:ble_ota_app/src/ble/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 
 class Uploader extends StatefulNotifier<UploadState> {
-  Uploader({required BleConnector bleConnector})
-      : _bleUploader = BleUploader(bleConnector: bleConnector) {
+  Uploader({required BleConnector bleConnector, bool sequentialUpload = false})
+      : _bleUploader = BleUploader(
+            bleConnector: bleConnector, sequentialUpload: sequentialUpload) {
     _bleUploader.stateStream.listen(_onBleUploadStateChanged);
   }
 

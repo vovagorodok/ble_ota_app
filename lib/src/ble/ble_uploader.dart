@@ -15,13 +15,16 @@ import 'package:ble_ota_app/src/ble/ble_serial.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
 class BleUploader extends StatefulNotifier<BleUploadState> {
-  BleUploader({required BleConnector bleConnector})
+  BleUploader(
+      {required BleConnector bleConnector, bool sequentialUpload = false})
       : _bleMtu = bleConnector.createMtu(),
         _bleSerial = bleConnector.createSerial(
-            serviceUuid, characteristicUuidRx, characteristicUuidTx);
+            serviceUuid, characteristicUuidRx, characteristicUuidTx),
+        _sequentialUpload = sequentialUpload;
 
   final BleMtu _bleMtu;
   final BleSerial _bleSerial;
+  final bool _sequentialUpload;
   StreamSubscription? _subscription;
   BleUploadState _state = BleUploadState();
   Uint8List _dataToSend = Uint8List(0);
@@ -60,6 +63,10 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
     return mtu - mtuWriteOverheadBytesNum - headCodeBytesNum;
   }
 
+  Future<void> _send(int head, Uint8List data) async {
+    await _bleSerial.send(Uint8List.fromList(uint8ToBytes(head) + data));
+  }
+
   void _raiseError(UploadError error, {int errorCode = 0}) {
     _unsubscribe();
     state.status = BleUploadStatus.error;
@@ -71,10 +78,6 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
   void _waitForResponse() {
     _bleSerial.waitData(
         timeoutCallback: () => _raiseError(UploadError.noDeviceResponse));
-  }
-
-  void _send(int head, Uint8List data) {
-    _bleSerial.send(Uint8List.fromList(uint8ToBytes(head) + data));
   }
 
   void _sendBegin() {
@@ -116,14 +119,16 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
     _bufferMaxSize = bytesToUint32(data, bufferSizePos);
   }
 
-  void _sendPackages() {
+  void _sendPackages() async {
     while (_currentDataPos < _dataToSend.length) {
       final packageSize =
           min(_dataToSend.length - _currentDataPos, _packageMaxSize);
       final packageEndPos = _currentDataPos + packageSize;
+      final package = _dataToSend.sublist(_currentDataPos, packageEndPos);
 
-      _send(HeadCode.package,
-          _dataToSend.sublist(_currentDataPos, packageEndPos));
+      _sequentialUpload
+          ? await _send(HeadCode.package, package)
+          : _send(HeadCode.package, package);
       _currentDataPos = packageEndPos;
 
       state.progress =

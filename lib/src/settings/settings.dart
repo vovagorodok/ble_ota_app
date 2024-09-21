@@ -1,5 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
 
 @immutable
 class Setting<T> {
@@ -25,6 +27,10 @@ const skipInfoReading = Setting<bool>(
 const alwaysAllowLocalFilesUpload = Setting<bool>(
   key: 'key-allow-local-upload',
   defaultValue: false,
+);
+final sequentialUpload = Setting<bool>(
+  key: 'key-sequential-upload',
+  defaultValue: !kIsWeb && !Platform.isAndroid && !Platform.isIOS,
 );
 const manufacturesDictUrl = Setting<String>(
   key: 'key-dict-url',

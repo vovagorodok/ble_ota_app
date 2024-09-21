@@ -27,7 +27,6 @@ class BluetoothLowEnergyConnector extends BaseBleConnector {
 
   @override
   Future<void> connect() async {
-    _updateConnectorStatus(BleConnectorStatus.connecting);
     await backend.connect(peripheral);
   }
 

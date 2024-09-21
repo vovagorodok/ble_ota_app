@@ -19,7 +19,9 @@ import 'package:ble_ota_app/src/screens/info_screen.dart';
 class UploadScreen extends StatefulWidget {
   UploadScreen(
       {required this.blePeripheral, required this.bleConnector, super.key})
-      : uploader = Uploader(bleConnector: bleConnector),
+      : uploader = Uploader(
+            bleConnector: bleConnector,
+            sequentialUpload: sequentialUpload.value),
         infoReader = InfoReader(bleConnector: bleConnector);
 
   final BlePeripheral blePeripheral;

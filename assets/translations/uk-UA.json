@@ -8,6 +8,7 @@
     "DeveloperOptions": "Параметри розробника",
     "SkipInfoReading": "Пропустити читання інформації",
     "AlwaysAllowLocalFilesUpload": "Завжди дозволяти локальне завантаження файлів",
+    "SequentialUpload" : "Послідовне завантаження",
     "ManufacturesDictionaryLink": "Посилання на словник виробників",
     "MaxMtuSize": "Максимальний розмір MTU",
     "ThisDeviceDoesNotSupportBluetooth": "Цей пристрій не підтримує Bluetooth",
