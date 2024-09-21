@@ -39,7 +39,6 @@ class BluetoothLowEnergyConnector extends BaseBleConnector {
   Future<void> scanAndConnect(
       {Duration duration = const Duration(seconds: 2)}) async {
     await Future.delayed(duration);
-    await connect();
   }
 
   @override
