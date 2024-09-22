@@ -40,7 +40,9 @@ class UniversalBleConnector extends BaseBleConnector {
 
   @override
   Future<void> scanAndConnect(
-      {Duration duration = const Duration(seconds: 2)}) async {}
+      {Duration duration = const Duration(seconds: 2)}) async {
+    await Future.delayed(duration);
+  }
 
   @override
   Future<List<String>> discoverServices() async {
