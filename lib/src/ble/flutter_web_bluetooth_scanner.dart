@@ -18,12 +18,12 @@ class FlutterWebBluetoothScanner extends BleScanner {
 
   List<String> serviceIds;
   final List<BlePeripheral> _devices = [];
-  bool _scanIsInProgress = false;
+  bool _isScanInProgress = false;
 
   @override
   BleScannerState get state => BleScannerState(
         devices: _devices,
-        scanIsInProgress: _scanIsInProgress,
+        isScanInProgress: _isScanInProgress,
       );
 
   @override
@@ -33,7 +33,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
     final requestOptions =
         RequestOptionsBuilder([RequestFilterBuilder(services: serviceIds)]);
 
-    _scanIsInProgress = true;
+    _isScanInProgress = true;
     notifyState(state);
 
     try {
@@ -43,7 +43,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
       // ignore: empty_catches
     } on DeviceNotFoundError {}
 
-    _scanIsInProgress = false;
+    _isScanInProgress = false;
     notifyState(state);
   }
 

@@ -54,7 +54,7 @@ class FlutterWebBluetoothConnector extends BaseBleConnector {
 
   @override
   BleCharacteristic createCharacteristic(
-      String serviceId, String characteristicId) {
+      {required String serviceId, required String characteristicId}) {
     return FlutterWebBluetoothCharacteristic(
         device: device,
         serviceId: serviceId,

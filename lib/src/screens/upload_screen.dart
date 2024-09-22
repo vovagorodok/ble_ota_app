@@ -50,7 +50,7 @@ class UploadScreenState extends State<UploadScreen> {
     setState(() {
       if (state == BleConnectorStatus.connected) {
         if (!skipInfoReading.value) {
-          infoReader.read(manufacturesDictUrl.value);
+          infoReader.read(manufacturesDictUrl: manufacturesDictUrl.value);
         }
       }
     });
@@ -127,14 +127,14 @@ class UploadScreenState extends State<UploadScreen> {
     if (result != null) {
       await WakelockPlus.enable();
       result.files.single.bytes == null
-          ? await uploader.uploadLocalFile(result.files.single.path!)
-          : await uploader.uploadBytes(result.files.single.bytes!);
+          ? await uploader.uploadLocalFile(localPath: result.files.single.path!)
+          : await uploader.uploadBytes(bytes: result.files.single.bytes!);
     }
   }
 
   Future<void> _uploadHttpFile(String url) async {
     await WakelockPlus.enable();
-    await uploader.uploadHttpFile(url);
+    await uploader.uploadHttpFile(url: url);
   }
 
   MaterialColor _determinateStatusColor() {

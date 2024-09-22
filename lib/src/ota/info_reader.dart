@@ -23,7 +23,7 @@ class InfoReader extends StatefulNotifier<InfoState> {
   @override
   InfoState get state => _state;
 
-  void read(String manufacturesDictUrl) {
+  void read({required String manufacturesDictUrl}) {
     _manufacturesDictUrl = manufacturesDictUrl;
     _state = InfoState(
       status: WorkStatus.working,

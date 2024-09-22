@@ -9,7 +9,7 @@ class UniversalBleMtu extends BleMtu {
   final String deviceId;
 
   @override
-  Future<int> request(int mtu) async {
+  Future<int> request({required int mtu}) async {
     return await UniversalBle.requestMtu(deviceId, mtu);
   }
 

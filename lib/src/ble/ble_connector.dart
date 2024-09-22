@@ -13,9 +13,11 @@ abstract class BleConnector extends StatefulNotifier<BleConnectorStatus> {
 
   BleMtu createMtu();
   BleCharacteristic createCharacteristic(
-      String serviceId, String characteristicId);
+      {required String serviceId, required String characteristicId});
   BleSerial createSerial(
-      String serviceId, String rxCharacteristicId, String txCharacteristicId);
+      {required String serviceId,
+      required String rxCharacteristicId,
+      required String txCharacteristicId});
 }
 
 enum BleConnectorStatus {

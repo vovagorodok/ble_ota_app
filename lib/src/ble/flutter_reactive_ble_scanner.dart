@@ -16,7 +16,7 @@ class FlutterReactiveBleScanner extends BleScanner {
   @override
   BleScannerState get state => BleScannerState(
         devices: _devices,
-        scanIsInProgress: _subscription != null,
+        isScanInProgress: _subscription != null,
       );
 
   @override

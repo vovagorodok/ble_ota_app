@@ -21,13 +21,13 @@ class UniversalBleCharacteristic extends BleCharacteristic {
   }
 
   @override
-  Future<void> write(Uint8List data) async {
+  Future<void> write({required Uint8List data}) async {
     await backend.UniversalBle.writeValue(deviceId, serviceId, characteristicId,
         data, backend.BleOutputProperty.withResponse);
   }
 
   @override
-  Future<void> writeWithoutResponse(Uint8List data) async {
+  Future<void> writeWithoutResponse({required Uint8List data}) async {
     await backend.UniversalBle.writeValue(deviceId, serviceId, characteristicId,
         data, backend.BleOutputProperty.withoutResponse);
   }

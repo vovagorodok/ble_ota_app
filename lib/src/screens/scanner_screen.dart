@@ -21,7 +21,7 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class ScannerScreenState extends State<ScannerScreen> {
-  final bleScanner = bleCentral.createScaner([serviceUuid]);
+  final bleScanner = bleCentral.createScaner(serviceIds: [serviceUuid]);
   final scanTimer = TimerWrapper();
 
   void _evaluateBleCentralStatus(BleCentralStatus status) {
@@ -80,7 +80,7 @@ class ScannerScreenState extends State<ScannerScreen> {
 
   Widget _buildDevicesList() {
     final devices = bleScanner.state.devices;
-    final additionalElement = bleScanner.state.scanIsInProgress ? 1 : 0;
+    final additionalElement = bleScanner.state.isScanInProgress ? 1 : 0;
 
     return ListView.builder(
       itemCount: devices.length + additionalElement,
@@ -100,13 +100,13 @@ class ScannerScreenState extends State<ScannerScreen> {
   Widget _buildScanButton() => FilledButton.icon(
         icon: const Icon(Icons.search_rounded),
         label: Text(tr('Scan')),
-        onPressed: !bleScanner.state.scanIsInProgress ? _startScan : null,
+        onPressed: !bleScanner.state.isScanInProgress ? _startScan : null,
       );
 
   Widget _buildStopButton() => FilledButton.icon(
         icon: const Icon(Icons.search_off_rounded),
         label: Text(tr('Stop')),
-        onPressed: bleScanner.state.scanIsInProgress ? _stopScan : null,
+        onPressed: bleScanner.state.isScanInProgress ? _stopScan : null,
       );
 
   Widget _buildControlButtons() => SizedBox(

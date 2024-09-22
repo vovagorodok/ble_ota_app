@@ -26,12 +26,12 @@ class FlutterReactiveBleCharacteristic extends BleCharacteristic {
   }
 
   @override
-  Future<void> write(Uint8List data) async {
+  Future<void> write({required Uint8List data}) async {
     await backend.writeCharacteristicWithResponse(_characteristic, value: data);
   }
 
   @override
-  Future<void> writeWithoutResponse(Uint8List data) async {
+  Future<void> writeWithoutResponse({required Uint8List data}) async {
     await backend.writeCharacteristicWithoutResponse(_characteristic,
         value: data);
   }

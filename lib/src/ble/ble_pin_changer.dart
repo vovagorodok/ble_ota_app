@@ -13,7 +13,9 @@ import 'package:ble_ota_app/src/ble/ble_serial.dart';
 class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
   BlePinChanger({required BleConnector bleConnector})
       : _bleSerial = bleConnector.createSerial(
-            serviceUuid, characteristicUuidRx, characteristicUuidTx);
+            serviceId: serviceUuid,
+            rxCharacteristicId: characteristicUuidRx,
+            txCharacteristicId: characteristicUuidTx);
 
   final BleSerial _bleSerial;
   StreamSubscription? _subscription;
@@ -22,7 +24,7 @@ class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
   @override
   BlePinChangeState get state => _state;
 
-  void set(int pin) {
+  void set({required int pin}) {
     _begin();
     _send(HeadCode.setPin, uint32ToBytes(pin));
     _waitForResponse();
@@ -42,7 +44,7 @@ class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
   }
 
   void _send(int head, Uint8List data) {
-    _bleSerial.send(Uint8List.fromList(uint8ToBytes(head) + data));
+    _bleSerial.send(data: Uint8List.fromList(uint8ToBytes(head) + data));
   }
 
   void _begin() {

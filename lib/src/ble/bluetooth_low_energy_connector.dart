@@ -53,7 +53,7 @@ class BluetoothLowEnergyConnector extends BaseBleConnector {
 
   @override
   BleCharacteristic createCharacteristic(
-      String serviceId, String characteristicId) {
+      {required String serviceId, required String characteristicId}) {
     return BluetoothLowEnergyCharacteristic(
         backend: backend,
         connector: this,

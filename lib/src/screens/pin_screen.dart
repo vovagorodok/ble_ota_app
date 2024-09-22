@@ -63,7 +63,7 @@ class PinScreenState extends State<PinScreen> {
   }
 
   void _setPin() {
-    blePinChanger.set(_pin!);
+    blePinChanger.set(pin: _pin!);
   }
 
   void _removePin() {

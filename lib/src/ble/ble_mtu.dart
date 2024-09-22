@@ -2,5 +2,5 @@ import 'dart:async';
 
 abstract class BleMtu {
   bool get isSupported;
-  Future<int> request(int mtu);
+  Future<int> request({required int mtu});
 }

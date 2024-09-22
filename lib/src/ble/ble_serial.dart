@@ -22,8 +22,8 @@ class BleSerial extends DataNotifier<Uint8List> {
   final _responseGuard = TimerWrapper();
   StreamSubscription? _subscription;
 
-  Future<void> send(Uint8List data) async {
-    await _characteristicRx.writeWithoutResponse(data);
+  Future<void> send({required Uint8List data}) async {
+    await _characteristicRx.writeWithoutResponse(data: data);
   }
 
   void waitData(

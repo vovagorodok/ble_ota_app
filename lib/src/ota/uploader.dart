@@ -21,23 +21,23 @@ class Uploader extends StatefulNotifier<UploadState> {
   @override
   UploadState get state => _state;
 
-  Future<void> uploadBytes(Uint8List bytes) async {
+  Future<void> uploadBytes({required Uint8List bytes}) async {
     _state = UploadState(status: WorkStatus.working);
     notifyState(state);
 
-    await _bleUploader.upload(bytes);
+    await _bleUploader.upload(data: bytes);
   }
 
-  Future<void> uploadLocalFile(String localPath) async {
+  Future<void> uploadLocalFile({required String localPath}) async {
     _state = UploadState(status: WorkStatus.working);
     notifyState(state);
 
     File file = File(localPath);
     final data = await file.readAsBytes();
-    await _bleUploader.upload(data);
+    await _bleUploader.upload(data: data);
   }
 
-  Future<void> uploadHttpFile(String url) async {
+  Future<void> uploadHttpFile({required String url}) async {
     try {
       _state = UploadState(status: WorkStatus.working);
       notifyState(state);
@@ -51,7 +51,7 @@ class Uploader extends StatefulNotifier<UploadState> {
         return;
       }
 
-      await _bleUploader.upload(response.bodyBytes);
+      await _bleUploader.upload(data: response.bodyBytes);
     } catch (_) {
       _raiseError(UploadError.generalNetworkError);
     }

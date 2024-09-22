@@ -10,15 +10,20 @@ import 'package:ble_ota_app/src/ble/ble_characteristic.dart';
 class BleInfoReader extends StatefulNotifier<DeviceInfoState> {
   BleInfoReader({required BleConnector bleConnector})
       : _characteristicManufactureName = bleConnector.createCharacteristic(
-            serviceUuid, characteristicUuidManufactureName),
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidManufactureName),
         _characteristicHardwareName = bleConnector.createCharacteristic(
-            serviceUuid, characteristicUuidHardwareName),
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidHardwareName),
         _characteristicHardwareVersion = bleConnector.createCharacteristic(
-            serviceUuid, characteristicUuidHardwareVersion),
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidHardwareVersion),
         _characteristicSoftwareName = bleConnector.createCharacteristic(
-            serviceUuid, characteristicUuidSoftwareName),
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidSoftwareName),
         _characteristicSoftwareVersion = bleConnector.createCharacteristic(
-            serviceUuid, characteristicUuidSoftwareVersion);
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidSoftwareVersion);
 
   final BleCharacteristic _characteristicManufactureName;
   final BleCharacteristic _characteristicHardwareName;

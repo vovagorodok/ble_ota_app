@@ -13,9 +13,9 @@ abstract class BleScanner extends StatefulNotifier<BleScannerState> {
 class BleScannerState {
   const BleScannerState({
     required this.devices,
-    required this.scanIsInProgress,
+    required this.isScanInProgress,
   });
 
   final List<BlePeripheral> devices;
-  final bool scanIsInProgress;
+  final bool isScanInProgress;
 }

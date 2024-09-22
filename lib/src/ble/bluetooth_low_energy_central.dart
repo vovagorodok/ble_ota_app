@@ -16,7 +16,7 @@ class BluetoothLowEnergyCentral extends BleCentral {
   BleCentralStatus get state => _status;
 
   @override
-  BleScanner createScaner(List<String> serviceIds) {
+  BleScanner createScaner({required List<String> serviceIds}) {
     return BluetoothLowEnergyScanner(
         backend: backend, serviceIds: _convertToUuids(serviceIds));
   }

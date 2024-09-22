@@ -13,26 +13,26 @@ class BluetoothLowEnergyScanner extends BleScanner {
   final CentralManager backend;
   final List<UUID> serviceIds;
   final List<BlePeripheral> _devices = [];
-  bool _scanIsInProgress = false;
+  bool _isScanInProgress = false;
 
   @override
   BleScannerState get state => BleScannerState(
         devices: _devices,
-        scanIsInProgress: _scanIsInProgress,
+        isScanInProgress: _isScanInProgress,
       );
 
   @override
   Future<void> scan() async {
     _devices.clear();
-    _scanIsInProgress = true;
+    _isScanInProgress = true;
     await backend.startDiscovery(serviceUUIDs: serviceIds);
     notifyState(state);
   }
 
   @override
   Future<void> stop() async {
-    if (!_scanIsInProgress) return;
-    _scanIsInProgress = false;
+    if (!_isScanInProgress) return;
+    _isScanInProgress = false;
     await backend.stopDiscovery();
     notifyState(state);
   }

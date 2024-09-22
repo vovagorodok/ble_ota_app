@@ -20,12 +20,12 @@ class UniversalBleScanner extends BleScanner {
 
   final List<String> serviceIds;
   final List<BlePeripheral> _devices = [];
-  bool _scanIsInProgress = false;
+  bool _isScanInProgress = false;
 
   @override
   BleScannerState get state => BleScannerState(
         devices: _devices,
-        scanIsInProgress: _scanIsInProgress,
+        isScanInProgress: _isScanInProgress,
       );
 
   @override
@@ -35,14 +35,14 @@ class UniversalBleScanner extends BleScanner {
         scanFilter: ScanFilter(
       withServices: serviceIds,
     ));
-    _scanIsInProgress = true;
+    _isScanInProgress = true;
     notifyState(state);
   }
 
   @override
   Future<void> stop() async {
     await UniversalBle.stopScan();
-    _scanIsInProgress = false;
+    _isScanInProgress = false;
     notifyState(state);
   }
 

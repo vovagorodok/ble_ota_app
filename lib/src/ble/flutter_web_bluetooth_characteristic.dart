@@ -22,13 +22,13 @@ class FlutterWebBluetoothCharacteristic extends BleCharacteristic {
   }
 
   @override
-  Future<void> write(Uint8List data) async {
+  Future<void> write({required Uint8List data}) async {
     final characteristic = await _getCharacteristic();
     await characteristic.writeValueWithResponse(data);
   }
 
   @override
-  Future<void> writeWithoutResponse(Uint8List data) async {
+  Future<void> writeWithoutResponse({required Uint8List data}) async {
     final characteristic = await _getCharacteristic();
     await characteristic.writeValueWithoutResponse(data);
   }

@@ -19,7 +19,9 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
       {required BleConnector bleConnector, bool sequentialUpload = false})
       : _bleMtu = bleConnector.createMtu(),
         _bleSerial = bleConnector.createSerial(
-            serviceUuid, characteristicUuidRx, characteristicUuidTx),
+            serviceId: serviceUuid,
+            rxCharacteristicId: characteristicUuidRx,
+            txCharacteristicId: characteristicUuidTx),
         _sequentialUpload = sequentialUpload;
 
   final BleMtu _bleMtu;
@@ -36,7 +38,7 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
   @override
   BleUploadState get state => _state;
 
-  Future<void> upload(Uint8List data) async {
+  Future<void> upload({required Uint8List data}) async {
     try {
       await _bleSerial.startNotifications();
       _subscription = _bleSerial.dataStream.listen(_handleResp);
@@ -59,12 +61,13 @@ class BleUploader extends StatefulNotifier<BleUploadState> {
 
   Future<int> _calcPackageMaxSize() async {
     final maxMtu = maxMtuSize.value.toInt();
-    final mtu = _bleMtu.isSupported ? await _bleMtu.request(maxMtu) : maxMtu;
+    final mtu =
+        _bleMtu.isSupported ? await _bleMtu.request(mtu: maxMtu) : maxMtu;
     return mtu - mtuWriteOverheadBytesNum - headCodeBytesNum;
   }
 
   Future<void> _send(int head, Uint8List data) async {
-    await _bleSerial.send(Uint8List.fromList(uint8ToBytes(head) + data));
+    await _bleSerial.send(data: Uint8List.fromList(uint8ToBytes(head) + data));
   }
 
   void _raiseError(UploadError error, {int errorCode = 0}) {
