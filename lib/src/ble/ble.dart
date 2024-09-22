@@ -24,7 +24,7 @@ BleCentral createCentral() {
   }
 }
 
-final isSequentialUploadRequiredByBleLibrary =
+final isSequentialUploadRequired =
     !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
 
 final bleCentral = createCentral();

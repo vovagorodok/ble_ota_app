@@ -29,7 +29,7 @@ const alwaysAllowLocalFilesUpload = Setting<bool>(
 );
 final sequentialUpload = Setting<bool>(
   key: 'key-sequential-upload',
-  defaultValue: isSequentialUploadRequiredByBleLibrary,
+  defaultValue: isSequentialUploadRequired,
 );
 const manufacturesDictUrl = Setting<String>(
   key: 'key-dict-url',
