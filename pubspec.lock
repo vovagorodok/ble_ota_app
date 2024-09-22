@@ -74,7 +74,7 @@ packages:
     source: hosted
     version: "6.0.0"
   bluez:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bluez
       sha256: "203a1924e818a9dd74af2b2c7a8f375ab8e5edf0e486bba8f90a0d8a17ed9fce"
