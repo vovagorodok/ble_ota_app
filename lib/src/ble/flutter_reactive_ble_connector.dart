@@ -43,7 +43,7 @@ class FlutterReactiveBleConnector extends BaseBleConnector {
   }
 
   @override
-  Future<void> scanAndConnect(
+  Future<void> connectToKnownDevice(
       {Duration duration = const Duration(seconds: 20)}) async {
     _updateConnectorStatus(BleConnectorStatus.scanning);
     _connection = backend

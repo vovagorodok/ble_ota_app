@@ -8,7 +8,7 @@ import 'package:ble_ota_app/src/ble/ble_serial.dart';
 abstract class BleConnector extends StatefulNotifier<BleConnectorStatus> {
   Future<void> connect();
   Future<void> disconnect();
-  Future<void> scanAndConnect({Duration duration});
+  Future<void> connectToKnownDevice({Duration duration});
   Future<List<String>> discoverServices();
 
   BleMtu createMtu();
