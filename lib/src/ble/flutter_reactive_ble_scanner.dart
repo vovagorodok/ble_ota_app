@@ -29,6 +29,13 @@ class FlutterReactiveBleScanner extends BleScanner {
     notifyState(state);
   }
 
+  @override
+  Future<void> stop() async {
+    await _subscription?.cancel();
+    _subscription = null;
+    notifyState(state);
+  }
+
   void _addScannedDevice(DiscoveredDevice device) {
     final scannedDevice = _createScannedDevice(device);
     final knownDeviceIndex =
@@ -38,13 +45,6 @@ class FlutterReactiveBleScanner extends BleScanner {
     } else {
       _devices.add(scannedDevice);
     }
-    notifyState(state);
-  }
-
-  @override
-  Future<void> stop() async {
-    await _subscription?.cancel();
-    _subscription = null;
     notifyState(state);
   }
 
