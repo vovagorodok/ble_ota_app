@@ -22,7 +22,7 @@ class FlutterReactiveBleScanner extends BleScanner {
   @override
   Future<void> scan() async {
     _devices.clear();
-    _subscription?.cancel();
+    await _subscription?.cancel();
     _subscription = backend
         .scanForDevices(withServices: serviceIds)
         .listen(_addScannedDevice, onError: (Object e) {});
