@@ -34,7 +34,7 @@ class UploadScreen extends StatefulWidget {
 }
 
 class UploadScreenState extends State<UploadScreen> {
-  late List<StreamSubscription> _subscriptions;
+  List<StreamSubscription> _subscriptions = [];
 
   BlePeripheral get blePeripheral => widget.blePeripheral;
   BleConnector get bleConnector => widget.bleConnector;
