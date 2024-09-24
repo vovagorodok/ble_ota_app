@@ -55,7 +55,7 @@ class BlueZConnector extends BaseBleConnector {
 
   @override
   BleMtu createMtu() {
-    return BlueZMtu();
+    return BlueZMtu(device: device);
   }
 
   @override

@@ -21,12 +21,14 @@ class BlueZCharacteristic extends BleCharacteristic {
 
   @override
   Future<void> write({required Uint8List data}) async {
-    await _getCharacteristic().writeValue(data);
+    await _getCharacteristic()
+        .writeValue(data, type: BlueZGattCharacteristicWriteType.request);
   }
 
   @override
   Future<void> writeWithoutResponse({required Uint8List data}) async {
-    await _getCharacteristic().writeValue(data);
+    await _getCharacteristic()
+        .writeValue(data, type: BlueZGattCharacteristicWriteType.command);
   }
 
   @override
