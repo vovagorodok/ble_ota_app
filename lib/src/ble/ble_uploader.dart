@@ -9,9 +9,9 @@ import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
-import 'package:ble_ota_app/src/ble/ble_connector.dart';
-import 'package:ble_ota_app/src/ble/ble_mtu.dart';
-import 'package:ble_ota_app/src/ble/ble_serial.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_mtu.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_serial.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 
 class BleUploader extends StatefulNotifier<BleUploadState> {
