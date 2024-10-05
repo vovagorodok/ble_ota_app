@@ -20,7 +20,6 @@ class BlueZConnector extends BaseBleConnector {
 
   @override
   Future<void> connect() async {
-    _updateConnectorStatus(BleConnectorStatus.connecting);
     await device.connect();
 
     int attempts = 0;
