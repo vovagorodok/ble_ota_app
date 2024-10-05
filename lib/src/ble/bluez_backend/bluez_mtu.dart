@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bluez/bluez.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_mtu.dart';
@@ -13,10 +14,10 @@ class BlueZMtu extends BleMtu {
       for (BlueZGattCharacteristic characteristic in service.characteristics) {
         int? requested = characteristic.mtu;
         // The value provided by Bluez includes an extra 3 bytes from the GATT header, which needs to be removed.
-        if (requested != null) return requested - 3;
+        if (requested != null) return min(requested - 3, mtu);
       }
     }
-    return mtu;
+    return min(23, mtu);
   }
 
   @override
