@@ -11,9 +11,9 @@ class BlueZMtu extends BleMtu {
   Future<int> request({required int mtu}) async {
     for (BlueZGattService service in device.gattServices) {
       for (BlueZGattCharacteristic characteristic in service.characteristics) {
-        int? mtu = characteristic.mtu;
+        int? requested = characteristic.mtu;
         // The value provided by Bluez includes an extra 3 bytes from the GATT header, which needs to be removed.
-        if (mtu != null) return mtu - 3;
+        if (requested != null) return requested - 3;
       }
     }
     return mtu;
