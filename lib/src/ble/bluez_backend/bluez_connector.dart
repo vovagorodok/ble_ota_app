@@ -23,10 +23,10 @@ class BlueZConnector extends BaseBleConnector {
     await device.connect();
 
     int attempts = 0;
-    while (attempts < 100 && !device.connected) {
+    do {
       await Future.delayed(const Duration(milliseconds: 100));
       attempts++;
-    }
+    } while (attempts < 10 && !device.connected);
 
     _updateConnectorStatus(device.connected
         ? BleConnectorStatus.connected

@@ -28,10 +28,10 @@ class BlueZCentral extends BleCentral {
     await client.connect();
 
     int attempts = 0;
-    while (attempts < 10 && client.adapters.isEmpty) {
+    do {
       await Future.delayed(const Duration(milliseconds: 100));
       attempts++;
-    }
+    } while (attempts < 10 && client.adapters.isEmpty);
 
     if (client.adapters.isEmpty) {
       _updateCentralStatus(BleCentralStatus.unsupported);
