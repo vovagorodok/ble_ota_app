@@ -13,28 +13,28 @@ dependencies:
   flutter_reactive_ble: ^5.3.1
   flutter_web_bluetooth: ^0.2.3
   bluetooth_low_energy: ^6.0.2
-  universal_ble: ^0.12.0
+  universal_ble: ^0.13.0
   bluez: ^0.8.2
   win_ble: ^1.1.1
-  file_picker: ^8.0.5
+  file_picker: ^8.1.2
   archive: ^3.6.1
   permission_handler: ^11.3.1
-  http: ^1.2.1
-  wakelock_plus: ^1.2.5
+  http: ^1.2.2
+  wakelock_plus: ^1.2.8
   expandable: ^5.0.1
-  meta: ^1.12.0
+  meta: ^1.15.0
   flutter_settings_screens: ^0.3.4
-  jumping_dot: ^0.0.6
+  jumping_dot: ^0.0.7
   easy_localization: ^3.0.7
-  flutter_markdown: ^0.7.2
+  flutter_markdown: ^0.7.3
   flutter_pin_code_fields: ^2.2.0
   url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
-  icons_launcher: ^2.1.7
+  flutter_lints: ^5.0.0
+  icons_launcher: ^3.0.0
 
 flutter:
   uses-material-design: true

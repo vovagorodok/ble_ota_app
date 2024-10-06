@@ -11,7 +11,7 @@ import 'package:ble_ota_app/src/ble/universal_ble_backend/universal_ble_characte
 class UniversalBleConnector extends BaseBleConnector {
   UniversalBleConnector({required this.deviceId, required this.serviceIds}) {
     backend.UniversalBle.onConnectionChange =
-        (String deviceId, bool isConnected) {
+        (String deviceId, bool isConnected, String? error) {
       if (deviceId != this.deviceId) return;
       if (isConnected) return;
       _updateConnectorStatus(BleConnectorStatus.disconnected);
@@ -27,9 +27,11 @@ class UniversalBleConnector extends BaseBleConnector {
 
   @override
   Future<void> connect() async {
-    if (!await backend.UniversalBle.connect(deviceId)) return;
-    await backend.UniversalBle.discoverServices(deviceId);
-    _updateConnectorStatus(BleConnectorStatus.connected);
+    try {
+      await backend.UniversalBle.connect(deviceId);
+      await backend.UniversalBle.discoverServices(deviceId);
+      _updateConnectorStatus(BleConnectorStatus.connected);
+    } catch (_) {}
   }
 
   @override
