@@ -7,7 +7,7 @@ import 'package:ble_ota_app/src/ble/bluetooth_low_energy_backend/bluetooth_low_e
 
 class BluetoothLowEnergyScanner extends BleScanner {
   BluetoothLowEnergyScanner({required this.backend, required this.serviceIds}) {
-    backend.discovered.listen(_addScannedDevice);
+    backend.discovered.listen(_addPeripheral);
   }
 
   final CentralManager backend;
@@ -37,8 +37,8 @@ class BluetoothLowEnergyScanner extends BleScanner {
     notifyState(state);
   }
 
-  void _addScannedDevice(DiscoveredEventArgs device) {
-    final scannedDevice = _createScannedDevice(device);
+  void _addPeripheral(DiscoveredEventArgs device) {
+    final scannedDevice = _createPeripheral(device);
     final knownDeviceIndex =
         _devices.indexWhere((d) => d.id == scannedDevice.id);
     if (knownDeviceIndex >= 0) {
@@ -49,7 +49,7 @@ class BluetoothLowEnergyScanner extends BleScanner {
     notifyState(state);
   }
 
-  BlePeripheral _createScannedDevice(DiscoveredEventArgs device) {
+  BlePeripheral _createPeripheral(DiscoveredEventArgs device) {
     return BluetoothLowEnergyPeripheral(
       backend: backend,
       serviceIds: serviceIds,

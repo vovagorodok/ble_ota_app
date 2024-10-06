@@ -10,7 +10,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
   FlutterWebBluetoothScanner({required this.serviceIds}) {
     FlutterWebBluetooth.instance.devices.listen((devices) {
       for (var device in devices) {
-        _addScannedDevice(_createScannedDevice(device));
+        _addPeripheral(_createPeripheral(device));
       }
       notifyState(state);
     });
@@ -50,7 +50,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
   @override
   Future<void> stop() async {}
 
-  void _addScannedDevice(BlePeripheral device) {
+  void _addPeripheral(BlePeripheral device) {
     final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
     if (knownDeviceIndex >= 0) {
       _devices[knownDeviceIndex] = device;
@@ -59,7 +59,7 @@ class FlutterWebBluetoothScanner extends BleScanner {
     }
   }
 
-  static BlePeripheral _createScannedDevice(BluetoothDevice device) {
+  static BlePeripheral _createPeripheral(BluetoothDevice device) {
     return FlutterWebBluetoothPeripheral(device: device);
   }
 }

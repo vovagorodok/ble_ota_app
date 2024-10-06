@@ -8,7 +8,7 @@ import 'package:ble_ota_app/src/ble/win_ble_backend/win_ble_peripheral.dart';
 class WinBleScanner extends BleScanner {
   WinBleScanner({required this.serviceIds}) {
     WinBle.scanStream.listen((device) {
-      _addScannedDevice(_createScannedDevice(device));
+      _addPeripheral(_createPeripheral(device));
       notifyState(state);
     });
   }
@@ -38,7 +38,7 @@ class WinBleScanner extends BleScanner {
     notifyState(state);
   }
 
-  void _addScannedDevice(BlePeripheral device) {
+  void _addPeripheral(BlePeripheral device) {
     final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
     if (knownDeviceIndex >= 0) {
       _devices[knownDeviceIndex] = device;
@@ -47,7 +47,7 @@ class WinBleScanner extends BleScanner {
     }
   }
 
-  BlePeripheral _createScannedDevice(BleDevice device) {
+  BlePeripheral _createPeripheral(BleDevice device) {
     return WinBlePeripheral(
       device: device,
       serviceIds: serviceIds,

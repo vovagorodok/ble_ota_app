@@ -10,9 +10,9 @@ class BlueZScanner extends BleScanner {
     client.deviceAdded.listen((device) {
       int index = _devices.indexWhere((d) => d.id == device.address);
       if (index == -1) {
-        _devices.add(_createScannedDevice(device));
+        _devices.add(_createPeripheral(device));
       } else {
-        _devices[index] = _createScannedDevice(device);
+        _devices[index] = _createPeripheral(device);
       }
       notifyState(state);
     });
@@ -45,7 +45,7 @@ class BlueZScanner extends BleScanner {
     notifyState(state);
   }
 
-  BlePeripheral _createScannedDevice(BlueZDevice device) {
+  BlePeripheral _createPeripheral(BlueZDevice device) {
     return BlueZPeripheral(
       device: device,
       serviceIds: serviceIds,

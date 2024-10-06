@@ -10,9 +10,9 @@ class UniversalBleScanner extends BleScanner {
     UniversalBle.onScanResult = (device) {
       int index = _devices.indexWhere((d) => d.id == device.deviceId);
       if (index == -1) {
-        _devices.add(_createScannedDevice(device));
+        _devices.add(_createPeripheral(device));
       } else {
-        _devices[index] = _createScannedDevice(device);
+        _devices[index] = _createPeripheral(device);
       }
       notifyState(state);
     };
@@ -46,7 +46,7 @@ class UniversalBleScanner extends BleScanner {
     notifyState(state);
   }
 
-  BlePeripheral _createScannedDevice(BleDevice device) {
+  BlePeripheral _createPeripheral(BleDevice device) {
     return UniversalBlePeripheral(
       device: device,
       serviceIds: serviceIds,

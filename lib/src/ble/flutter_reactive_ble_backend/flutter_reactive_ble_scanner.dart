@@ -25,7 +25,7 @@ class FlutterReactiveBleScanner extends BleScanner {
     await _subscription?.cancel();
     _subscription = backend
         .scanForDevices(withServices: serviceIds)
-        .listen(_addScannedDevice, onError: (Object e) {});
+        .listen(_addPeripheral, onError: (Object e) {});
     notifyState(state);
   }
 
@@ -36,8 +36,8 @@ class FlutterReactiveBleScanner extends BleScanner {
     notifyState(state);
   }
 
-  void _addScannedDevice(DiscoveredDevice device) {
-    final scannedDevice = _createScannedDevice(device);
+  void _addPeripheral(DiscoveredDevice device) {
+    final scannedDevice = _createPeripheral(device);
     final knownDeviceIndex =
         _devices.indexWhere((d) => d.id == scannedDevice.id);
     if (knownDeviceIndex >= 0) {
@@ -48,7 +48,7 @@ class FlutterReactiveBleScanner extends BleScanner {
     notifyState(state);
   }
 
-  BlePeripheral _createScannedDevice(DiscoveredDevice device) {
+  BlePeripheral _createPeripheral(DiscoveredDevice device) {
     return FlutterReactiveBlePeripheral(
       backend: backend,
       serviceIds: serviceIds,
