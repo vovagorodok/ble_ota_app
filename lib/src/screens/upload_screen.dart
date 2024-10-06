@@ -10,46 +10,47 @@ import 'package:ble_ota_app/src/core/software.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ota/uploader.dart';
 import 'package:ble_ota_app/src/ota/info_reader.dart';
-import 'package:ble_ota_app/src/ble/ble_connector.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_peripheral.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/screens/pin_screen.dart';
 import 'package:ble_ota_app/src/screens/info_screen.dart';
 
 class UploadScreen extends StatefulWidget {
-  UploadScreen({required this.deviceId, required this.deviceName, super.key})
-      : uploader = Uploader(deviceId: deviceId),
-        infoReader = InfoReader(deviceId: deviceId),
-        bleConnector = BleConnector(deviceId: deviceId);
+  UploadScreen(
+      {required this.blePeripheral, required this.bleConnector, super.key})
+      : uploader = Uploader(
+            bleConnector: bleConnector,
+            sequentialUpload: sequentialUpload.value),
+        infoReader = InfoReader(bleConnector: bleConnector);
 
-  final String deviceId;
-  final String deviceName;
+  final BlePeripheral blePeripheral;
+  final BleConnector bleConnector;
   final Uploader uploader;
   final InfoReader infoReader;
-  final BleConnector bleConnector;
 
   @override
   State<UploadScreen> createState() => UploadScreenState();
 }
 
 class UploadScreenState extends State<UploadScreen> {
-  late List<StreamSubscription> _subscriptions;
+  List<StreamSubscription> _subscriptions = [];
 
+  BlePeripheral get blePeripheral => widget.blePeripheral;
+  BleConnector get bleConnector => widget.bleConnector;
   Uploader get uploader => widget.uploader;
   InfoReader get infoReader => widget.infoReader;
-  BleConnector get bleConnector => widget.bleConnector;
+  BleConnectorStatus get connectionStatus => bleConnector.state;
   UploadState get uploadState => uploader.state;
   InfoState get infoState => infoReader.state;
-  BleConnectionState get connectionState => bleConnector.state;
   WorkStatus get uploadStatus => uploadState.status;
   WorkStatus get infoStatus => infoState.status;
 
-  void _onConnectionStateChanged(BleConnectionState state) {
+  void _onConnectionStateChanged(BleConnectorStatus state) {
     setState(() {
-      if (state == BleConnectionState.disconnected) {
-        bleConnector.findAndConnect();
-      } else if (state == BleConnectionState.connected) {
+      if (state == BleConnectorStatus.connected) {
         if (!skipInfoReading.value) {
-          infoReader.read(manufacturesDictUrl.value);
+          infoReader.read(manufacturesDictUrl: manufacturesDictUrl.value);
         }
       }
     });
@@ -62,7 +63,12 @@ class UploadScreenState extends State<UploadScreen> {
   void _onUploadStateChanged(UploadState state) {
     setState(() {
       if (state.status == WorkStatus.success) {
-        bleConnector.disconnect();
+        () async {
+          await bleConnector.disconnect();
+          if (bleConnector.isConnectToKnownDeviceSupported) {
+            await bleConnector.connectToKnownDevice();
+          }
+        }.call();
         WakelockPlus.disable();
       } else if (state.status == WorkStatus.error) {
         WakelockPlus.disable();
@@ -84,21 +90,26 @@ class UploadScreenState extends State<UploadScreen> {
   @override
   void dispose() {
     () async {
+      await bleConnector.disconnect();
       for (var subscription in _subscriptions) {
         await subscription.cancel();
       }
-
-      await uploader.dispose();
-      await infoReader.dispose();
-      await bleConnector.disconnect();
-      await bleConnector.dispose();
-      await WakelockPlus.disable();
     }.call();
+    WakelockPlus.disable();
+
+    uploader.dispose();
+    infoReader.dispose();
+    bleConnector.dispose();
     super.dispose();
   }
 
+  bool _canPop() {
+    return uploadStatus != WorkStatus.working &&
+        infoStatus != WorkStatus.working;
+  }
+
   bool _canUpload() {
-    return connectionState == BleConnectionState.connected &&
+    return connectionStatus == BleConnectorStatus.connected &&
         uploadStatus != WorkStatus.working &&
         infoStatus != WorkStatus.working;
   }
@@ -117,13 +128,15 @@ class UploadScreenState extends State<UploadScreen> {
 
     if (result != null) {
       await WakelockPlus.enable();
-      await uploader.uploadLocalFile(result.files.single.path!);
+      result.files.single.bytes == null
+          ? await uploader.uploadLocalFile(localPath: result.files.single.path!)
+          : await uploader.uploadBytes(bytes: result.files.single.bytes!);
     }
   }
 
   Future<void> _uploadHttpFile(String url) async {
     await WakelockPlus.enable();
-    await uploader.uploadHttpFile(url);
+    await uploader.uploadHttpFile(url: url);
   }
 
   MaterialColor _determinateStatusColor() {
@@ -269,18 +282,24 @@ class UploadScreenState extends State<UploadScreen> {
   }
 
   Widget _buildStatusWidget() {
-    if (connectionState == BleConnectionState.disconnected) {
+    if (connectionStatus == BleConnectorStatus.connecting) {
       return _buildStatusText(tr('Connecting..'));
+    } else if (connectionStatus == BleConnectorStatus.disconnecting) {
+      return _buildStatusText(tr('Disconnecting..'));
     } else if (uploadStatus == WorkStatus.working) {
       return _buildStatusText(tr('Uploading..'));
     } else if (uploadStatus == WorkStatus.error) {
       return _buildStatusText(determineUploadError(uploadState));
-    } else if (infoStatus == WorkStatus.error) {
-      return _buildStatusText(determineInfoError(infoState));
-    } else if (infoStatus == WorkStatus.idle) {
-      return _buildStatusText(tr('Connected'));
     } else if (infoStatus == WorkStatus.working) {
       return _buildStatusText(tr('Loading..'));
+    } else if (infoStatus == WorkStatus.error) {
+      return _buildStatusText(determineInfoError(infoState));
+    } else if (connectionStatus == BleConnectorStatus.disconnected) {
+      return _buildStatusText(tr('Disconnected'));
+    } else if (connectionStatus == BleConnectorStatus.scanning) {
+      return _buildStatusText(tr('Scanning..'));
+    } else if (infoStatus == WorkStatus.idle) {
+      return _buildStatusText(tr('Connected'));
     } else if (infoState.remoteInfo.softwareList.isEmpty) {
       return _buildStatusText(tr('NoAvailableSoftwares'));
     } else if (infoState.remoteInfo.newestSoftware == null) {
@@ -322,10 +341,11 @@ class UploadScreenState extends State<UploadScreen> {
       );
 
   Widget _buildStatusWithOptionallySoftwareList() {
-    final buildSoftwareList = connectionState == BleConnectionState.connected &&
-        infoStatus == WorkStatus.success &&
-        uploadStatus != WorkStatus.working &&
-        infoState.remoteInfo.softwareList.isNotEmpty;
+    final buildSoftwareList =
+        connectionStatus == BleConnectorStatus.connected &&
+            infoStatus == WorkStatus.success &&
+            uploadStatus != WorkStatus.working &&
+            infoState.remoteInfo.softwareList.isNotEmpty;
     return buildSoftwareList
         ? _buildStatusWithSoftwareList()
         : _buildStatusWidget();
@@ -405,8 +425,16 @@ class UploadScreenState extends State<UploadScreen> {
   Widget build(BuildContext context) => Scaffold(
         primary: MediaQuery.of(context).orientation == Orientation.portrait,
         appBar: AppBar(
-          title: Text(widget.deviceName),
+          title: Text(blePeripheral.name ?? ''),
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: _canPop()
+                ? () {
+                    Navigator.pop(context);
+                  }
+                : null,
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.pin_rounded),
@@ -415,8 +443,8 @@ class UploadScreenState extends State<UploadScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => PinScreen(
-                            deviceId: widget.deviceId,
-                            deviceName: widget.deviceName,
+                            blePeripheral: blePeripheral,
+                            bleConnector: bleConnector,
                           ),
                         ),
                       )

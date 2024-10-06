@@ -50,6 +50,11 @@ class InfoScreenState extends State<InfoScreen> {
       appBar: AppBar(
         title: Text(widget.title),
         centerTitle: true,
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
       ),
       body: SafeArea(
         child: _text != null

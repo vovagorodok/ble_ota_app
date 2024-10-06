@@ -5,13 +5,18 @@ import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_peripheral.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
 
 class PinScreen extends StatefulWidget {
-  PinScreen({required deviceId, required this.deviceName, super.key})
-      : blePinChanger = BlePinChanger(deviceId: deviceId);
+  PinScreen(
+      {required this.blePeripheral,
+      required BleConnector bleConnector,
+      super.key})
+      : blePinChanger = BlePinChanger(bleConnector: bleConnector);
 
-  final String deviceName;
+  final BlePeripheral blePeripheral;
   final BlePinChanger blePinChanger;
 
   @override
@@ -20,7 +25,7 @@ class PinScreen extends StatefulWidget {
 
 class PinScreenState extends State<PinScreen> {
   int? _pin;
-  late StreamSubscription _subscription;
+  StreamSubscription? _subscription;
 
   BlePinChanger get blePinChanger => widget.blePinChanger;
   BlePinChangeState get blePinChangeState => blePinChanger.state;
@@ -38,10 +43,8 @@ class PinScreenState extends State<PinScreen> {
 
   @override
   void dispose() {
-    () async {
-      await _subscription.cancel();
-      await blePinChanger.dispose();
-    }.call();
+    _subscription?.cancel();
+    blePinChanger.dispose();
     super.dispose();
   }
 
@@ -60,7 +63,7 @@ class PinScreenState extends State<PinScreen> {
   }
 
   void _setPin() {
-    blePinChanger.set(_pin!);
+    blePinChanger.set(pin: _pin!);
   }
 
   void _removePin() {
@@ -171,8 +174,16 @@ class PinScreenState extends State<PinScreen> {
   Widget build(BuildContext context) => Scaffold(
         primary: MediaQuery.of(context).orientation == Orientation.portrait,
         appBar: AppBar(
-          title: Text(widget.deviceName),
+          title: Text(widget.blePeripheral.name ?? ''),
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: _canChange()
+                ? () {
+                    Navigator.pop(context);
+                  }
+                : null,
+          ),
         ),
         body: SafeArea(
           minimum: const EdgeInsets.all(16.0),

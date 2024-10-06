@@ -1,30 +1,35 @@
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/device_info.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/version.dart';
-import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_characteristic.dart';
 
-class BleInfoReader extends StatefulStream<DeviceInfoState> {
-  BleInfoReader({required String deviceId})
-      : _characteristicManufactureName =
-            _crateCharacteristic(characteristicUuidManufactureName, deviceId),
-        _characteristicHardwareName =
-            _crateCharacteristic(characteristicUuidHardwareName, deviceId),
-        _characteristicHardwareVersion =
-            _crateCharacteristic(characteristicUuidHardwareVersion, deviceId),
-        _characteristicSoftwareName =
-            _crateCharacteristic(characteristicUuidSoftwareName, deviceId),
-        _characteristicSoftwareVersion =
-            _crateCharacteristic(characteristicUuidSoftwareVersion, deviceId);
+class BleInfoReader extends StatefulNotifier<DeviceInfoState> {
+  BleInfoReader({required BleConnector bleConnector})
+      : _characteristicManufactureName = bleConnector.createCharacteristic(
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidManufactureName),
+        _characteristicHardwareName = bleConnector.createCharacteristic(
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidHardwareName),
+        _characteristicHardwareVersion = bleConnector.createCharacteristic(
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidHardwareVersion),
+        _characteristicSoftwareName = bleConnector.createCharacteristic(
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidSoftwareName),
+        _characteristicSoftwareVersion = bleConnector.createCharacteristic(
+            serviceId: serviceUuid,
+            characteristicId: characteristicUuidSoftwareVersion);
 
-  final QualifiedCharacteristic _characteristicManufactureName;
-  final QualifiedCharacteristic _characteristicHardwareName;
-  final QualifiedCharacteristic _characteristicHardwareVersion;
-  final QualifiedCharacteristic _characteristicSoftwareName;
-  final QualifiedCharacteristic _characteristicSoftwareVersion;
+  final BleCharacteristic _characteristicManufactureName;
+  final BleCharacteristic _characteristicHardwareName;
+  final BleCharacteristic _characteristicHardwareVersion;
+  final BleCharacteristic _characteristicSoftwareName;
+  final BleCharacteristic _characteristicSoftwareVersion;
   final DeviceInfoState _state = DeviceInfoState();
 
   @override
@@ -32,32 +37,26 @@ class BleInfoReader extends StatefulStream<DeviceInfoState> {
 
   void read() {
     state.status = WorkStatus.working;
-    addStateToStream(state);
+    notifyState(state);
 
     () async {
       state.info = DeviceInfo(
-        manufactureName: String.fromCharCodes(
-            await ble.readCharacteristic(_characteristicManufactureName)),
-        hardwareName: String.fromCharCodes(
-            await ble.readCharacteristic(_characteristicHardwareName)),
-        hardwareVersion: Version.fromList(
-            await ble.readCharacteristic(_characteristicHardwareVersion)),
-        softwareName: String.fromCharCodes(
-            await ble.readCharacteristic(_characteristicSoftwareName)),
-        softwareVersion: Version.fromList(
-            await ble.readCharacteristic(_characteristicSoftwareVersion)),
+        manufactureName:
+            String.fromCharCodes(await _characteristicManufactureName.read()),
+        hardwareName:
+            String.fromCharCodes(await _characteristicHardwareName.read()),
+        hardwareVersion:
+            Version.fromList(await _characteristicHardwareVersion.read()),
+        softwareName:
+            String.fromCharCodes(await _characteristicSoftwareName.read()),
+        softwareVersion:
+            Version.fromList(await _characteristicSoftwareVersion.read()),
       );
       state.status = WorkStatus.success;
 
-      addStateToStream(state);
+      notifyState(state);
     }.call();
   }
-
-  static _crateCharacteristic(Uuid charUuid, String deviceId) =>
-      QualifiedCharacteristic(
-          characteristicId: charUuid,
-          serviceId: serviceUuid,
-          deviceId: deviceId);
 }
 
 class DeviceInfoState extends WorkState<WorkStatus, InfoError> {

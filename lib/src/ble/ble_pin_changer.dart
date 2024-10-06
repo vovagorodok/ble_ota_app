@@ -3,63 +3,70 @@ import 'dart:typed_data';
 
 import 'package:ble_ota_app/src/utils/converters.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
-import 'package:ble_ota_app/src/ble/ble_serial.dart';
+import 'package:ble_ota_app/src/ble/ble_uuids.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_serial.dart';
 
-class BlePinChanger extends StatefulStream<BlePinChangeState> {
-  BlePinChanger({required this.deviceId})
-      : _bleSerial = BleSerial(deviceId: deviceId);
+class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
+  BlePinChanger({required BleConnector bleConnector})
+      : _bleSerial = bleConnector.createSerial(
+            serviceId: serviceUuid,
+            rxCharacteristicId: characteristicUuidRx,
+            txCharacteristicId: characteristicUuidTx);
 
-  final String deviceId;
   final BleSerial _bleSerial;
+  StreamSubscription? _subscription;
   BlePinChangeState _state = BlePinChangeState();
 
   @override
   BlePinChangeState get state => _state;
 
-  void set(int pin) {
+  void set({required int pin}) {
     _begin();
-    _sendData(uint8ToBytes(HeadCode.setPin) + uint32ToBytes(pin));
+    _send(HeadCode.setPin, uint32ToBytes(pin));
     _waitForResponse();
   }
 
   void remove() {
     _begin();
-    _sendData(uint8ToBytes(HeadCode.removePin));
+    _send(HeadCode.removePin, Uint8List(0));
     _waitForResponse();
   }
 
-  void _begin() {
-    _bleSerial.subscribe(
-        onData: (event) => _handleResp(Uint8List.fromList(event)));
-
-    _state = BlePinChangeState(status: WorkStatus.working);
-    addStateToStream(state);
-  }
-
   @override
-  Future<void> dispose() async {
+  void dispose() {
+    _unsubscribe();
     _bleSerial.dispose();
     super.dispose();
   }
 
+  void _send(int head, Uint8List data) {
+    _bleSerial.send(data: Uint8List.fromList(uint8ToBytes(head) + data));
+  }
+
+  void _begin() {
+    _bleSerial.startNotifications();
+    _subscription = _bleSerial.dataStream
+        .listen((data) => _handleResp(Uint8List.fromList(data)));
+
+    _state = BlePinChangeState(status: WorkStatus.working);
+    notifyState(state);
+  }
+
   void _raiseError(PinChangeError error, {int errorCode = 0}) {
-    _bleSerial.unsubscribe();
+    _unsubscribe();
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    addStateToStream(state);
+    notifyState(state);
   }
 
   void _waitForResponse() {
-    _bleSerial.waitForResponse(
+    _bleSerial.waitData(
         timeoutCallback: () => _raiseError(PinChangeError.noDeviceResponse));
-  }
-
-  void _sendData(List<int> data) {
-    _bleSerial.sendData(data);
   }
 
   void _handleResp(Uint8List data) {
@@ -68,17 +75,22 @@ class BlePinChanger extends StatefulStream<BlePinChangeState> {
       return;
     }
 
-    var headCode = bytesToUint8(data, headCodePos);
+    final headCode = bytesToUint8(data, headCodePos);
     if (headCode == HeadCode.ok) {
-      _bleSerial.unsubscribe();
+      _unsubscribe();
       state.status = WorkStatus.success;
-      addStateToStream(state);
+      notifyState(state);
     } else {
       _raiseError(
         PinChangeError.generalDeviceError,
         errorCode: headCode,
       );
     }
+  }
+
+  void _unsubscribe() {
+    _bleSerial.stopNotifications();
+    _subscription?.cancel();
   }
 }
 

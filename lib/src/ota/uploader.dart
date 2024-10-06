@@ -1,14 +1,17 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:ble_ota_app/src/core/work_state.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_uploader.dart';
 
-class Uploader extends StatefulStream<UploadState> {
-  Uploader({required deviceId})
-      : _bleUploader = BleUploader(deviceId: deviceId) {
+class Uploader extends StatefulNotifier<UploadState> {
+  Uploader({required BleConnector bleConnector, bool sequentialUpload = false})
+      : _bleUploader = BleUploader(
+            bleConnector: bleConnector, sequentialUpload: sequentialUpload) {
     _bleUploader.stateStream.listen(_onBleUploadStateChanged);
   }
 
@@ -18,42 +21,26 @@ class Uploader extends StatefulStream<UploadState> {
   @override
   UploadState get state => _state;
 
-  void _raiseError(UploadError error, {int errorCode = 0}) {
-    state.status = WorkStatus.error;
-    state.error = error;
-    state.errorCode = errorCode;
-    addStateToStream(state);
-  }
-
-  void _onBleUploadStateChanged(BleUploadState bleUploadState) {
-    state.progress = bleUploadState.progress;
-
-    if (bleUploadState.status == BleUploadStatus.success) {
-      state.status = WorkStatus.success;
-      addStateToStream(state);
-    } else if (bleUploadState.status == BleUploadStatus.error) {
-      _raiseError(
-        bleUploadState.error,
-        errorCode: bleUploadState.errorCode,
-      );
-    } else {
-      addStateToStream(state);
-    }
-  }
-
-  Future<void> uploadLocalFile(String localPath) async {
+  Future<void> uploadBytes({required Uint8List bytes}) async {
     _state = UploadState(status: WorkStatus.working);
-    addStateToStream(state);
+    notifyState(state);
+
+    await _bleUploader.upload(data: bytes);
+  }
+
+  Future<void> uploadLocalFile({required String localPath}) async {
+    _state = UploadState(status: WorkStatus.working);
+    notifyState(state);
 
     File file = File(localPath);
-    var data = await file.readAsBytes();
-    await _bleUploader.upload(data);
+    final data = await file.readAsBytes();
+    await _bleUploader.upload(data: data);
   }
 
-  Future<void> uploadHttpFile(String url) async {
+  Future<void> uploadHttpFile({required String url}) async {
     try {
       _state = UploadState(status: WorkStatus.working);
-      addStateToStream(state);
+      notifyState(state);
 
       final response = await http.get(Uri.parse(url));
       if (response.statusCode != 200) {
@@ -64,9 +51,32 @@ class Uploader extends StatefulStream<UploadState> {
         return;
       }
 
-      await _bleUploader.upload(response.bodyBytes);
+      await _bleUploader.upload(data: response.bodyBytes);
     } catch (_) {
       _raiseError(UploadError.generalNetworkError);
+    }
+  }
+
+  void _raiseError(UploadError error, {int errorCode = 0}) {
+    state.status = WorkStatus.error;
+    state.error = error;
+    state.errorCode = errorCode;
+    notifyState(state);
+  }
+
+  void _onBleUploadStateChanged(BleUploadState bleUploadState) {
+    state.progress = bleUploadState.progress;
+
+    if (bleUploadState.status == BleUploadStatus.success) {
+      state.status = WorkStatus.success;
+      notifyState(state);
+    } else if (bleUploadState.status == BleUploadStatus.error) {
+      _raiseError(
+        bleUploadState.error,
+        errorCode: bleUploadState.errorCode,
+      );
+    } else {
+      notifyState(state);
     }
   }
 }

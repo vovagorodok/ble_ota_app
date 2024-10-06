@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:ble_ota_app/src/ble/ble.dart';
 
 @immutable
 class Setting<T> {
@@ -25,6 +26,10 @@ const skipInfoReading = Setting<bool>(
 const alwaysAllowLocalFilesUpload = Setting<bool>(
   key: 'key-allow-local-upload',
   defaultValue: false,
+);
+final sequentialUpload = Setting<bool>(
+  key: 'key-sequential-upload',
+  defaultValue: isSequentialUploadRequired,
 );
 const manufacturesDictUrl = Setting<String>(
   key: 'key-dict-url',

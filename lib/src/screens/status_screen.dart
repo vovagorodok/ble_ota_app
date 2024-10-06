@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 
 class StatusScreen extends StatefulWidget {
@@ -14,43 +14,47 @@ class StatusScreen extends StatefulWidget {
 }
 
 class StatusScreenState extends State<StatusScreen> {
-  String _determineText(BleStatus status) {
+  String _determineText(BleCentralStatus status) {
     switch (status) {
-      case BleStatus.unsupported:
+      case BleCentralStatus.unsupported:
         return tr('ThisDeviceDoesNotSupportBluetooth');
-      case BleStatus.unauthorized:
+      case BleCentralStatus.unsupportedBrowser:
+        return tr('ThisBrowserDoesNotSupportBluetooth');
+      case BleCentralStatus.unauthorized:
         return tr('AuthorizeApplicationToUseBluetoothAndLocation');
-      case BleStatus.poweredOff:
+      case BleCentralStatus.poweredOff:
         return tr('BluetoothIsDisabledTurnItOn');
-      case BleStatus.locationServicesDisabled:
+      case BleCentralStatus.locationServicesDisabled:
         return tr('LocationServicesAreDisabledEnableThem');
-      case BleStatus.ready:
+      case BleCentralStatus.ready:
         return tr('BluetoothIsUpAndRunning');
       default:
         return tr('WaitingToFetchBluetoothStatus', args: ['$status']);
     }
   }
 
-  IconData _determineIcon(BleStatus status) {
+  IconData _determineIcon(BleCentralStatus status) {
     switch (status) {
-      case BleStatus.unsupported:
+      case BleCentralStatus.unsupported:
         return Icons.bluetooth_disabled_rounded;
-      case BleStatus.unauthorized:
+      case BleCentralStatus.unsupportedBrowser:
+        return Icons.browser_not_supported_rounded;
+      case BleCentralStatus.unauthorized:
         return Icons.person_off_rounded;
-      case BleStatus.poweredOff:
+      case BleCentralStatus.poweredOff:
         return Icons.bluetooth_disabled_rounded;
-      case BleStatus.locationServicesDisabled:
+      case BleCentralStatus.locationServicesDisabled:
         return Icons.location_off_rounded;
-      case BleStatus.ready:
+      case BleCentralStatus.ready:
         return Icons.bluetooth_rounded;
       default:
         return Icons.autorenew_rounded;
     }
   }
 
-  void _evaluateBleStatus(BleStatus status) {
+  void _evaluateBleCentralStatus(BleCentralStatus status) {
     setState(() {
-      if (status == BleStatus.ready) {
+      if (status == BleCentralStatus.ready) {
         Navigator.pop(context);
       }
     });
@@ -59,8 +63,10 @@ class StatusScreenState extends State<StatusScreen> {
   @override
   void initState() {
     super.initState();
-    ble.statusStream.listen(_evaluateBleStatus);
+    bleCentral.stateStream.listen(_evaluateBleCentralStatus);
     () async {
+      if (!Platform.isAndroid && !Platform.isIOS && !Platform.isWindows) return;
+
       if (Platform.isAndroid) {
         await Permission.location.request();
       }
@@ -69,7 +75,7 @@ class StatusScreenState extends State<StatusScreen> {
       await Permission.bluetoothAdvertise.request();
       await Permission.bluetoothConnect.request();
     }.call();
-    _evaluateBleStatus(ble.status);
+    _evaluateBleCentralStatus(bleCentral.state);
   }
 
   @override
@@ -83,7 +89,7 @@ class StatusScreenState extends State<StatusScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  _determineText(ble.status),
+                  _determineText(bleCentral.state),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
@@ -92,7 +98,7 @@ class StatusScreenState extends State<StatusScreen> {
                 ),
                 const SizedBox(height: 20),
                 Icon(
-                  _determineIcon(ble.status),
+                  _determineIcon(bleCentral.state),
                   size: 100,
                 ),
               ],

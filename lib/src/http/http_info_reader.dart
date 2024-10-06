@@ -7,13 +7,64 @@ import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
 import 'package:ble_ota_app/src/core/software.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
 
-class HttpInfoReader extends StatefulStream<RemoteInfoState> {
+class HttpInfoReader extends StatefulNotifier<RemoteInfoState> {
   RemoteInfoState _state = RemoteInfoState(info: RemoteInfo());
 
   @override
   RemoteInfoState get state => _state;
+
+  void read(DeviceInfo deviceInfo, String manufacturesDictUrl) {
+    _state = RemoteInfoState(
+      status: WorkStatus.working,
+      info: RemoteInfo(),
+    );
+    notifyState(state);
+
+    () async {
+      try {
+        final manufacturesResponse =
+            await http.get(Uri.parse(manufacturesDictUrl));
+        if (manufacturesResponse.statusCode != 200) {
+          _raiseError(
+            InfoError.unexpectedNetworkResponse,
+            errorCode: manufacturesResponse.statusCode,
+          );
+          return;
+        }
+        final manufacturesBody = json.decode(manufacturesResponse.body);
+        final hardwaresUrl = manufacturesBody[deviceInfo.manufactureName];
+        if (hardwaresUrl == null) {
+          state.info.isHardwareUnregistered = true;
+          state.status = WorkStatus.success;
+          notifyState(state);
+          return;
+        }
+
+        final hardwaresResponse = await http.get(Uri.parse(hardwaresUrl));
+        if (hardwaresResponse.statusCode != 200) {
+          _raiseError(
+            InfoError.unexpectedNetworkResponse,
+            errorCode: hardwaresResponse.statusCode,
+          );
+          return;
+        }
+        final hardwaresBody = json.decode(hardwaresResponse.body);
+        final hardwareUrl = hardwaresBody[deviceInfo.hardwareName];
+        if (hardwareUrl == null) {
+          state.info.isHardwareUnregistered = true;
+          state.status = WorkStatus.success;
+          notifyState(state);
+          return;
+        }
+
+        await _readSoftwares(deviceInfo, hardwareUrl);
+      } catch (_) {
+        _raiseError(InfoError.generalNetworkError);
+      }
+    }.call();
+  }
 
   void _readNewestSoftware(DeviceInfo deviceInfo) {
     final filteredBySoftwareList =
@@ -74,7 +125,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
 
       _readNewestSoftware(deviceInfo);
       state.status = WorkStatus.success;
-      addStateToStream(state);
+      notifyState(state);
     } catch (_) {
       _raiseError(InfoError.generalNetworkError);
     }
@@ -84,58 +135,7 @@ class HttpInfoReader extends StatefulStream<RemoteInfoState> {
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    addStateToStream(state);
-  }
-
-  void read(DeviceInfo deviceInfo, String manufacturesDictUrl) {
-    _state = RemoteInfoState(
-      status: WorkStatus.working,
-      info: RemoteInfo(),
-    );
-    addStateToStream(state);
-
-    () async {
-      try {
-        final manufacturesResponse =
-            await http.get(Uri.parse(manufacturesDictUrl));
-        if (manufacturesResponse.statusCode != 200) {
-          _raiseError(
-            InfoError.unexpectedNetworkResponse,
-            errorCode: manufacturesResponse.statusCode,
-          );
-          return;
-        }
-        final manufacturesBody = json.decode(manufacturesResponse.body);
-        final hardwaresUrl = manufacturesBody[deviceInfo.manufactureName];
-        if (hardwaresUrl == null) {
-          state.info.isHardwareUnregistered = true;
-          state.status = WorkStatus.success;
-          addStateToStream(state);
-          return;
-        }
-
-        final hardwaresResponse = await http.get(Uri.parse(hardwaresUrl));
-        if (hardwaresResponse.statusCode != 200) {
-          _raiseError(
-            InfoError.unexpectedNetworkResponse,
-            errorCode: hardwaresResponse.statusCode,
-          );
-          return;
-        }
-        final hardwaresBody = json.decode(hardwaresResponse.body);
-        final hardwareUrl = hardwaresBody[deviceInfo.hardwareName];
-        if (hardwareUrl == null) {
-          state.info.isHardwareUnregistered = true;
-          state.status = WorkStatus.success;
-          addStateToStream(state);
-          return;
-        }
-
-        await _readSoftwares(deviceInfo, hardwareUrl);
-      } catch (_) {
-        _raiseError(InfoError.generalNetworkError);
-      }
-    }.call();
+    notifyState(state);
   }
 }
 

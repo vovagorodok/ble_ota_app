@@ -2,13 +2,14 @@ import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
-import 'package:ble_ota_app/src/core/state_stream.dart';
+import 'package:ble_ota_app/src/core/state_notifier.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/http/http_info_reader.dart';
 
-class InfoReader extends StatefulStream<InfoState> {
-  InfoReader({required deviceId})
-      : _bleInfoReader = BleInfoReader(deviceId: deviceId),
+class InfoReader extends StatefulNotifier<InfoState> {
+  InfoReader({required BleConnector bleConnector})
+      : _bleInfoReader = BleInfoReader(bleConnector: bleConnector),
         _httpInfoReader = HttpInfoReader() {
     _bleInfoReader.stateStream.listen(_onDeviceInfoStateChanged);
     _httpInfoReader.stateStream.listen(_onRemoteInfoStateChanged);
@@ -22,11 +23,22 @@ class InfoReader extends StatefulStream<InfoState> {
   @override
   InfoState get state => _state;
 
+  void read({required String manufacturesDictUrl}) {
+    _manufacturesDictUrl = manufacturesDictUrl;
+    _state = InfoState(
+      status: WorkStatus.working,
+      remoteInfo: RemoteInfo(),
+    );
+    notifyState(state);
+
+    _bleInfoReader.read();
+  }
+
   void _raiseError(InfoError error, int errorCode) {
     state.status = WorkStatus.error;
     state.error = error;
     state.errorCode = errorCode;
-    addStateToStream(state);
+    notifyState(state);
   }
 
   void _onDeviceInfoStateChanged(DeviceInfoState deviceInfoState) {
@@ -42,21 +54,10 @@ class InfoReader extends StatefulStream<InfoState> {
     if (remoteInfoState.status == WorkStatus.success) {
       state.remoteInfo = remoteInfoState.info;
       state.status = WorkStatus.success;
-      addStateToStream(state);
+      notifyState(state);
     } else if (remoteInfoState.status == WorkStatus.error) {
       _raiseError(remoteInfoState.error, remoteInfoState.errorCode);
     }
-  }
-
-  void read(String manufacturesDictUrl) {
-    _manufacturesDictUrl = manufacturesDictUrl;
-    _state = InfoState(
-      status: WorkStatus.working,
-      remoteInfo: RemoteInfo(),
-    );
-    addStateToStream(state);
-
-    _bleInfoReader.read();
   }
 }
 
