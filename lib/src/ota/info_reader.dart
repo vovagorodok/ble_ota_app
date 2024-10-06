@@ -1,9 +1,9 @@
 import 'package:ble_backend/ble_connector.dart';
 import 'package:ble_backend/state_notifier.dart';
+import 'package:ble_backend/work_state.dart';
 import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/core/remote_info.dart';
-import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/ble/ble_info_reader.dart';
 import 'package:ble_ota_app/src/http/http_info_reader.dart';
 

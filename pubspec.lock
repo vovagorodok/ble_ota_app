@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: ble_backend
-      sha256: "8e8ded31077b175aa9b28ff8d14209231718f17f794ccfd6898b8a0491ca576c"
+      sha256: "3826fe1752ba072a5e6cac506b197fb84f2ac5fae49da702a340be51774d49d7"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   bluetooth_low_energy:
     dependency: "direct main"
     description:

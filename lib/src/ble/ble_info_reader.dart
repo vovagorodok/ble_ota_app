@@ -1,8 +1,8 @@
 import 'package:ble_backend/ble_connector.dart';
 import 'package:ble_backend/ble_characteristic.dart';
 import 'package:ble_backend/state_notifier.dart';
+import 'package:ble_backend/work_state.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
-import 'package:ble_ota_app/src/core/work_state.dart';
 import 'package:ble_ota_app/src/core/device_info.dart';
 import 'package:ble_ota_app/src/core/version.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';

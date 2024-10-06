@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:ble_ota_app/src/core/work_state.dart';
+import 'package:ble_backend/work_state.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
 import 'package:ble_ota_app/src/ota/info_reader.dart';

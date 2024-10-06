@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  ble_backend: ^1.0.0
+  ble_backend: ^1.0.1
   flutter_reactive_ble_backend: ^1.0.0
   flutter_web_bluetooth_backend: ^1.0.0
   bluez_backend: ^0.1.0
