@@ -13,6 +13,7 @@ class BlueZCharacteristic extends BleCharacteristic {
   final BlueZDevice device;
   final BlueZUUID serviceId;
   final BlueZUUID characteristicId;
+  StreamSubscription? _subscription;
 
   @override
   Future<Uint8List> read() async {
@@ -33,12 +34,19 @@ class BlueZCharacteristic extends BleCharacteristic {
 
   @override
   Future<void> startNotifications() async {
-    await _getCharacteristic().startNotify();
+    final characteristic = _getCharacteristic();
+    await characteristic.startNotify();
+    _subscription = characteristic.propertiesChanged
+        .where((properties) => properties.contains('Value'))
+        .listen((properties) {
+      notifyData(Uint8List.fromList(characteristic.value));
+    });
   }
 
   @override
   Future<void> stopNotifications() async {
     await _getCharacteristic().stopNotify();
+    await _subscription?.cancel();
   }
 
   BlueZGattCharacteristic _getCharacteristic() {
