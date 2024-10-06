@@ -1,6 +1,7 @@
 import 'package:bluez/bluez.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/bluez_backend/bluez_scanner.dart';
 
 class BlueZCentral extends BleCentral {
@@ -18,6 +19,15 @@ class BlueZCentral extends BleCentral {
   BleScanner createScaner({required List<String> serviceIds}) {
     return BlueZScanner(client: client, serviceIds: serviceIds);
   }
+
+  @override
+  BleConnector createConnectorToKnownDevice(
+      {required String deviceId, required List<String> serviceIds}) {
+    throw UnsupportedError;
+  }
+
+  @override
+  bool get isCreateConnectorToKnownDeviceSupported => false;
 
   void _updateCentralStatus(BleCentralStatus status) {
     _status = status;

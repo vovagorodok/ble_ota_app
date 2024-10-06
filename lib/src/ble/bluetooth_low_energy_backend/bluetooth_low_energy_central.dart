@@ -1,6 +1,7 @@
 import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/bluetooth_low_energy_backend/bluetooth_low_energy_scanner.dart';
 
 class BluetoothLowEnergyCentral extends BleCentral {
@@ -20,6 +21,15 @@ class BluetoothLowEnergyCentral extends BleCentral {
     return BluetoothLowEnergyScanner(
         backend: backend, serviceIds: _convertToUuids(serviceIds));
   }
+
+  @override
+  BleConnector createConnectorToKnownDevice(
+      {required String deviceId, required List<String> serviceIds}) {
+    throw UnsupportedError;
+  }
+
+  @override
+  bool get isCreateConnectorToKnownDeviceSupported => false;
 
   void _updateState(BluetoothLowEnergyStateChangedEventArgs update) {
     _updateCentralStatus(_convertToCentralStatus(update.state));

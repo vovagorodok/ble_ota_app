@@ -1,7 +1,9 @@
 import 'package:universal_ble/universal_ble.dart' as backend;
 import 'package:ble_ota_app/src/ble/ble_backend/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/universal_ble_backend/universal_ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/universal_ble_backend/universal_ble_connector.dart';
 
 class UniversalBleCentral extends BleCentral {
   UniversalBleCentral() {
@@ -18,6 +20,15 @@ class UniversalBleCentral extends BleCentral {
   BleScanner createScaner({required List<String> serviceIds}) {
     return UniversalBleScanner(serviceIds: serviceIds);
   }
+
+  @override
+  BleConnector createConnectorToKnownDevice(
+      {required String deviceId, required List<String> serviceIds}) {
+    return UniversalBleConnector(deviceId: deviceId, serviceIds: serviceIds);
+  }
+
+  @override
+  bool get isCreateConnectorToKnownDeviceSupported => true;
 
   void _updateState(backend.AvailabilityState update) {
     _updateCentralStatus(_convertToCentralStatus(update));

@@ -1,7 +1,9 @@
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_central.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
 import 'package:ble_ota_app/src/ble/flutter_reactive_ble_backend/flutter_reactive_ble_scanner.dart';
+import 'package:ble_ota_app/src/ble/flutter_reactive_ble_backend/flutter_reactive_ble_connector.dart';
 
 class FlutterReactiveBleCentral extends BleCentral {
   FlutterReactiveBleCentral({required this.backend})
@@ -20,6 +22,18 @@ class FlutterReactiveBleCentral extends BleCentral {
     return FlutterReactiveBleScanner(
         backend: backend, serviceIds: _convertToUuids(serviceIds));
   }
+
+  @override
+  BleConnector createConnectorToKnownDevice(
+      {required String deviceId, required List<String> serviceIds}) {
+    return FlutterReactiveBleConnector(
+        backend: backend,
+        deviceId: deviceId,
+        serviceIds: _convertToUuids(serviceIds));
+  }
+
+  @override
+  bool get isCreateConnectorToKnownDeviceSupported => true;
 
   void _updateState(BleStatus update) {
     _updateCentralStatus(_convertToCentralStatus(update));
