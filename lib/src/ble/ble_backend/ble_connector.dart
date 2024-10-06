@@ -9,6 +9,8 @@ abstract class BleConnector extends StatefulNotifier<BleConnectorStatus> {
   Future<void> connect();
   Future<void> disconnect();
   Future<void> connectToKnownDevice({Duration duration});
+  bool get isConnectToKnownDeviceSupported;
+
   Future<List<String>> discoverServices();
 
   BleMtu createMtu();

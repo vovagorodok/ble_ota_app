@@ -42,8 +42,11 @@ class BlueZConnector extends BaseBleConnector {
   @override
   Future<void> connectToKnownDevice(
       {Duration duration = const Duration(seconds: 2)}) async {
-    await Future.delayed(duration);
+    throw UnsupportedError;
   }
+
+  @override
+  bool get isConnectToKnownDeviceSupported => false;
 
   @override
   Future<List<String>> discoverServices() async {

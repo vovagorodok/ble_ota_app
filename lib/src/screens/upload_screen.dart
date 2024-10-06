@@ -65,7 +65,9 @@ class UploadScreenState extends State<UploadScreen> {
       if (state.status == WorkStatus.success) {
         () async {
           await bleConnector.disconnect();
-          await bleConnector.connectToKnownDevice();
+          if (bleConnector.isConnectToKnownDeviceSupported) {
+            await bleConnector.connectToKnownDevice();
+          }
         }.call();
         WakelockPlus.disable();
       } else if (state.status == WorkStatus.error) {
