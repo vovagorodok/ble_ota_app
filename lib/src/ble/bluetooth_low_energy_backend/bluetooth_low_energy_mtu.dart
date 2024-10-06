@@ -15,5 +15,5 @@ class BluetoothLowEnergyMtu extends BleMtu {
   }
 
   @override
-  bool get isSupported => true;
+  bool get isRequestSupported => true;
 }
