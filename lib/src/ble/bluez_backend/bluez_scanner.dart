@@ -1,31 +1,24 @@
 import 'dart:async';
 
 import 'package:bluez/bluez.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/base_ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_peripheral.dart';
 import 'package:ble_ota_app/src/ble/bluez_backend/bluez_peripheral.dart';
 
-class BlueZScanner extends BleScanner {
+class BlueZScanner extends BaseBleScanner {
   BlueZScanner({required this.client, required this.serviceIds}) {
-    client.deviceAdded.listen((device) {
-      int index = _devices.indexWhere((d) => d.id == device.address);
-      if (index == -1) {
-        _devices.add(_createPeripheral(device));
-      } else {
-        _devices[index] = _createPeripheral(device);
-      }
-      notifyState(state);
-    });
+    client.deviceAdded
+        .listen((device) => addPeripheral(_createPeripheral(device)));
   }
 
   final BlueZClient client;
   final List<String> serviceIds;
-  final List<BlePeripheral> _devices = [];
   bool _isScanInProgress = false;
 
   @override
   BleScannerState get state => BleScannerState(
-        devices: _devices,
+        devices: devices,
         isScanInProgress: _isScanInProgress,
       );
 

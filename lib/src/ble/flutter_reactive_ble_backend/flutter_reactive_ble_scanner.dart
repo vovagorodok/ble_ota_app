@@ -1,31 +1,31 @@
 import 'dart:async';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:ble_ota_app/src/ble/ble_backend/base_ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_scanner.dart';
 import 'package:ble_ota_app/src/ble/ble_backend/ble_peripheral.dart';
 import 'package:ble_ota_app/src/ble/flutter_reactive_ble_backend/flutter_reactive_ble_peripheral.dart';
 
-class FlutterReactiveBleScanner extends BleScanner {
+class FlutterReactiveBleScanner extends BaseBleScanner {
   FlutterReactiveBleScanner({required this.backend, required this.serviceIds});
 
   final FlutterReactiveBle backend;
   final List<Uuid> serviceIds;
-  final List<BlePeripheral> _devices = [];
   StreamSubscription? _subscription;
 
   @override
   BleScannerState get state => BleScannerState(
-        devices: _devices,
+        devices: devices,
         isScanInProgress: _subscription != null,
       );
 
   @override
   Future<void> scan() async {
-    _devices.clear();
+    devices.clear();
     await _subscription?.cancel();
-    _subscription = backend
-        .scanForDevices(withServices: serviceIds)
-        .listen(_addPeripheral, onError: (Object e) {});
+    _subscription = backend.scanForDevices(withServices: serviceIds).listen(
+        (device) => addPeripheral(_createPeripheral(device)),
+        onError: (Object e) {});
     notifyState(state);
   }
 
@@ -33,18 +33,6 @@ class FlutterReactiveBleScanner extends BleScanner {
   Future<void> stop() async {
     await _subscription?.cancel();
     _subscription = null;
-    notifyState(state);
-  }
-
-  void _addPeripheral(DiscoveredDevice device) {
-    final scannedDevice = _createPeripheral(device);
-    final knownDeviceIndex =
-        _devices.indexWhere((d) => d.id == scannedDevice.id);
-    if (knownDeviceIndex >= 0) {
-      _devices[knownDeviceIndex] = scannedDevice;
-    } else {
-      _devices.add(scannedDevice);
-    }
     notifyState(state);
   }
 
