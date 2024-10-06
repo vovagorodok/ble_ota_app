@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:ble_ota_app/src/utils/converters.dart';
+import 'package:ble_backend/ble_connector.dart';
+import 'package:ble_backend/ble_serial.dart';
+import 'package:ble_backend/converters.dart';
+import 'package:ble_backend/state_notifier.dart';
 import 'package:ble_ota_app/src/core/work_state.dart';
-import 'package:ble_ota_app/src/core/state_notifier.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
-import 'package:ble_ota_app/src/ble/ble_backend/ble_connector.dart';
-import 'package:ble_ota_app/src/ble/ble_backend/ble_serial.dart';
 
 class BlePinChanger extends StatefulNotifier<BlePinChangeState> {
   BlePinChanger({required BleConnector bleConnector})
