@@ -14,7 +14,7 @@ class WinBleCharacteristic extends BleCharacteristic {
             serviceId: serviceId,
             characteristicId: characteristicId)
         .listen((value) {
-      notifyData(value);
+      notifyData(Uint8List.fromList(value));
     });
   }
 

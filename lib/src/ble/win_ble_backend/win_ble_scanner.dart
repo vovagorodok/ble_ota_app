@@ -8,6 +8,10 @@ import 'package:ble_ota_app/src/ble/win_ble_backend/win_ble_peripheral.dart';
 class WinBleScanner extends BleScanner {
   WinBleScanner({required this.serviceIds}) {
     WinBle.scanStream.listen((device) {
+      for (final serviceId in serviceIds) {
+        if (!device.serviceUuids
+            .any((id) => id.substring(1, id.length - 1) == serviceId)) return;
+      }
       _addPeripheral(_createPeripheral(device));
       notifyState(state);
     });
