@@ -21,7 +21,7 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class ScannerScreenState extends State<ScannerScreen> {
-  final bleScanner = bleCentral.createScaner(serviceIds: [serviceUuid]);
+  final bleScanner = bleCentral.createScanner(serviceIds: [serviceUuid]);
   final scanTimer = TimerWrapper();
 
   void _evaluateBleCentralStatus(BleCentralStatus status) {
