@@ -9,18 +9,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
   ble_backend: ^1.0.1
-  flutter_reactive_ble_backend: ^1.0.0
-  flutter_web_bluetooth_backend: ^1.0.0
-  bluez_backend: ^0.1.0
-  universal_ble_backend: ^0.1.0
-  bluetooth_low_energy_backend: ^0.1.0
   flutter_reactive_ble: ^5.3.1
+  flutter_reactive_ble_backend: ^1.0.0
   flutter_web_bluetooth: ^0.2.3
-  bluetooth_low_energy: ^6.0.2
-  universal_ble: ^0.13.0
+  flutter_web_bluetooth_backend: ^1.0.0
   bluez: ^0.8.2
+  bluez_backend: ^0.1.0
+  bluetooth_low_energy: ^6.0.2
+  bluetooth_low_energy_backend: ^0.1.0
+  universal_ble: ^0.13.0
+  universal_ble_backend: ^0.1.0
+  cupertino_icons: ^1.0.8
   file_picker: ^8.1.2
   archive: ^3.6.1
   permission_handler: ^11.3.1
