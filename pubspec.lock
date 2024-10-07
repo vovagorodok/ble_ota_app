@@ -33,8 +33,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  bluetooth_low_energy:
+  ble_backend_factory:
     dependency: "direct main"
+    description:
+      name: ble_backend_factory
+      sha256: cfdc1424c5ba464f7e7c38e1bb7a58772993ec1b0893db831caaa5933d49f684
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  bluetooth_low_energy:
+    dependency: transitive
     description:
       name: bluetooth_low_energy
       sha256: "057c146c3d5378f6a048b6a792cee7029bb185c7b3392dfb1605228325a5e336"
@@ -50,7 +58,7 @@ packages:
     source: hosted
     version: "6.0.3"
   bluetooth_low_energy_backend:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: bluetooth_low_energy_backend
       sha256: "488967578e5a63b3d6aa5d03764ea3fa4d0e64c0ec1237595ee48cc82d3b956d"
@@ -90,7 +98,7 @@ packages:
     source: hosted
     version: "6.0.0"
   bluez:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: bluez
       sha256: "203a1924e818a9dd74af2b2c7a8f375ab8e5edf0e486bba8f90a0d8a17ed9fce"
@@ -98,7 +106,7 @@ packages:
     source: hosted
     version: "0.8.2"
   bluez_backend:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: bluez_backend
       sha256: "4702949c94478085dfc615f44dd976b1792c9fdd07b2e67dd1d8606775eb074e"
@@ -276,7 +284,7 @@ packages:
     source: hosted
     version: "2.0.23"
   flutter_reactive_ble:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_reactive_ble
       sha256: "247e2efa76de203d1ba11335c13754b5b9d0504b5423e5b0c93a600f016b24e0"
@@ -284,7 +292,7 @@ packages:
     source: hosted
     version: "5.3.1"
   flutter_reactive_ble_backend:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_reactive_ble_backend
       sha256: f30c589afea9a47fc18789e8aa96ed9a7d8e5a24853b667c70b9f11a1b5b2599
@@ -305,7 +313,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_web_bluetooth:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_web_bluetooth
       sha256: "52ce64f65d7321c4bf6abfe9dac02fb888731339a5e0ad6de59fb916c20c9f02"
@@ -313,7 +321,7 @@ packages:
     source: hosted
     version: "0.2.3"
   flutter_web_bluetooth_backend:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_web_bluetooth_backend
       sha256: "9d14b247d0f7b4b2af0be550c4240eab6e5c241c3bcf11c2b6771dbbee929c82"
@@ -771,7 +779,7 @@ packages:
     source: hosted
     version: "1.3.2"
   universal_ble:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: universal_ble
       sha256: "4d8f48dd09dbaf9c5b079e77924df78cc7c276d634183919160314edc22d7c76"
@@ -779,7 +787,7 @@ packages:
     source: hosted
     version: "0.13.0"
   universal_ble_backend:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: universal_ble_backend
       sha256: b0acf8fc732296f42fde97bdd818a269bf6d3b05189abbb54b6a249a704a2e6e

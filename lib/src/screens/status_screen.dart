@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ble_backend/ble_central.dart';
-import 'package:ble_ota_app/src/ble/ble.dart';
+import 'package:ble_backend_factory/ble_central.dart';
 
 class StatusScreen extends StatefulWidget {
   const StatusScreen({super.key});
