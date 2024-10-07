@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ble_backend: ^1.2.0
-  ble_backend_factory: ^1.1.0
+  ble_backend: ^1.2.2
+  ble_backend_factory: ^1.1.1
   cupertino_icons: ^1.0.8
   file_picker: ^8.1.2
   archive: ^3.6.1
