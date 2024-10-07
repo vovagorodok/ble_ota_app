@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:ble_backend/ble_connector.dart';
 import 'package:ble_backend/ble_serial.dart';
-import 'package:ble_backend/converters.dart';
 import 'package:ble_backend/state_notifier.dart';
 import 'package:ble_backend/work_state.dart';
+import 'package:ble_backend/utils/converters.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
 import 'package:ble_ota_app/src/ble/ble_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';

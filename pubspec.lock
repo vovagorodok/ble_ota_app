@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: ble_backend
-      sha256: "3826fe1752ba072a5e6cac506b197fb84f2ac5fae49da702a340be51774d49d7"
+      sha256: d52d5c41a37e6fc66b7a15d4158c39d66fafe2aae66b3ea48be1c829ab2fb3f7
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.1.0"
   bluetooth_low_energy:
     dependency: "direct main"
     description:
@@ -53,10 +53,10 @@ packages:
     dependency: "direct main"
     description:
       name: bluetooth_low_energy_backend
-      sha256: d1e49fcc027ec9c5045c1b7c34b9a6a4c5abd919b333f37bc7f2395cb1a43872
+      sha256: "488967578e5a63b3d6aa5d03764ea3fa4d0e64c0ec1237595ee48cc82d3b956d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0"
   bluetooth_low_energy_darwin:
     dependency: transitive
     description:
@@ -101,10 +101,10 @@ packages:
     dependency: "direct main"
     description:
       name: bluez_backend
-      sha256: "2b3114ed193cd4618457992118145bc15e2ff4aad903f073c7c17ade4edbcdc1"
+      sha256: "4702949c94478085dfc615f44dd976b1792c9fdd07b2e67dd1d8606775eb074e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -287,10 +287,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_reactive_ble_backend
-      sha256: "43ebc778db7b67173f099ebe3fed24eafb40ab6897069f9f6f273048fb57d9e8"
+      sha256: f30c589afea9a47fc18789e8aa96ed9a7d8e5a24853b667c70b9f11a1b5b2599
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   flutter_settings_screens:
     dependency: "direct main"
     description:
@@ -316,10 +316,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_web_bluetooth_backend
-      sha256: "7a3121ee8dbb6a9cc9c66e86ba055f57119b8dea036b1b9f53ffb42e79eddc7f"
+      sha256: "9d14b247d0f7b4b2af0be550c4240eab6e5c241c3bcf11c2b6771dbbee929c82"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -782,10 +782,10 @@ packages:
     dependency: "direct main"
     description:
       name: universal_ble_backend
-      sha256: "4ebb1fffd49dc0273320adfb106375a11db0b9122390139a8f98ae6c158a37d5"
+      sha256: b0acf8fc732296f42fde97bdd818a269bf6d3b05189abbb54b6a249a704a2e6e
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0"
   universal_io:
     dependency: transitive
     description:

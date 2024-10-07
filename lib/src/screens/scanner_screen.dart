@@ -5,7 +5,7 @@ import 'package:jumping_dot/jumping_dot.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:ble_backend/ble_central.dart';
 import 'package:ble_backend/ble_scanner.dart';
-import 'package:ble_backend/timer_wrapper.dart';
+import 'package:ble_backend/utils/timer_wrapper.dart';
 import 'package:ble_ota_app/src/ble/ble.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/screens/status_screen.dart';
