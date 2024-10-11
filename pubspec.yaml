@@ -14,16 +14,17 @@ dependencies:
   cupertino_icons: ^1.0.8
   file_picker: ^8.1.2
   archive: ^3.6.1
-  permission_handler: ^11.3.1
   http: ^1.2.2
+  permission_handler: ^11.3.1
+  device_info_plus: ^11.0.0
   wakelock_plus: ^1.2.8
   expandable: ^5.0.1
   meta: ^1.15.0
-  flutter_settings_screens: ^0.3.4
   jumping_dot: ^0.0.7
   easy_localization: ^3.0.7
   flutter_markdown: ^0.7.3
   flutter_pin_code_fields: ^2.2.0
+  flutter_settings_screens: ^0.3.4
   url_launcher: ^6.3.0
 
 dev_dependencies:

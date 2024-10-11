@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:ble_backend/ble_central.dart';
 import 'package:ble_backend_factory/ble_central.dart';
 
@@ -68,7 +69,12 @@ class StatusScreenState extends State<StatusScreen> {
       if (!Platform.isAndroid && !Platform.isIOS && !Platform.isWindows) return;
 
       if (Platform.isAndroid) {
-        await Permission.location.request();
+        final deviceInfo = DeviceInfoPlugin();
+        final androidInfo = await deviceInfo.androidInfo;
+        final sdkVersion = androidInfo.version.sdkInt;
+        if (sdkVersion < 31) {
+          await Permission.location.request();
+        }
       }
       await Permission.bluetooth.request();
       await Permission.bluetoothScan.request();
