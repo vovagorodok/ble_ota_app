@@ -10,11 +10,11 @@ import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
 
 class PinScreen extends StatefulWidget {
-  PinScreen(
-      {required this.blePeripheral,
-      required BleConnector bleConnector,
-      super.key})
-      : blePinChanger = BlePinChanger(bleConnector: bleConnector);
+  PinScreen({
+    required this.blePeripheral,
+    required BleConnector bleConnector,
+    super.key,
+  }) : blePinChanger = BlePinChanger(bleConnector: bleConnector);
 
   final BlePeripheral blePeripheral;
   final BlePinChanger blePinChanger;
