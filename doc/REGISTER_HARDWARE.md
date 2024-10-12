@@ -30,6 +30,7 @@ General fields:
 - required `softwares` - list
 - optional `hardware_icon` - string contains path to icon
 - optional `hardware_text` - string contains path to text about hardware in markdown
+- optional `hardware_page` - string contains path to hardware web page
 
 Software fields:
 - required `software_name` - string
@@ -37,6 +38,7 @@ Software fields:
 - required `software_path` - string contains path to bin file
 - optional `software_icon` - string contains path to icon
 - optional `software_text` - string contains path to text about software in markdown
+- optional `software_page` - string contains path to software web page
 - optional `hardware_version` - specific version of hardware that software is for
 - optional `min_hardware_version` - min version of hardware that software is for
 - optional `max_hardware_version` - max version of hardware that software is for

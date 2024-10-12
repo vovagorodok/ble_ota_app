@@ -107,6 +107,7 @@ class HttpInfoReader extends StatefulNotifier<RemoteInfoState> {
       }
       _state.info.hardwareIcon = body["hardware_icon"];
       _state.info.hardwareText = body["hardware_text"];
+      _state.info.hardwarePage = body["hardware_page"];
 
       final softwares = body["softwares"];
       final fullList = softwares.map<Software>(Software.fromJson).toList();

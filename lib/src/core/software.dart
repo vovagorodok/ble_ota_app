@@ -9,6 +9,7 @@ class Software {
     this.path = "",
     this.icon,
     this.text,
+    this.page,
     this.hardwareVersion,
     this.minHardwareVersion,
     this.maxHardwareVersion,
@@ -20,6 +21,7 @@ class Software {
         path: json["software_path"],
         icon: json["software_icon"],
         text: json["software_text"],
+        page: json["software_page"],
         hardwareVersion: _getOptionalVersion(json, "hardware_version"),
         minHardwareVersion: _getOptionalVersion(json, "min_hardware_version"),
         maxHardwareVersion: _getOptionalVersion(json, "max_hardware_version"),
@@ -38,6 +40,7 @@ class Software {
   final String path;
   final String? icon;
   final String? text;
+  final String? page;
   final Version? hardwareVersion;
   final Version? minHardwareVersion;
   final Version? maxHardwareVersion;

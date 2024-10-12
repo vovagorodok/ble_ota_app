@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:expandable/expandable.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_backend/ble_peripheral.dart';
@@ -167,16 +168,21 @@ class UploadScreenState extends State<UploadScreen> {
             ],
           ),
           onTap: infoState.status == WorkStatus.success &&
-                  infoState.remoteInfo.hardwareText != null
-              ? () async => await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InfoScreen(
-                        title: infoState.remoteInfo.hardwareName,
-                        url: infoState.remoteInfo.hardwareText!,
-                      ),
-                    ),
-                  )
+                  (infoState.remoteInfo.hardwareText != null ||
+                      infoState.remoteInfo.hardwarePage != null)
+              ? infoState.remoteInfo.hardwareText == null
+                  ? () async => await launchUrl(
+                      Uri.parse(infoState.remoteInfo.hardwarePage!))
+                  : () async => await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InfoScreen(
+                            title: infoState.remoteInfo.hardwareName,
+                            textUrl: infoState.remoteInfo.hardwareText!,
+                            pageUrl: infoState.remoteInfo.hardwarePage,
+                          ),
+                        ),
+                      )
               : null,
           enabled: _canUpload(),
         ),
@@ -244,18 +250,23 @@ class UploadScreenState extends State<UploadScreen> {
           ),
           title: Text(sw.name),
           subtitle: Text("v${sw.version}"),
-          trailing: sw.text != null
+          trailing: sw.text != null || sw.page != null
               ? IconButton(
-                  icon: const Icon(Icons.info_rounded),
-                  onPressed: () async => await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InfoScreen(
-                        title: sw.toString(),
-                        url: sw.text!,
-                      ),
-                    ),
-                  ),
+                  icon: Icon(sw.text == null
+                      ? Icons.language_rounded
+                      : Icons.info_rounded),
+                  onPressed: sw.text == null
+                      ? () async => await launchUrl(Uri.parse(sw.page!))
+                      : () async => await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InfoScreen(
+                                title: sw.toString(),
+                                textUrl: sw.text!,
+                                pageUrl: sw.page,
+                              ),
+                            ),
+                          ),
                 )
               : null,
           onTap: () => _uploadHttpFile(sw.path),

@@ -5,10 +5,16 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 
 class InfoScreen extends StatefulWidget {
-  const InfoScreen({required this.title, required this.url, super.key});
+  const InfoScreen({
+    required this.title,
+    required this.textUrl,
+    this.pageUrl,
+    super.key,
+  });
 
   final String title;
-  final String url;
+  final String textUrl;
+  final String? pageUrl;
 
   @override
   State<InfoScreen> createState() => InfoScreenState();
@@ -40,7 +46,7 @@ class InfoScreenState extends State<InfoScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchHttpText(widget.url);
+    _fetchHttpText(widget.textUrl);
   }
 
   @override
@@ -55,13 +61,21 @@ class InfoScreenState extends State<InfoScreen> {
             onPressed: () {
               Navigator.pop(context);
             }),
+        actions: [
+          if (widget.pageUrl != null)
+            IconButton(
+              icon: const Icon(Icons.language_rounded),
+              onPressed: () async =>
+                  await launchUrl(Uri.parse(widget.pageUrl!)),
+            )
+        ],
       ),
       body: SafeArea(
         child: _text != null
             ? Markdown(
                 data: _text!,
                 onTapLink: (String text, String? href, String title) async =>
-                    launchUrl(Uri.parse(href!)),
+                    await launchUrl(Uri.parse(href!)),
               )
             : Padding(
                 padding: const EdgeInsets.all(16.0),
