@@ -8,7 +8,10 @@ import 'package:ble_backend/ble_central.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
 
 class StatusScreen extends StatefulWidget {
-  const StatusScreen({required this.bleCentral, super.key});
+  const StatusScreen({
+    required this.bleCentral,
+    super.key,
+  });
 
   final BleCentral bleCentral;
 

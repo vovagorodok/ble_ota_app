@@ -13,8 +13,11 @@ import 'package:ble_ota_app/src/screens/settings_screen.dart';
 import 'package:ble_ota_app/src/screens/upload_screen.dart';
 
 class ScannerScreen extends StatefulWidget {
-  const ScannerScreen(
-      {required this.bleCentral, required this.bleScanner, super.key});
+  const ScannerScreen({
+    required this.bleCentral,
+    required this.bleScanner,
+    super.key,
+  });
 
   final BleCentral bleCentral;
   final BleScanner bleScanner;
