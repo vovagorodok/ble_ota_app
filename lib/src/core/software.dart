@@ -15,16 +15,16 @@ class Software {
     this.maxHardwareVersion,
   });
 
-  static Software fromJson(json) => Software(
-        name: json["software_name"],
-        version: Version.fromList(json["software_version"]),
-        path: json["software_path"],
-        icon: json["software_icon"],
-        text: json["software_text"],
-        page: json["software_page"],
-        hardwareVersion: _getOptionalVersion(json, "hardware_version"),
-        minHardwareVersion: _getOptionalVersion(json, "min_hardware_version"),
-        maxHardwareVersion: _getOptionalVersion(json, "max_hardware_version"),
+  static Software fromDict(dict) => Software(
+        name: dict["software_name"],
+        version: Version.fromList(dict["software_version"]),
+        path: dict["software_path"],
+        icon: dict["software_icon"],
+        text: dict["software_text"],
+        page: dict["software_page"],
+        hardwareVersion: _getOptionalVersion(dict, "hardware_version"),
+        minHardwareVersion: _getOptionalVersion(dict, "min_hardware_version"),
+        maxHardwareVersion: _getOptionalVersion(dict, "max_hardware_version"),
       );
 
   @override

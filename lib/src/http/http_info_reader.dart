@@ -110,7 +110,7 @@ class HttpInfoReader extends StatefulNotifier<RemoteInfoState> {
       _state.info.hardwarePage = body["hardware_page"];
 
       final softwares = body["softwares"];
-      final fullList = softwares.map<Software>(Software.fromJson).toList();
+      final fullList = softwares.map<Software>(Software.fromDict).toList();
       final filteredByHardwareList = fullList.where((Software software) {
         return (software.hardwareVersion != null
                 ? software.hardwareVersion == deviceInfo.hardwareVersion
