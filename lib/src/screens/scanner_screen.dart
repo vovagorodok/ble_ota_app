@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:ble_backend/ble_central.dart';
 import 'package:ble_backend/ble_scanner.dart';
 import 'package:ble_backend/utils/timer_wrapper.dart';
-import 'package:ble_ota/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
 import 'package:ble_ota_app/src/ui/jumping_dots.dart';
@@ -14,8 +13,8 @@ import 'package:ble_ota_app/src/screens/settings_screen.dart';
 import 'package:ble_ota_app/src/screens/upload_screen.dart';
 
 class ScannerScreen extends StatefulWidget {
-  ScannerScreen({required this.bleCentral, super.key})
-      : bleScanner = bleCentral.createScanner(serviceIds: [serviceUuid]);
+  const ScannerScreen(
+      {required this.bleCentral, required this.bleScanner, super.key});
 
   final BleCentral bleCentral;
   final BleScanner bleScanner;
