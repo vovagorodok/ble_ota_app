@@ -2,8 +2,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:jumping_dot/jumping_dot.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
+import 'package:ble_ota_app/src/ui/jumping_dots.dart';
 
 class InfoScreen extends StatefulWidget {
   const InfoScreen({
@@ -81,11 +81,7 @@ class InfoScreenState extends State<InfoScreen> {
               )
             : Padding(
                 padding: const EdgeInsets.all(screenPadding),
-                child: JumpingDots(
-                  color: Colors.grey,
-                  radius: 6,
-                  innerPadding: 5,
-                ),
+                child: createJumpingDots(),
               ),
       ),
     );

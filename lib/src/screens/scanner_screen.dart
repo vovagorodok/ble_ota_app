@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-import 'package:jumping_dot/jumping_dot.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:ble_backend/ble_central.dart';
 import 'package:ble_backend/ble_scanner.dart';
@@ -9,6 +8,7 @@ import 'package:ble_backend/utils/timer_wrapper.dart';
 import 'package:ble_backend_factory/ble_central.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
+import 'package:ble_ota_app/src/ui/jumping_dots.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/screens/status_screen.dart';
 import 'package:ble_ota_app/src/screens/settings_screen.dart';
@@ -89,11 +89,7 @@ class ScannerScreenState extends State<ScannerScreen> {
           ? _buildDeviceCard(devices[index])
           : Padding(
               padding: const EdgeInsets.all(25.0),
-              child: JumpingDots(
-                color: Colors.grey,
-                radius: 6,
-                innerPadding: 5,
-              ),
+              child: createJumpingDots(),
             ),
     );
   }
