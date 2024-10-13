@@ -7,8 +7,8 @@ import 'package:ble_ota_app/src/ota/uploader.dart';
 
 String determineInfoError(InfoState state) {
   switch (state.error) {
-    case InfoError.incorrectJsonFileFormat:
-      return tr('IncorrectJsonFileFormat');
+    case InfoError.incorrectFileFormat:
+      return tr('IncorrectFileFormat');
     case InfoError.unexpectedNetworkResponse:
       return tr('UnexpectedNetworkResponse', args: ['${state.errorCode}']);
     case InfoError.generalNetworkError:

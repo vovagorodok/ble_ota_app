@@ -29,7 +29,7 @@
     "UnexpectedNetworkResponse": "Nieoczekiwana odpowiedź sieci: {}",
     "NetworkError": "Błąd sieci",
     "UnknownError": "Nieznany błąd: {}",
-    "IncorrectJsonFileFormat": "Nieprawidłowy format pliku json",
+    "IncorrectFileFormat": "Nieprawidłowy format pliku",
     "PinCodeHasNotBeenChanged": "Pin kod nie został zmieniony",
     "NoInformation": "Brak informacji",
     "Loading..": "Ładowanie..",

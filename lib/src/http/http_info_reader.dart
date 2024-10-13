@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:yaml/yaml.dart';
 import 'package:ble_backend/state_notifier.dart';
 import 'package:ble_backend/work_state.dart';
 import 'package:ble_ota_app/src/core/errors.dart';
@@ -33,7 +34,9 @@ class HttpInfoReader extends StatefulNotifier<RemoteInfoState> {
           );
           return;
         }
-        final manufacturesBody = json.decode(manufacturesResponse.body);
+        final manufacturesBody =
+            _loadDict(manufacturesDictUrl, manufacturesResponse.body);
+
         final hardwaresUrl = manufacturesBody[deviceInfo.manufactureName];
         if (hardwaresUrl == null) {
           state.info.isHardwareUnregistered = true;
@@ -50,7 +53,8 @@ class HttpInfoReader extends StatefulNotifier<RemoteInfoState> {
           );
           return;
         }
-        final hardwaresBody = json.decode(hardwaresResponse.body);
+        final hardwaresBody = _loadDict(hardwaresUrl, hardwaresResponse.body);
+
         final hardwareUrl = hardwaresBody[deviceInfo.hardwareName];
         if (hardwareUrl == null) {
           state.info.isHardwareUnregistered = true;
@@ -94,15 +98,15 @@ class HttpInfoReader extends StatefulNotifier<RemoteInfoState> {
         return;
       }
 
-      final body = json.decode(response.body);
+      final body = _loadDict(hardwareUrl, response.body);
       if (!body.containsKey("hardware_name") ||
           !body.containsKey("softwares")) {
-        _raiseError(InfoError.incorrectJsonFileFormat);
+        _raiseError(InfoError.incorrectFileFormat);
         return;
       }
       _state.info.hardwareName = body["hardware_name"];
       if (_state.info.hardwareName != deviceInfo.hardwareName) {
-        _raiseError(InfoError.incorrectJsonFileFormat);
+        _raiseError(InfoError.incorrectFileFormat);
         return;
       }
       _state.info.hardwareIcon = body["hardware_icon"];
@@ -131,6 +135,11 @@ class HttpInfoReader extends StatefulNotifier<RemoteInfoState> {
       _raiseError(InfoError.generalNetworkError);
     }
   }
+
+  dynamic _loadDict(String name, String body) =>
+      name.endsWith('.yaml') || name.endsWith('.yml')
+          ? loadYaml(body)
+          : jsonDecode(body);
 
   void _raiseError(InfoError error, {int errorCode = 0}) {
     state.status = WorkStatus.error;

@@ -29,7 +29,7 @@
     "UnexpectedNetworkResponse": "Unexpected network response: {}",
     "NetworkError": "Network error",
     "UnknownError": "Unknown error: {}",
-    "IncorrectJsonFileFormat": "Incorrect json file format",
+    "IncorrectFileFormat": "Incorrect file format",
     "PinCodeHasNotBeenChanged": "Pin code has not been changed",
     "NoInformation": "No information",
     "Loading..": "Loading..",

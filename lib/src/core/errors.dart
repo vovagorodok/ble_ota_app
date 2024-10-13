@@ -14,7 +14,7 @@ enum UploadError {
 
 enum InfoError {
   unknown,
-  incorrectJsonFileFormat,
+  incorrectFileFormat,
   unexpectedNetworkResponse,
   generalNetworkError,
 }
