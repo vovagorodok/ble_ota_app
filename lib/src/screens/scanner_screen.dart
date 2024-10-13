@@ -7,11 +7,12 @@ import 'package:ble_backend/ble_central.dart';
 import 'package:ble_backend/ble_scanner.dart';
 import 'package:ble_backend/utils/timer_wrapper.dart';
 import 'package:ble_backend_factory/ble_central.dart';
+import 'package:ble_ota_app/src/settings/settings.dart';
+import 'package:ble_ota_app/src/ui/ui_consts.dart';
 import 'package:ble_ota_app/src/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/screens/status_screen.dart';
 import 'package:ble_ota_app/src/screens/settings_screen.dart';
 import 'package:ble_ota_app/src/screens/upload_screen.dart';
-import 'package:ble_ota_app/src/settings/settings.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
@@ -110,14 +111,14 @@ class ScannerScreenState extends State<ScannerScreen> {
       );
 
   Widget _buildControlButtons() => SizedBox(
-        height: 50,
+        height: buttonHeight,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: _buildScanButton(),
             ),
-            if (!kIsWeb) const SizedBox(width: 16),
+            if (!kIsWeb) const SizedBox(width: buttonsSplitter),
             if (!kIsWeb)
               Expanded(
                 child: _buildStopButton(),
@@ -131,7 +132,7 @@ class ScannerScreenState extends State<ScannerScreen> {
           Expanded(
             child: _buildDevicesList(),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: screenPortraitSplitter),
           _buildControlButtons(),
         ],
       );
@@ -142,7 +143,7 @@ class ScannerScreenState extends State<ScannerScreen> {
           Expanded(
             child: _buildDevicesList(),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: screenLandscapeSplitter),
           Expanded(
             child: _buildControlButtons(),
           ),
@@ -179,7 +180,7 @@ class ScannerScreenState extends State<ScannerScreen> {
         ],
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.all(16.0),
+        minimum: const EdgeInsets.all(screenPadding),
         child: StreamBuilder<BleScannerState>(
           stream: bleScanner.stateStream,
           builder: (context, snapshot) => OrientationBuilder(

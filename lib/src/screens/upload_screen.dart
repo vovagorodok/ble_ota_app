@@ -14,6 +14,7 @@ import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ota/uploader.dart';
 import 'package:ble_ota_app/src/ota/info_reader.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
+import 'package:ble_ota_app/src/ui/ui_consts.dart';
 import 'package:ble_ota_app/src/screens/pin_screen.dart';
 import 'package:ble_ota_app/src/screens/info_screen.dart';
 
@@ -373,7 +374,7 @@ class UploadScreenState extends State<UploadScreen> {
       );
 
   Widget _buildUploadFileButton() => SizedBox(
-        height: 50,
+        height: buttonHeight,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -399,7 +400,8 @@ class UploadScreenState extends State<UploadScreen> {
           ),
           const SizedBox(height: 20),
           _buildSoftwareStatusWidget(),
-          if (_canUploadLocalFile()) const SizedBox(height: 8),
+          if (_canUploadLocalFile())
+            const SizedBox(height: screenPortraitSplitter),
           if (_canUploadLocalFile()) _buildUploadFileButton(),
         ],
       );
@@ -414,7 +416,7 @@ class UploadScreenState extends State<UploadScreen> {
               ],
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: screenLandscapeSplitter),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -466,7 +468,7 @@ class UploadScreenState extends State<UploadScreen> {
           ],
         ),
         body: SafeArea(
-          minimum: const EdgeInsets.all(16.0),
+          minimum: const EdgeInsets.all(screenPadding),
           child: OrientationBuilder(
             builder: (context, orientation) =>
                 orientation == Orientation.portrait

@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:ble_backend/ble_central.dart';
 import 'package:ble_backend_factory/ble_central.dart';
+import 'package:ble_ota_app/src/ui/ui_consts.dart';
 
 class StatusScreen extends StatefulWidget {
   const StatusScreen({super.key});
@@ -89,7 +90,7 @@ class StatusScreenState extends State<StatusScreen> {
         canPop: false,
         child: Scaffold(
           body: SafeArea(
-            minimum: const EdgeInsets.all(16.0),
+            minimum: const EdgeInsets.all(screenPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,

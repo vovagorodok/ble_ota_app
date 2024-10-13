@@ -8,6 +8,7 @@ import 'package:ble_backend/ble_connector.dart';
 import 'package:ble_backend/work_state.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
+import 'package:ble_ota_app/src/ui/ui_consts.dart';
 
 class PinScreen extends StatefulWidget {
   PinScreen({
@@ -133,14 +134,14 @@ class PinScreenState extends State<PinScreen> {
       );
 
   Widget _buildControlButtons() => SizedBox(
-        height: 50,
+        height: buttonHeight,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: _buildSetButton(),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: buttonsSplitter),
             Expanded(
               child: _buildRemoveButton(),
             ),
@@ -163,7 +164,7 @@ class PinScreenState extends State<PinScreen> {
           Expanded(
             child: _buildPinCodeWithStatusWidget(),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: screenLandscapeSplitter),
           Expanded(
             child: _buildControlButtons(),
           ),
@@ -186,7 +187,7 @@ class PinScreenState extends State<PinScreen> {
           ),
         ),
         body: SafeArea(
-          minimum: const EdgeInsets.all(16.0),
+          minimum: const EdgeInsets.all(screenPadding),
           child: OrientationBuilder(
             builder: (context, orientation) =>
                 orientation == Orientation.portrait

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:jumping_dot/jumping_dot.dart';
+import 'package:ble_ota_app/src/ui/ui_consts.dart';
 
 class InfoScreen extends StatefulWidget {
   const InfoScreen({
@@ -76,9 +77,10 @@ class InfoScreenState extends State<InfoScreen> {
                 data: _text!,
                 onTapLink: (String text, String? href, String title) async =>
                     await launchUrl(Uri.parse(href!)),
+                padding: const EdgeInsets.all(screenPadding),
               )
             : Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(screenPadding),
                 child: JumpingDots(
                   color: Colors.grey,
                   radius: 6,
