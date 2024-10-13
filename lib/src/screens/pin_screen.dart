@@ -6,8 +6,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_backend/ble_peripheral.dart';
 import 'package:ble_backend/ble_connector.dart';
 import 'package:ble_backend/work_state.dart';
+import 'package:ble_ota/ble/ble_pin_changer.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
-import 'package:ble_ota_app/src/ble/ble_pin_changer.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
 
 class PinScreen extends StatefulWidget {

@@ -9,10 +9,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_backend/ble_peripheral.dart';
 import 'package:ble_backend/ble_connector.dart';
 import 'package:ble_backend/work_state.dart';
-import 'package:ble_ota_app/src/core/software.dart';
+import 'package:ble_ota/core/software.dart';
+import 'package:ble_ota/uploader.dart';
+import 'package:ble_ota/info_reader.dart';
 import 'package:ble_ota_app/src/utils/string_forms.dart';
-import 'package:ble_ota_app/src/ota/uploader.dart';
-import 'package:ble_ota_app/src/ota/info_reader.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
 import 'package:ble_ota_app/src/screens/pin_screen.dart';
@@ -133,14 +133,18 @@ class UploadScreenState extends State<UploadScreen> {
     if (result != null) {
       await WakelockPlus.enable();
       result.files.single.bytes == null
-          ? await uploader.uploadLocalFile(localPath: result.files.single.path!)
-          : await uploader.uploadBytes(bytes: result.files.single.bytes!);
+          ? await uploader.uploadLocalFile(
+              localPath: result.files.single.path!,
+              maxMtu: maxMtuSize.value.toInt())
+          : await uploader.uploadBytes(
+              bytes: result.files.single.bytes!,
+              maxMtu: maxMtuSize.value.toInt());
     }
   }
 
   Future<void> _uploadHttpFile(String url) async {
     await WakelockPlus.enable();
-    await uploader.uploadHttpFile(url: url);
+    await uploader.uploadHttpFile(url: url, maxMtu: maxMtuSize.value.toInt());
   }
 
   MaterialColor _determinateStatusColor() {

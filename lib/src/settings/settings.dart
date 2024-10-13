@@ -1,6 +1,8 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:ble_ota_app/src/ble/ble.dart';
 
 @immutable
 class Setting<T> {
@@ -29,7 +31,7 @@ const alwaysAllowLocalFilesUpload = Setting<bool>(
 );
 final sequentialUpload = Setting<bool>(
   key: 'key-sequential-upload',
-  defaultValue: isSequentialUploadRequired,
+  defaultValue: _isSequentialUploadRequired,
 );
 const manufacturesDictUrl = Setting<String>(
   key: 'key-dict-url',
@@ -40,3 +42,6 @@ const maxMtuSize = Setting<double>(
   key: 'key-max-mtu-size',
   defaultValue: 515,
 );
+
+final _isSequentialUploadRequired =
+    !kIsWeb && !Platform.isAndroid && !Platform.isIOS;

@@ -11,9 +11,9 @@ dependencies:
     sdk: flutter
   ble_backend: ^1.2.2
   ble_backend_factory: ^1.1.2
+  ble_ota: ^1.0.2
   cupertino_icons: ^1.0.8
   file_picker: ^8.1.2
-  archive: ^3.6.1
   http: ^1.2.2
   permission_handler: ^11.3.1
   device_info_plus: ^11.0.0
@@ -26,7 +26,6 @@ dependencies:
   flutter_pin_code_fields: ^2.2.0
   flutter_settings_screens: ^0.3.4
   url_launcher: ^6.3.0
-  yaml: ^3.1.2
 
 dev_dependencies:
   flutter_test:

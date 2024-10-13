@@ -2,7 +2,7 @@
 # See https://dart.dev/tools/pub/glossary#lockfile
 packages:
   archive:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: archive
       sha256: cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d
@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.2"
+  ble_ota:
+    dependency: "direct main"
+    description:
+      name: ble_ota
+      sha256: bcd95bc9da2ab9c7b8d9e56a69ed54e3e18fedf33a83797c18787b5ae4694e51
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   bluetooth_low_energy:
     dependency: transitive
     description:
@@ -955,7 +963,7 @@ packages:
     source: hosted
     version: "6.5.0"
   yaml:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: yaml
       sha256: "75769501ea3489fca56601ff33454fe45507ea3bfb014161abc3b43ae25989d5"
