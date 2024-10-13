@@ -32,8 +32,8 @@ class Software {
     return "$name v$version";
   }
 
-  static _getOptionalVersion(json, key) =>
-      json.containsKey(key) ? Version.fromList(json[key]) : null;
+  static _getOptionalVersion(dict, key) =>
+      dict.containsKey(key) ? Version.fromList(dict[key]) : null;
 
   final String name;
   final Version version;
