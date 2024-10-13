@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:ble_backend/ble_central.dart';
 import 'package:ble_backend/ble_scanner.dart';
 import 'package:ble_backend/utils/timer_wrapper.dart';
-import 'package:ble_backend_factory/ble_central.dart';
 import 'package:ble_ota/ble/ble_uuids.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
@@ -15,15 +14,21 @@ import 'package:ble_ota_app/src/screens/settings_screen.dart';
 import 'package:ble_ota_app/src/screens/upload_screen.dart';
 
 class ScannerScreen extends StatefulWidget {
-  const ScannerScreen({super.key});
+  ScannerScreen({required this.bleCentral, super.key})
+      : bleScanner = bleCentral.createScanner(serviceIds: [serviceUuid]);
+
+  final BleCentral bleCentral;
+  final BleScanner bleScanner;
 
   @override
   State<ScannerScreen> createState() => ScannerScreenState();
 }
 
 class ScannerScreenState extends State<ScannerScreen> {
-  final bleScanner = bleCentral.createScanner(serviceIds: [serviceUuid]);
   final scanTimer = TimerWrapper();
+
+  BleCentral get bleCentral => widget.bleCentral;
+  BleScanner get bleScanner => widget.bleScanner;
 
   void _evaluateBleCentralStatus(BleCentralStatus status) {
     setState(() {
@@ -38,7 +43,10 @@ class ScannerScreenState extends State<ScannerScreen> {
           status != BleCentralStatus.unknown) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const StatusScreen()),
+          MaterialPageRoute(
+              builder: (context) => StatusScreen(
+                    bleCentral: bleCentral,
+                  )),
         );
       }
     });

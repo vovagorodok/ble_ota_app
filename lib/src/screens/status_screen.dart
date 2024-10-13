@@ -5,17 +5,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:ble_backend/ble_central.dart';
-import 'package:ble_backend_factory/ble_central.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
 
 class StatusScreen extends StatefulWidget {
-  const StatusScreen({super.key});
+  const StatusScreen({required this.bleCentral, super.key});
+
+  final BleCentral bleCentral;
 
   @override
   State<StatusScreen> createState() => StatusScreenState();
 }
 
 class StatusScreenState extends State<StatusScreen> {
+  BleCentral get bleCentral => widget.bleCentral;
+
   String _determineText(BleCentralStatus status) {
     switch (status) {
       case BleCentralStatus.unsupported:
