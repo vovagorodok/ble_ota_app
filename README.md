@@ -1,10 +1,13 @@
 # BleOta
 Graphical application for upload firmware over Bluetooth.  
 <img src="./assets/images/icon_color.svg" width="100">  
-Fully works on `Android` and `iOS`. For other OS it depends on `flutter_reactive_ble` library.  
 Local files upload is disabled by default to prevent unknown firmware upload by end users, enable it by changing `Always allow local files upload` in `Settings`.  
 Additionally update functionality for specific hardwares is supported.
 If you want end users have ability to update your hardware check `doc/REGISTER_HARDWARE.md`.
+
+Fully works on `Android` and `iOS`.
+On `Web` can require additional browser flags, see `doc/USING.md`.
+For other OS it depends on internal libraries.
 
 [<img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
 alt="Download from Google Play" 
