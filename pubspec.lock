@@ -29,26 +29,26 @@ packages:
     dependency: "direct main"
     description:
       name: ble_backend
-      sha256: "520ded9b331f159b773f5ce54b4cc4c373705cd94956ffb408a2c084a14ceb2e"
+      sha256: "89a79aa1f57349fab763fc21903ca1ffcff33f98398eebcac065fc83dc1b272f"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "1.2.3"
   ble_backend_factory:
     dependency: "direct main"
     description:
       name: ble_backend_factory
-      sha256: "0b9a73caffc6fc44671ea511fdcb1344c4b792490d6454aae96edc19bf062f1e"
+      sha256: "0b25a69e7c158587a717c67e398b09c788414da8aa72ff039c42f4aaf192c834"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.3"
   ble_ota:
     dependency: "direct main"
     description:
       name: ble_ota
-      sha256: bcd95bc9da2ab9c7b8d9e56a69ed54e3e18fedf33a83797c18787b5ae4694e51
+      sha256: cb9947b2c06490529b5db24334c615c9acb9da4b26190699b7f22bc9016b0b32
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   bluetooth_low_energy:
     dependency: transitive
     description:
@@ -69,10 +69,10 @@ packages:
     dependency: transitive
     description:
       name: bluetooth_low_energy_backend
-      sha256: "55ded78a33f4baae95472eb2c7657571ed19b911c75bb68d8f626e4002ef2e30"
+      sha256: "0f75f7890513fa5a07aa2ae99ac8cf006f94ff59dba9092699cba298270d3177"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.2"
+    version: "0.3.3"
   bluetooth_low_energy_darwin:
     dependency: transitive
     description:
@@ -117,10 +117,10 @@ packages:
     dependency: transitive
     description:
       name: bluez_backend
-      sha256: "60e29c768bf9a701c423904d69f1ed00faefee905f260c0d5fb035682ab5f661"
+      sha256: "9d51f3c09081c91f2edb4c084140caf91954f7ef8ffdd04fee2d2471d0495c7b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.2"
+    version: "0.3.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -287,10 +287,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: e17575ca576a34b46c58c91f9948891117a1bd97815d2e661813c7f90c647a78
+      sha256: bd9c475d9aae256369edacafc29d1e74c81f78a10cdcdacbbbc9e3c43d009e4a
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.3+2"
+    version: "0.7.4"
   flutter_pin_code_fields:
     dependency: "direct main"
     description:
@@ -319,10 +319,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_reactive_ble_backend
-      sha256: f87809d2f75ce8d3337e7182e4b1ec5e8b5ea087020d8d152682a4e9b662172e
+      sha256: "95317f2832f6cbedb9e14e19102de39e67aa8ec0808708f2b873b95a9d39a01a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.2"
   flutter_settings_screens:
     dependency: "direct main"
     description:
@@ -340,18 +340,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_web_bluetooth
-      sha256: "52ce64f65d7321c4bf6abfe9dac02fb888731339a5e0ad6de59fb916c20c9f02"
+      sha256: fcd03e2e5f82edcedcbc940f1b6a0635a50757374183254f447640886c53208e
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.3"
+    version: "0.2.4"
   flutter_web_bluetooth_backend:
     dependency: transitive
     description:
       name: flutter_web_bluetooth_backend
-      sha256: "4ca247ffc0f089020b26910371812ec7bd7b7e9f63fb04a212533587fd5b35fe"
+      sha256: "04f44be40104d682d353e8226f1a4d84d1d8da81be393ad12434450f43126994"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "1.2.3"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -814,10 +814,10 @@ packages:
     dependency: transitive
     description:
       name: universal_ble_backend
-      sha256: "77d409ae545fc16f264cd0429b05d936e2e533b5d2f1f1bef1cf4dbb588c12f0"
+      sha256: "4510660f8a38bb18594c36d633a3c3525258153ae6e16c80270799470af0f8f2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.2"
+    version: "0.3.3"
   universal_io:
     dependency: transitive
     description:
@@ -830,10 +830,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "21b704ce5fa560ea9f3b525b43601c678728ba46725bab9b01187b4831377ed3"
+      sha256: "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.0"
+    version: "6.3.1"
   url_launcher_android:
     dependency: transitive
     description:
