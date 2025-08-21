@@ -9,15 +9,15 @@ Fully works on `Android` and `iOS`.
 On `Web` can require additional browser flags, see `doc/USING.md`.
 For other OS it depends on internal libraries.
 
-[<img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
+[<picture><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
 alt="Download from Google Play" 
-height="50">](https://play.google.com/store/apps/details?id=com.vovagorodok.ble_ota_app)&nbsp;&nbsp;&nbsp;
-[<img src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Get_it_on_F-Droid_%28material_design%29.svg" 
+height="50"></picture>](https://play.google.com/store/apps/details?id=com.vovagorodok.ble_ota_app)&nbsp;&nbsp;&nbsp;
+[<picture><img src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Get_it_on_F-Droid_%28material_design%29.svg" 
 alt="Download from F-Droid" 
-height="50">](https://f-droid.org/packages/com.vovagorodok.ble_ota_app/)&nbsp;&nbsp;&nbsp;
-[<img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" 
+height="50"></picture>](https://f-droid.org/packages/com.vovagorodok.ble_ota_app/)&nbsp;&nbsp;&nbsp;
+[<picture><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" 
 alt="Download from App Store" 
-height="50">](https://itunes.apple.com/us/app/ble_ota_app/id0000000000)
+height="50"></picture>](https://itunes.apple.com/us/app/ble_ota_app/id0000000000)
 
 > **REMARK**: Application not released on `App Store` yet.
 > Apple corporation require `100$/year` developer fees even for free and open source applications.
