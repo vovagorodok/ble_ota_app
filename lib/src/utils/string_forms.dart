@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_backend/work_state.dart';
+import 'package:ble_ota/core/version.dart';
 import 'package:ble_ota/core/errors.dart';
 import 'package:ble_ota/ble/ble_pin_changer.dart';
 import 'package:ble_ota/info_reader.dart';
@@ -58,7 +59,7 @@ String determinePinChangeError(BlePinChangeState state) {
   }
 }
 
-String createDeviceString(infoState, name, version) {
+String createDeviceString(InfoState infoState, String name, Version version) {
   if (infoState.status == WorkStatus.success) {
     return "$name v$version";
   } else if (infoState.status == WorkStatus.working) {

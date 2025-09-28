@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:ble_backend/ble_central.dart';
+import 'package:ble_backend/ble_peripheral.dart';
 import 'package:ble_backend/ble_scanner.dart';
 import 'package:ble_backend/utils/timer_wrapper.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
@@ -69,7 +70,7 @@ class ScannerScreenState extends State<ScannerScreen> {
     bleScanner.stop();
   }
 
-  Widget _buildDeviceCard(device) => Card(
+  Widget _buildDeviceCard(BlePeripheral device) => Card(
         child: ListTile(
           title: Text(device.name ?? ''),
           subtitle: Text("${device.id}\nRSSI: ${device.rssi ?? ''}"),
