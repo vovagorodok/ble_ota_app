@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

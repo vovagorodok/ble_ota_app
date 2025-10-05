@@ -1,37 +1,36 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:expandable/expandable.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:ble_backend/ble_peripheral.dart';
 import 'package:ble_backend/ble_connector.dart';
-import 'package:ble_backend/work_state.dart';
-import 'package:ble_ota/core/software.dart';
-import 'package:ble_ota/uploader.dart';
-import 'package:ble_ota/info_reader.dart';
-import 'package:ble_ota_app/src/utils/string_forms.dart';
+import 'package:ble_backend/ble_peripheral.dart';
+import 'package:ble_ota_app/src/screens/info_screen.dart';
+import 'package:ble_ota_app/src/screens/pin_screen.dart';
 import 'package:ble_ota_app/src/settings/settings.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
-import 'package:ble_ota_app/src/screens/pin_screen.dart';
-import 'package:ble_ota_app/src/screens/info_screen.dart';
+import 'package:ble_ota_app/src/utils/string_forms.dart';
+import 'package:ble_ota/ble_ota.dart';
+import 'package:ble_ota/core/software.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:expandable/expandable.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class UploadScreen extends StatefulWidget {
   UploadScreen({
     required this.blePeripheral,
     required this.bleConnector,
     super.key,
-  })  : uploader = Uploader(
+  }) : bleOta = BleOta(
             bleConnector: bleConnector,
-            sequentialUpload: sequentialUpload.value),
-        infoReader = InfoReader(bleConnector: bleConnector);
+            manufacturesDictUrl: manufacturesDictUrl.value,
+            maxMtu: maxMtuSize.value.toInt(),
+            skipInfoReading: skipInfoReading.value,
+            sequentialUpload: sequentialUpload.value);
 
   final BlePeripheral blePeripheral;
   final BleConnector bleConnector;
-  final Uploader uploader;
-  final InfoReader infoReader;
+  final BleOta bleOta;
 
   @override
   State<UploadScreen> createState() => UploadScreenState();
@@ -42,39 +41,30 @@ class UploadScreenState extends State<UploadScreen> {
 
   BlePeripheral get blePeripheral => widget.blePeripheral;
   BleConnector get bleConnector => widget.bleConnector;
-  Uploader get uploader => widget.uploader;
-  InfoReader get infoReader => widget.infoReader;
+  BleOta get bleOta => widget.bleOta;
   BleConnectorStatus get connectionStatus => bleConnector.state;
-  UploadState get uploadState => uploader.state;
-  InfoState get infoState => infoReader.state;
-  WorkStatus get uploadStatus => uploadState.status;
-  WorkStatus get infoStatus => infoState.status;
+  BleOtaState get bleOtaState => bleOta.state;
+  BleOtaStatus get bleOtaStatus => bleOtaState.status;
 
   void _onConnectionStateChanged(BleConnectorStatus state) {
     setState(() {
       if (state == BleConnectorStatus.connected) {
-        if (!skipInfoReading.value) {
-          infoReader.read(manufacturesDictUrl: manufacturesDictUrl.value);
-        }
+        bleOta.init();
       }
     });
   }
 
-  void _onInfoStateChanged(InfoState state) {
-    setState(() {});
-  }
-
-  void _onUploadStateChanged(UploadState state) {
+  void _onBleOtaStateChanged(BleOtaState state) {
     setState(() {
-      if (state.status == WorkStatus.success) {
+      if (state.status == BleOtaStatus.uploaded) {
         () async {
           await bleConnector.disconnect();
           if (bleConnector.isConnectToKnownDeviceSupported) {
             await bleConnector.connectToKnownDevice();
           }
         }.call();
-        WakelockPlus.disable();
-      } else if (state.status == WorkStatus.error) {
+      } else if (state.status == BleOtaStatus.initialized ||
+          state.status == BleOtaStatus.error) {
         WakelockPlus.disable();
       }
     });
@@ -84,8 +74,7 @@ class UploadScreenState extends State<UploadScreen> {
   void initState() {
     super.initState();
     _subscriptions = [
-      uploader.stateStream.listen(_onUploadStateChanged),
-      infoReader.stateStream.listen(_onInfoStateChanged),
+      bleOta.stateStream.listen(_onBleOtaStateChanged),
       bleConnector.stateStream.listen(_onConnectionStateChanged),
     ];
     bleConnector.connect();
@@ -101,27 +90,41 @@ class UploadScreenState extends State<UploadScreen> {
     }.call();
     WakelockPlus.disable();
 
-    uploader.dispose();
-    infoReader.dispose();
+    bleOta.dispose();
     bleConnector.dispose();
     super.dispose();
   }
 
+  bool _isBleOtaActive() {
+    return bleOtaStatus == BleOtaStatus.idle ||
+        bleOtaStatus == BleOtaStatus.init ||
+        bleOtaStatus == BleOtaStatus.upload ||
+        bleOtaStatus == BleOtaStatus.pinChange;
+  }
+
+  bool _isBleOtaInitialized() {
+    return bleOtaStatus != BleOtaStatus.idle &&
+        bleOtaStatus != BleOtaStatus.init;
+  }
+
+  bool _isRemoteInfoNotAvailable() {
+    return _isBleOtaInitialized() && !bleOtaState.remoteInfo.isAvailable;
+  }
+
   bool _canPop() {
-    return uploadStatus != WorkStatus.working &&
-        infoStatus != WorkStatus.working;
+    return !_isBleOtaActive();
   }
 
   bool _canUpload() {
     return connectionStatus == BleConnectorStatus.connected &&
-        uploadStatus != WorkStatus.working &&
-        infoStatus != WorkStatus.working;
+        !_isBleOtaActive() &&
+        bleOtaState.deviceFlags.uploadEnabled;
   }
 
   bool _canUploadLocalFile() {
     return skipInfoReading.value ||
         alwaysAllowLocalFilesUpload.value ||
-        infoState.remoteInfo.isHardwareUnregistered;
+        _isRemoteInfoNotAvailable();
   }
 
   Future<void> _pickFile() async {
@@ -133,27 +136,22 @@ class UploadScreenState extends State<UploadScreen> {
     if (result != null) {
       await WakelockPlus.enable();
       result.files.single.bytes == null
-          ? await uploader.uploadLocalFile(
-              localPath: result.files.single.path!,
-              maxMtu: maxMtuSize.value.toInt())
-          : await uploader.uploadBytes(
-              bytes: result.files.single.bytes!,
-              maxMtu: maxMtuSize.value.toInt());
+          ? await bleOta.uploadLocalFile(localPath: result.files.single.path!)
+          : await bleOta.uploadBytes(bytes: result.files.single.bytes!);
     }
   }
 
-  Future<void> _uploadHttpFile(String url) async {
+  Future<void> _uploadHttpFile(Software sw) async {
     await WakelockPlus.enable();
-    await uploader.uploadHttpFile(url: url, maxMtu: maxMtuSize.value.toInt());
+    await bleOta.uploadHttpFile(url: sw.path, size: sw.size);
   }
 
   MaterialColor _determinateStatusColor() {
-    if (uploadStatus == WorkStatus.working) {
+    if (bleOtaStatus == BleOtaStatus.upload) {
       return Colors.blue;
-    } else if (uploadStatus == WorkStatus.error ||
-        infoStatus == WorkStatus.error) {
+    } else if (bleOtaStatus == BleOtaStatus.error) {
       return Colors.red;
-    } else if (uploadStatus == WorkStatus.success) {
+    } else if (bleOtaStatus == BleOtaStatus.uploaded) {
       return Colors.green;
     } else {
       return Colors.blue;
@@ -166,27 +164,27 @@ class UploadScreenState extends State<UploadScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                tr('Hardware:', args: [createHardwareString(infoState)]),
+                tr('Hardware:', args: [createHardwareString(bleOtaState)]),
               ),
               const Divider(),
               Text(
-                tr('Software:', args: [createSoftwareString(infoState)]),
+                tr('Software:', args: [createSoftwareString(bleOtaState)]),
               ),
             ],
           ),
-          onTap: infoState.status == WorkStatus.success &&
-                  (infoState.remoteInfo.hardwareText != null ||
-                      infoState.remoteInfo.hardwarePage != null)
-              ? infoState.remoteInfo.hardwareText == null
+          onTap: bleOtaState.remoteInfo.isAvailable &&
+                  (bleOtaState.remoteInfo.hardwareText != null ||
+                      bleOtaState.remoteInfo.hardwarePage != null)
+              ? bleOtaState.remoteInfo.hardwareText == null
                   ? () async => await launchUrl(
-                      Uri.parse(infoState.remoteInfo.hardwarePage!))
+                      Uri.parse(bleOtaState.remoteInfo.hardwarePage!))
                   : () async => await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => InfoScreen(
-                            title: infoState.remoteInfo.hardwareName,
-                            textUrl: infoState.remoteInfo.hardwareText!,
-                            pageUrl: infoState.remoteInfo.hardwarePage,
+                            title: bleOtaState.remoteInfo.hardwareName,
+                            textUrl: bleOtaState.remoteInfo.hardwareText!,
+                            pageUrl: bleOtaState.remoteInfo.hardwarePage,
                           ),
                         ),
                       )
@@ -196,23 +194,22 @@ class UploadScreenState extends State<UploadScreen> {
       );
 
   Widget _buildProgressInside() {
-    if (uploadStatus == WorkStatus.working) {
+    if (bleOtaStatus == BleOtaStatus.upload) {
       return Text(
-        (uploadState.progress * 100).toStringAsFixed(1),
+        (bleOtaState.uploadProgress * 100).toStringAsFixed(1),
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.blue,
           fontSize: 24,
         ),
       );
-    } else if (uploadStatus == WorkStatus.error ||
-        infoStatus == WorkStatus.error) {
+    } else if (bleOtaStatus == BleOtaStatus.error) {
       return const Icon(
         Icons.error_rounded,
         color: Colors.red,
         size: 56,
       );
-    } else if (uploadStatus == WorkStatus.success) {
+    } else if (bleOtaStatus == BleOtaStatus.uploaded) {
       return const Icon(
         Icons.done_rounded,
         color: Colors.green,
@@ -222,8 +219,8 @@ class UploadScreenState extends State<UploadScreen> {
       return CircleAvatar(
         radius: 55,
         backgroundColor: Colors.transparent,
-        backgroundImage: infoState.remoteInfo.hardwareIcon != null
-            ? NetworkImage(infoState.remoteInfo.hardwareIcon!)
+        backgroundImage: bleOtaState.remoteInfo.hardwareIcon != null
+            ? NetworkImage(bleOtaState.remoteInfo.hardwareIcon!)
             : null,
       );
     }
@@ -237,7 +234,7 @@ class UploadScreenState extends State<UploadScreen> {
         fit: StackFit.expand,
         children: [
           CircularProgressIndicator(
-            value: uploadState.progress,
+            value: bleOtaState.uploadProgress,
             color: _determinateStatusColor(),
             strokeWidth: 10,
             backgroundColor: _determinateStatusColor().shade200,
@@ -276,14 +273,14 @@ class UploadScreenState extends State<UploadScreen> {
                           ),
                 )
               : null,
-          onTap: () => _uploadHttpFile(sw.path),
+          onTap: () => _uploadHttpFile(sw),
           enabled: _canUpload(),
         ),
       );
 
   Widget _buildSoftwareList() => Column(
         children: [
-          for (var sw in infoState.remoteInfo.softwareList)
+          for (var sw in bleOtaState.remoteInfo.softwareList)
             _buildSoftwareCard(sw)
         ],
       );
@@ -304,23 +301,21 @@ class UploadScreenState extends State<UploadScreen> {
       return _buildStatusText(tr('Connecting..'));
     } else if (connectionStatus == BleConnectorStatus.disconnecting) {
       return _buildStatusText(tr('Disconnecting..'));
-    } else if (uploadStatus == WorkStatus.working) {
-      return _buildStatusText(tr('Uploading..'));
-    } else if (uploadStatus == WorkStatus.error) {
-      return _buildStatusText(determineUploadError(uploadState));
-    } else if (infoStatus == WorkStatus.working) {
-      return _buildStatusText(tr('Loading..'));
-    } else if (infoStatus == WorkStatus.error) {
-      return _buildStatusText(determineInfoError(infoState));
     } else if (connectionStatus == BleConnectorStatus.disconnected) {
       return _buildStatusText(tr('Disconnected'));
     } else if (connectionStatus == BleConnectorStatus.scanning) {
       return _buildStatusText(tr('Scanning..'));
-    } else if (infoStatus == WorkStatus.idle) {
+    } else if (bleOtaStatus == BleOtaStatus.init) {
+      return _buildStatusText(tr('Loading..'));
+    } else if (bleOtaStatus == BleOtaStatus.upload) {
+      return _buildStatusText(tr('Uploading..'));
+    } else if (bleOtaStatus == BleOtaStatus.error) {
+      return _buildStatusText(determineError(bleOtaState));
+    } else if (!bleOtaState.remoteInfo.isAvailable) {
       return _buildStatusText(tr('Connected'));
-    } else if (infoState.remoteInfo.softwareList.isEmpty) {
+    } else if (bleOtaState.remoteInfo.softwareList.isEmpty) {
       return _buildStatusText(tr('NoAvailableSoftwares'));
-    } else if (infoState.remoteInfo.newestSoftware == null) {
+    } else if (bleOtaState.remoteInfo.newestSoftware == null) {
       return _buildStatusText(tr('NewestSoftwareAlreadyInstalled'));
     } else {
       return Column(
@@ -334,7 +329,7 @@ class UploadScreenState extends State<UploadScreen> {
               textAlign: TextAlign.left,
             ),
           ),
-          _buildSoftwareCard(infoState.remoteInfo.newestSoftware!),
+          _buildSoftwareCard(bleOtaState.remoteInfo.newestSoftware!),
         ],
       );
     }
@@ -361,9 +356,9 @@ class UploadScreenState extends State<UploadScreen> {
   Widget _buildStatusWithOptionallySoftwareList() {
     final buildSoftwareList =
         connectionStatus == BleConnectorStatus.connected &&
-            infoStatus == WorkStatus.success &&
-            uploadStatus != WorkStatus.working &&
-            infoState.remoteInfo.softwareList.isNotEmpty;
+            !_isBleOtaActive() &&
+            bleOtaState.remoteInfo.isAvailable &&
+            bleOtaState.remoteInfo.softwareList.isNotEmpty;
     return buildSoftwareList
         ? _buildStatusWithSoftwareList()
         : _buildStatusWidget();
@@ -455,20 +450,21 @@ class UploadScreenState extends State<UploadScreen> {
                 : null,
           ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.pin_rounded),
-              onPressed: _canUpload()
-                  ? () async => await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PinScreen(
-                            blePeripheral: blePeripheral,
-                            bleConnector: bleConnector,
+            if (bleOtaState.deviceFlags.pinChangeSupported)
+              IconButton(
+                icon: const Icon(Icons.pin_rounded),
+                onPressed: _canUpload()
+                    ? () async => await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PinScreen(
+                              blePeripheral: blePeripheral,
+                              bleOta: bleOta,
+                            ),
                           ),
-                        ),
-                      )
-                  : null,
-            ),
+                        )
+                    : null,
+              ),
           ],
         ),
         body: SafeArea(

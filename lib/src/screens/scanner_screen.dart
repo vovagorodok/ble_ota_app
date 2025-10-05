@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:ble_backend/ble_central.dart';
 import 'package:ble_backend/ble_peripheral.dart';
 import 'package:ble_backend/ble_scanner.dart';
 import 'package:ble_backend/utils/timer_wrapper.dart';
-import 'package:ble_ota_app/src/settings/settings.dart';
-import 'package:ble_ota_app/src/ui/ui_consts.dart';
-import 'package:ble_ota_app/src/ui/jumping_dots.dart';
-import 'package:ble_ota_app/src/screens/status_screen.dart';
 import 'package:ble_ota_app/src/screens/settings_screen.dart';
+import 'package:ble_ota_app/src/screens/status_screen.dart';
 import 'package:ble_ota_app/src/screens/upload_screen.dart';
+import 'package:ble_ota_app/src/settings/settings.dart';
+import 'package:ble_ota_app/src/ui/jumping_dots.dart';
+import 'package:ble_ota_app/src/ui/ui_consts.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({

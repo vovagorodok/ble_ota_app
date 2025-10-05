@@ -1,8 +1,8 @@
 import 'dart:io' show Platform;
 
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 @immutable
 class Setting<T> {

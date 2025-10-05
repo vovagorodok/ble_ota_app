@@ -44,10 +44,9 @@ packages:
   ble_ota:
     dependency: "direct main"
     description:
-      name: ble_ota
-      sha256: d97522fa405e1fc5b7630982ab2563344a54c23a3652ae83d51c79ddd81195f2
-      url: "https://pub.dev"
-    source: hosted
+      path: "../ble_ota"
+      relative: true
+    source: path
     version: "1.1.1"
   bluetooth_low_energy:
     dependency: transitive

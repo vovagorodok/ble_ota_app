@@ -33,6 +33,7 @@ Software fields:
 - optional `software_icon` - string contains url to icon
 - optional `software_text` - string contains url to text about software in markdown
 - optional `software_page` - string contains url to software web page
+- optional `software_size` - int contains original size that is required if software compressed
 - optional `hardware_version` - specific version of hardware that software is for
 - optional `min_hardware_version` - min version of hardware that software is for
 - optional `max_hardware_version` - max version of hardware that software is for
@@ -44,3 +45,13 @@ Files:
 - hardware dicts: `example_hardware_esp32.yaml/json` and `example_hardware_samd.yaml/json`
 
 Link: https://github.com/vovagorodok/ArduinoBleOTA/tree/main/tools/release_builder.
+
+## Signature and compression
+Generate signature only on original `firmware.bin`:
+```
+openssl dgst -sign priv_key.pem -keyform PEM -sha256 -out signature.sig -binary firmware.bin
+pigz -kzc firmware.bin > firmware.bin.zlib
+cat firmware.bin.zlib signature.sig > firmware.sig.bin.zlib
+```
+More in `SECURITY.md` and `COMPRESSION.md` at https://github.com/vovagorodok/ArduinoBleOTA/tree/main/doc  
+Remember to fill `software_size` field with original `firmware.bin` size if software is compressed.

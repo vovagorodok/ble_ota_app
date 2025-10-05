@@ -1,9 +1,9 @@
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:ble_ota_app/src/ui/ui_consts.dart';
 import 'package:ble_ota_app/src/ui/jumping_dots.dart';
+import 'package:ble_ota_app/src/ui/ui_consts.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class InfoScreen extends StatefulWidget {
   const InfoScreen({
