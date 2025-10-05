@@ -24,7 +24,7 @@ class UploadScreen extends StatefulWidget {
   }) : bleOta = BleOta(
             bleConnector: bleConnector,
             manufacturesDictUrl: manufacturesDictUrl.value,
-            maxMtu: maxMtuSize.value.toInt(),
+            maxMtuSize: maxMtuSize.value.toInt(),
             skipInfoReading: skipInfoReading.value,
             sequentialUpload: sequentialUpload.value);
 
