@@ -29,18 +29,18 @@ packages:
     dependency: "direct main"
     description:
       name: ble_backend
-      sha256: a54543f28f34b6b7b03dfc0607b8f3b1f933f4680f9a06b71141dc5532f2665a
+      sha256: "220870a59bd32a3c455e33d72f2b40b1493c4d39e13785732f7bd32b595f6921"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.1"
+    version: "1.4.0"
   ble_backend_factory:
     dependency: "direct main"
     description:
       name: ble_backend_factory
-      sha256: b08fb6b2927a7d83b3887621ab157dcd8350ac34ac91b14ee2516b5d1408f59a
+      sha256: "3e535c2d0dd31a41a7c84c82f7785e9bbe4e4accacbdece1a961d89275ecb760"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.1"
+    version: "1.4.1"
   ble_ota:
     dependency: "direct main"
     description:
@@ -68,10 +68,10 @@ packages:
     dependency: transitive
     description:
       name: bluetooth_low_energy_backend
-      sha256: "99cca5eef65be137583a6da767757cf13b618811c5cd2bee0edf91d4ce86e5e0"
+      sha256: "4d44a63295de451599555ecfd4240d70a54589cf85ca7f7d2905fd63c8b79bbb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.1"
+    version: "0.5.0"
   bluetooth_low_energy_darwin:
     dependency: transitive
     description:
@@ -116,10 +116,10 @@ packages:
     dependency: transitive
     description:
       name: bluez_backend
-      sha256: bd6df0135c6e692cbdf33959b02180134aab3e6229452fd6ab292a9a88fa8836
+      sha256: "025708865432af0b9432e83186a7d78093fe3a0baa0bf43cb50ee471c2ee9392"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.1"
+    version: "0.5.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -318,10 +318,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_reactive_ble_backend
-      sha256: "76e51356c5b982ccd984f22025fa0e10a1084070cc3c989f7185af8124d7ae1e"
+      sha256: "4bb7444c4e2eaeb21d2c4dd599ca7395a6b4596725856c3969365fae6801f375"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.1"
+    version: "1.4.0"
   flutter_settings_screens:
     dependency: "direct main"
     description:
@@ -347,10 +347,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_web_bluetooth_backend
-      sha256: "1b41c64c0e9e28741eb2ecb32eb99d293e52e1977d475dea6678e80bb8016f7d"
+      sha256: c360c116a3829861aaa573556189280bce8cd2416ae7cf582165fcd74badca55
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.1"
+    version: "1.4.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -813,10 +813,10 @@ packages:
     dependency: transitive
     description:
       name: universal_ble_backend
-      sha256: fef9b960a671424d0f811b696b4ff1df7deb9bb63e9027fcfa42f7448b871ead
+      sha256: a547e9c1c94a83c5c310d48bae0f0631f0cafe296ece0503fc76529a08f3c9e8
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.2"
+    version: "0.6.0"
   universal_io:
     dependency: transitive
     description:

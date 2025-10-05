@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ble_backend: ^1.3.1
-  ble_backend_factory: ^1.3.1
+  ble_backend: ^1.4.0
+  ble_backend_factory: ^1.4.1
   ble_ota:
     path: ../ble_ota
   cupertino_icons: ^1.0.8
