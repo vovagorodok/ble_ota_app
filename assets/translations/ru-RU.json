@@ -8,6 +8,7 @@
     "DeveloperOptions": "Параметры разработчика",
     "SkipInfoReading": "Пропустить чтение информации",
     "AlwaysAllowLocalFilesUpload": "Всегда разрешать локальную загрузку файлов",
+    "DisableBuffer" : "Отключить буфер",
     "SequentialUpload" : "Последовательная загрузка",
     "ManufacturesDictionaryLink": "Ссылка на словарь производителей",
     "MaxMtuSize": "Максимальный размер MTU",

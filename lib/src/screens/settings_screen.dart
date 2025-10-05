@@ -59,6 +59,12 @@ class SettingsScreenState extends State<SettingsScreen> {
                 showDivider: false,
               ),
               SwitchSettingsTile(
+                title: tr('DisableBuffer'),
+                settingKey: disableBuffer.key,
+                defaultValue: disableBuffer.defaultValue,
+                showDivider: false,
+              ),
+              SwitchSettingsTile(
                 title: tr('SequentialUpload'),
                 settingKey: sequentialUpload.key,
                 defaultValue: sequentialUpload.defaultValue,

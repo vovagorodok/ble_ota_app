@@ -8,6 +8,7 @@
     "DeveloperOptions": "Opcje programistyczne",
     "SkipInfoReading": "Pomiń czytanie informacji",
     "AlwaysAllowLocalFilesUpload": "Zawsze zezwalaj na lokalne wgrywanie plików",
+    "DisableBuffer" : "Wyłącz bufor",
     "SequentialUpload" : "Sekwencyjne wgrywanie",
     "ManufacturesDictionaryLink": "Link do słownika producentów",
     "MaxMtuSize": "Maksymalny rozmiar MTU",

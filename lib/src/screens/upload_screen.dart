@@ -25,6 +25,7 @@ class UploadScreen extends StatefulWidget {
             bleConnector: bleConnector,
             manufacturesDictUrl: manufacturesDictUrl.value,
             maxMtuSize: maxMtuSize.value.toInt(),
+            maxBufferSize: disableBuffer.value ? 0 : null,
             skipInfoReading: skipInfoReading.value,
             sequentialUpload: sequentialUpload.value);
 
@@ -48,6 +49,14 @@ class UploadScreenState extends State<UploadScreen> {
 
   void _onConnectionStateChanged(BleConnectorStatus state) {
     setState(() {
+      [
+        BleConnectorStatus.connecting,
+        BleConnectorStatus.disconnecting,
+        BleConnectorStatus.scanning
+      ].contains(state)
+          ? WakelockPlus.enable()
+          : WakelockPlus.disable();
+
       if (state == BleConnectorStatus.connected) {
         bleOta.init();
       }
@@ -63,6 +72,8 @@ class UploadScreenState extends State<UploadScreen> {
             await bleConnector.connectToKnownDevice();
           }
         }.call();
+      } else if (state.status == BleOtaStatus.init) {
+        WakelockPlus.enable();
       } else if (state.status == BleOtaStatus.initialized ||
           state.status == BleOtaStatus.error) {
         WakelockPlus.disable();

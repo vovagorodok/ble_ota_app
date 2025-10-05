@@ -29,6 +29,10 @@ const alwaysAllowLocalFilesUpload = Setting<bool>(
   key: 'key-allow-local-upload',
   defaultValue: false,
 );
+final disableBuffer = Setting<bool>(
+  key: 'key-disable-buffer',
+  defaultValue: false,
+);
 final sequentialUpload = Setting<bool>(
   key: 'key-sequential-upload',
   defaultValue: _isSequentialUploadRequired,
