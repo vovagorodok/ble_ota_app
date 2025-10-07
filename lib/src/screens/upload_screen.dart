@@ -129,7 +129,7 @@ class UploadScreenState extends State<UploadScreen> {
   bool _canUpload() {
     return connectionStatus == BleConnectorStatus.connected &&
         !_isBleOtaActive() &&
-        bleOtaState.deviceFlags.uploadEnabled;
+        bleOtaState.deviceCapabilities.uploadEnabled;
   }
 
   bool _canUploadLocalFile() {
@@ -461,7 +461,7 @@ class UploadScreenState extends State<UploadScreen> {
                 : null,
           ),
           actions: [
-            if (bleOtaState.deviceFlags.pinChangeSupported)
+            if (bleOtaState.deviceCapabilities.pinChangeSupported)
               IconButton(
                 icon: const Icon(Icons.pin_rounded),
                 onPressed: _canUpload()
