@@ -6,7 +6,7 @@ Additionally update functionality for specific hardwares is supported.
 If you want end users have ability to update your hardware check `doc/REGISTER_HARDWARE.md`.
 
 Fully works on `Android` and `iOS`.
-On `Web` can require additional browser flags, see `doc/USING.md`.
+On desktop `Web` can require additional browser flags, see `doc/USING.md`.
 For other OS it depends on internal libraries.
 
 [<picture><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
