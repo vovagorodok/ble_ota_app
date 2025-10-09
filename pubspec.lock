@@ -37,10 +37,10 @@ packages:
     dependency: "direct main"
     description:
       name: ble_backend_factory
-      sha256: "3e535c2d0dd31a41a7c84c82f7785e9bbe4e4accacbdece1a961d89275ecb760"
+      sha256: "14e03cd3bbf880e48503327e24ecb7e9ba5bddd594d5a3776f65d880457e1769"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.2"
   ble_ota:
     dependency: "direct main"
     description:
@@ -49,62 +49,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  bluetooth_low_energy:
-    dependency: transitive
-    description:
-      name: bluetooth_low_energy
-      sha256: "5dec5831412c7d82b77df878dd3e08a82132426d2fb4c5d7c98c9a8cd0ed79e0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.0"
-  bluetooth_low_energy_android:
-    dependency: transitive
-    description:
-      name: bluetooth_low_energy_android
-      sha256: "32c0f84f88770845e3189e04b0ddf4780dc8743fd7a8ade60b99b6cb414b8a89"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.0"
-  bluetooth_low_energy_backend:
-    dependency: transitive
-    description:
-      name: bluetooth_low_energy_backend
-      sha256: "4d44a63295de451599555ecfd4240d70a54589cf85ca7f7d2905fd63c8b79bbb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.0"
-  bluetooth_low_energy_darwin:
-    dependency: transitive
-    description:
-      name: bluetooth_low_energy_darwin
-      sha256: fbbe3be175cb54093884a84f6f0826d6e8a2a2e29dfeae9b367d5e8e9ee1db38
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.0"
-  bluetooth_low_energy_linux:
-    dependency: transitive
-    description:
-      name: bluetooth_low_energy_linux
-      sha256: a5c740f445dc8d2e940767fa94ed3bb24c32e77bc962a67ab23cb1f218180705
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.0"
-  bluetooth_low_energy_platform_interface:
-    dependency: transitive
-    description:
-      name: bluetooth_low_energy_platform_interface
-      sha256: dd76c0f8e31dcfb984059b03e73cb2998c29cffd17425f4ce946365b63abb3dc
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.0"
-  bluetooth_low_energy_windows:
-    dependency: transitive
-    description:
-      name: bluetooth_low_energy_windows
-      sha256: "7a651259f7bc3ae2bb042c21e15e1e4f88acea57da1f69b3165f239124724791"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.0"
   bluez:
     dependency: transitive
     description:
@@ -348,10 +292,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_web_bluetooth_backend
-      sha256: c360c116a3829861aaa573556189280bce8cd2416ae7cf582165fcd74badca55
+      sha256: b497f0e6b782b309f912de6a73b791a6979f7cab5b66090c9a80b8f564508c01
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.4.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -381,14 +325,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
-  hybrid_logging:
-    dependency: transitive
-    description:
-      name: hybrid_logging
-      sha256: "54248d52ce68c14702a42fbc4083bac5c6be30f6afad8a41be4bbadd197b8af5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   icons_launcher:
     dependency: "direct dev"
     description:
