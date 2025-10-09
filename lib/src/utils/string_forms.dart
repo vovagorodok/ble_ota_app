@@ -1,79 +1,94 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:ble_backend/work_state.dart';
-import 'package:ble_ota/core/version.dart';
+import 'package:ble_ota/ble_ota.dart';
 import 'package:ble_ota/core/errors.dart';
-import 'package:ble_ota/ble/ble_pin_changer.dart';
-import 'package:ble_ota/info_reader.dart';
-import 'package:ble_ota/uploader.dart';
+import 'package:ble_ota/core/version.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-String determineInfoError(InfoState state) {
+String determineError(BleOtaState state) {
   switch (state.error) {
-    case InfoError.incorrectFileFormat:
-      return tr('IncorrectFileFormat');
-    case InfoError.unexpectedNetworkResponse:
-      return tr('UnexpectedNetworkResponse', args: ['${state.errorCode}']);
-    case InfoError.generalNetworkError:
+    case Error.deviceError:
+      return tr('DeviceError');
+    case Error.noDeviceResponse:
+      return tr('NoDeviceResponse');
+    case Error.unexpectedDeviceResponse:
+      return tr('UnexpectedDeviceResponse', args: ['${state.errorCode}']);
+    case Error.incorrectDeviceResponse:
+      return tr('IncorrectDeviceResponse');
+
+    case Error.networkError:
       return tr('NetworkError');
-    default:
-      return tr('UnknownError', args: ['${state.errorCode}']);
-  }
-}
+    case Error.unexpectedNetworkResponse:
+      return tr('UnexpectedNetworkResponse', args: ['${state.errorCode}']);
+    case Error.incorrectNetworkFile:
+      return tr('IncorrectNetworkFile');
 
-String determineUploadError(UploadState state) {
-  switch (state.error) {
-    case UploadError.generalDeviceError:
-      return tr('UploadError');
-    case UploadError.incorrectPackageFormat:
-      return tr('IncorrectPackageFormat');
-    case UploadError.incorrectFirmwareSize:
+    case Error.incorrectMessageSize:
+      return tr('IncorrectMessageSize');
+    case Error.incorrectMessageHeader:
+      return tr('IncorrectMessageHeader');
+    case Error.incorrectFirmwareSize:
       return tr('IncorrectFirmwareSize');
-    case UploadError.incorrectChecksum:
-      return tr('ChecksumError');
-    case UploadError.internalSrorageError:
+    case Error.internalStorageError:
       return tr('InternalStorageError');
-    case UploadError.uploadDisabled:
+    case Error.uploadDisabled:
       return tr('UploadDisabled');
-    case UploadError.noDeviceResponse:
-      return tr('NoDeviceResponse');
-    case UploadError.unexpectedDeviceResponse:
-      return tr('UnexpectedDeviceResponse', args: ['${state.errorCode}']);
-    case UploadError.unexpectedNetworkResponse:
-      return tr('UnexpectedNetworkResponse', args: ['${state.errorCode}']);
-    case UploadError.generalNetworkError:
-      return tr('NetworkError');
+    case Error.uploadRunning:
+      return tr('UploadRunning');
+    case Error.uploadStopped:
+      return tr('UploadStopped');
+    case Error.installRunning:
+      return tr('InstallRunning');
+    case Error.bufferDisabled:
+      return tr('BufferDisabled');
+    case Error.bufferOverflow:
+      return tr('BufferOverflow');
+    case Error.compressionNotSupported:
+      return tr('CompressionNotSupported');
+    case Error.incorrectCompression:
+      return tr('IncorrectCompression');
+    case Error.incorrectCompressedSize:
+      return tr('IncorrectCompressedSize');
+    case Error.incorrectCompressionChecksum:
+      return tr('IncorrectCompressionChecksum');
+    case Error.incorrectCompressionParam:
+      return tr('IncorrectCompressionParam');
+    case Error.incorrectCompressionEnd:
+      return tr('IncorrectCompressionEnd');
+    case Error.checksumNotSupported:
+      return tr('ChecksumNotSupported');
+    case Error.incorrectChecksum:
+      return tr('IncorrectChecksum');
+    case Error.signatureNotSupported:
+      return tr('SignatureNotSupported');
+    case Error.incorrectSignature:
+      return tr('IncorrectSignature');
+    case Error.incorrectSignatureSize:
+      return tr('IncorrectSignatureSize');
+    case Error.pinNotSupported:
+      return tr('PinNotSupported');
+    case Error.pinChangeError:
+      return tr('PinChangeError');
+
     default:
       return tr('UnknownError', args: ['${state.errorCode}']);
   }
 }
 
-String determinePinChangeError(BlePinChangeState state) {
-  switch (state.error) {
-    case PinChangeError.generalDeviceError:
-      return tr('PinCodeHasNotBeenChanged');
-    case PinChangeError.noDeviceResponse:
-      return tr('NoDeviceResponse');
-    case PinChangeError.unexpectedDeviceResponse:
-      return tr('UnexpectedDeviceResponse', args: ['${state.errorCode}']);
-    default:
-      return tr('UnknownError', args: ['${state.errorCode}']);
-  }
-}
-
-String createDeviceString(InfoState infoState, String name, Version version) {
-  if (infoState.status == WorkStatus.success) {
+String createDeviceString(
+    BleOtaState bleOtaState, String name, Version version) {
+  if (bleOtaState.deviceInfo.isAvailable) {
     return "$name v$version";
-  } else if (infoState.status == WorkStatus.working) {
+  } else if (bleOtaState.status == BleOtaStatus.init) {
     return tr('Loading..');
   } else {
     return tr('NoInformation');
   }
 }
 
-String createHardwareString(InfoState infoState) => createDeviceString(
-    infoState,
-    infoState.deviceInfo.hardwareName,
-    infoState.deviceInfo.hardwareVersion);
-String createSoftwareString(InfoState infoState) => createDeviceString(
-    infoState,
-    infoState.deviceInfo.softwareName,
-    infoState.deviceInfo.softwareVersion);
+String createHardwareString(BleOtaState bleOtaState) => createDeviceString(
+    bleOtaState,
+    bleOtaState.deviceInfo.hardwareName,
+    bleOtaState.deviceInfo.hardwareVersion);
+String createSoftwareString(BleOtaState bleOtaState) => createDeviceString(
+    bleOtaState,
+    bleOtaState.deviceInfo.softwareName,
+    bleOtaState.deviceInfo.softwareVersion);

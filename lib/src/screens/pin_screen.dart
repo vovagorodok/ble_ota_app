@@ -1,24 +1,22 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:ble_backend/ble_peripheral.dart';
-import 'package:ble_backend/ble_connector.dart';
-import 'package:ble_backend/work_state.dart';
-import 'package:ble_ota/ble/ble_pin_changer.dart';
-import 'package:ble_ota_app/src/utils/string_forms.dart';
 import 'package:ble_ota_app/src/ui/ui_consts.dart';
+import 'package:ble_ota_app/src/utils/string_forms.dart';
+import 'package:ble_ota/ble_ota.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
+import 'package:flutter/material.dart';
 
 class PinScreen extends StatefulWidget {
-  PinScreen({
+  const PinScreen({
     required this.blePeripheral,
-    required BleConnector bleConnector,
+    required this.bleOta,
     super.key,
-  }) : blePinChanger = BlePinChanger(bleConnector: bleConnector);
+  });
 
   final BlePeripheral blePeripheral;
-  final BlePinChanger blePinChanger;
+  final BleOta bleOta;
 
   @override
   State<PinScreen> createState() => PinScreenState();
@@ -28,24 +26,23 @@ class PinScreenState extends State<PinScreen> {
   int? _pin;
   StreamSubscription? _subscription;
 
-  BlePinChanger get blePinChanger => widget.blePinChanger;
-  BlePinChangeState get blePinChangeState => blePinChanger.state;
-  WorkStatus get blePinChangeStatus => blePinChangeState.status;
+  BleOta get bleOta => widget.bleOta;
+  BleOtaState get bleOtaState => bleOta.state;
+  BleOtaStatus get bleOtaStatus => bleOtaState.status;
 
-  void _onBlePinStateChanged(BlePinChangeState state) {
+  void _onBleOtaStateChanged(BleOtaState state) {
     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    _subscription = blePinChanger.stateStream.listen(_onBlePinStateChanged);
+    _subscription = bleOta.stateStream.listen(_onBleOtaStateChanged);
   }
 
   @override
   void dispose() {
     _subscription?.cancel();
-    blePinChanger.dispose();
     super.dispose();
   }
 
@@ -56,7 +53,7 @@ class PinScreenState extends State<PinScreen> {
   }
 
   bool _canChange() {
-    return blePinChangeStatus != WorkStatus.working;
+    return bleOtaStatus != BleOtaStatus.pinChange;
   }
 
   bool _canSetPin() {
@@ -64,19 +61,19 @@ class PinScreenState extends State<PinScreen> {
   }
 
   void _setPin() {
-    blePinChanger.set(pin: _pin!);
+    bleOta.setPin(pin: _pin!);
   }
 
   void _removePin() {
-    blePinChanger.remove();
+    bleOta.removePin();
   }
 
   String _determinateStatusText() {
-    if (blePinChangeStatus == WorkStatus.working) {
+    if (bleOtaStatus == BleOtaStatus.pinChange) {
       return tr('Changing..');
-    } else if (blePinChangeStatus == WorkStatus.error) {
-      return determinePinChangeError(blePinChangeState);
-    } else if (blePinChangeStatus == WorkStatus.success) {
+    } else if (bleOtaStatus == BleOtaStatus.error) {
+      return determineError(bleOtaState);
+    } else if (bleOtaStatus == BleOtaStatus.pinChanged) {
       return tr('Changed');
     } else {
       return tr('ChangePinCode:');
@@ -84,9 +81,9 @@ class PinScreenState extends State<PinScreen> {
   }
 
   Color? _determinateStatusColor() {
-    if (blePinChangeStatus == WorkStatus.error) {
+    if (bleOtaStatus == BleOtaStatus.error) {
       return Colors.red;
-    } else if (blePinChangeStatus == WorkStatus.success) {
+    } else if (bleOtaStatus == BleOtaStatus.pinChanged) {
       return Colors.green;
     } else {
       return null;

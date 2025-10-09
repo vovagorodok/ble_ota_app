@@ -1,8 +1,8 @@
 import 'dart:io' show Platform;
 
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 @immutable
 class Setting<T> {
@@ -27,6 +27,10 @@ const skipInfoReading = Setting<bool>(
 );
 const alwaysAllowLocalFilesUpload = Setting<bool>(
   key: 'key-allow-local-upload',
+  defaultValue: false,
+);
+final disableBuffer = Setting<bool>(
+  key: 'key-disable-buffer',
   defaultValue: false,
 );
 final sequentialUpload = Setting<bool>(
