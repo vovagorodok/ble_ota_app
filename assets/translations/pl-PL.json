@@ -24,7 +24,7 @@
     "UnexpectedDeviceResponse": "Nieoczekiwana odpowiedź urządzenia: {}",
     "IncorrectDeviceResponse": "Nieprawidłowa odpowiedź urządzenia",
     "NetworkError": "Błąd sieci",
-    "UnexpectedNetworkResponse": "Nieoczekiwana odpowiedź sieci: {}",
+    "UnexpectedNetworkResponse": "Nieoczekiwana odpowiedź sieciowa: {}",
     "IncorrectNetworkFile": "Nieprawidłowy plik sieciowy",
     "IncorrectMessageSize": "Nieprawidłowy rozmiar wiadomości",
     "IncorrectMessageHeader": "Nieprawidłowy nagłówek wiadomości",
