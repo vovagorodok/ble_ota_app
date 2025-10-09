@@ -1,7 +1,7 @@
 name: ble_ota_app
 description: Upload firmware over bluetooth.
 publish_to: 'none'
-version: 1.2.1+12
+version: 2.0.0+13
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -11,8 +11,7 @@ dependencies:
     sdk: flutter
   ble_backend: ^1.4.0
   ble_backend_factory: ^1.4.1
-  ble_ota:
-    path: ../ble_ota
+  ble_ota: ^2.0.0
   cupertino_icons: ^1.0.8
   file_picker: ^10.3.3
   http: ^1.5.0
