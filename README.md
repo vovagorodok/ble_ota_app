@@ -17,7 +17,10 @@ alt="Download from F-Droid"
 height="50"></picture>](https://f-droid.org/packages/com.vovagorodok.ble_ota_app/)&nbsp;&nbsp;&nbsp;
 [<picture><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" 
 alt="Download from App Store" 
-height="50"></picture>](https://itunes.apple.com/us/app/ble_ota_app/id0000000000)
+height="50"></picture>](https://itunes.apple.com/us/app/ble_ota_app/id0000000000)&nbsp;&nbsp;&nbsp;
+[<picture><img src="./resources/Web_badge.svg" 
+alt="Open it on WEB Page" 
+height="50"></picture>](https://vovagorodok.github.io/web/apps/ble_ota/)
 
 > **REMARK**: Application not released on `App Store` yet.
 > Apple corporation require `100$/year` developer fees even for free and open source applications.
