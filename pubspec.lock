@@ -37,10 +37,10 @@ packages:
     dependency: "direct main"
     description:
       name: ble_backend_factory
-      sha256: "14e03cd3bbf880e48503327e24ecb7e9ba5bddd594d5a3776f65d880457e1769"
+      sha256: "5582d431531699c1039f7edf2a61e3b8bc5ffcbef3301eb330f24570f6ab95f6"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.2"
+    version: "1.4.3"
   ble_ota:
     dependency: "direct main"
     description:
@@ -742,18 +742,18 @@ packages:
     dependency: transitive
     description:
       name: universal_ble
-      sha256: "6a5c6c1fb295015934a5aef3dc751ae7e00721535275f8478bfe74db77b238c5"
+      sha256: c7cba5aa7fcb64af769be90740382e391293943eef48aa0356c320c8ae3c609c
       url: "https://pub.dev"
     source: hosted
-    version: "0.21.1"
+    version: "1.1.0"
   universal_ble_backend:
     dependency: transitive
     description:
       name: universal_ble_backend
-      sha256: a547e9c1c94a83c5c310d48bae0f0631f0cafe296ece0503fc76529a08f3c9e8
+      sha256: d07a28d29a27d3d17082c4c15421825cccd05132fdae1eed82dbf8ca2427d1d6
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "1.0.0"
   universal_io:
     dependency: transitive
     description:
