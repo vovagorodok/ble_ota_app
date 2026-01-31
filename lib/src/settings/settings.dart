@@ -48,4 +48,4 @@ const maxMtuSize = Setting<double>(
 );
 
 final _isSequentialUploadRequired =
-    !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
+    kIsWeb || (!Platform.isAndroid && !Platform.isIOS);
