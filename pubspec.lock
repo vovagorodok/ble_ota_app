@@ -45,10 +45,10 @@ packages:
     dependency: "direct main"
     description:
       name: ble_ota
-      sha256: "12c2ee710b3a279e5afcab0911d873c0e61b309bea6bedea4a40f8b61324816b"
+      sha256: "0103113b3e0d2d137a05e5995919a01c085749a64590307d9d0316876aa865b1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   bluez:
     dependency: transitive
     description:
