@@ -6,8 +6,8 @@
    version="1.1"
    viewBox="0 0 180 53.333"
    xml:space="preserve"
-   sodipodi:docname="Open_on_web_badge_EN.svg"
-   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   sodipodi:docname="Web_badge.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@
      inkscape:cx="88.262079"
      inkscape:cy="43.373425"
      inkscape:window-width="2048"
-     inkscape:window-height="1115"
+     inkscape:window-height="1083"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -54,7 +54,7 @@
      fill="#a2a2a1"
      stroke-width=".13333" /><text
      xml:space="preserve"
-     style="text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff"
+     style="font-size:10.6667px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff"
      x="54.548233"
      y="17.803938"
      id="text2"><tspan
@@ -62,9 +62,9 @@
        id="tspan2"
        x="54.548233"
        y="17.803938"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif">OPEN IT ON</tspan></text><text
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:Verdana;-inkscape-font-specification:Verdana">OPEN IT ON</tspan></text><text
      xml:space="preserve"
-     style="font-weight:bold;font-size:26.6667px;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff"
+     style="font-weight:bold;font-size:24px;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff"
      x="54.548241"
      y="40.153564"
      id="text1"><tspan
@@ -72,4 +72,4 @@
        id="tspan1"
        x="54.548241"
        y="40.153564"
-       style="font-size:26.6667px">WEB Page</tspan></text></svg>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Verdana;-inkscape-font-specification:Verdana">WEB</tspan></text></svg>
