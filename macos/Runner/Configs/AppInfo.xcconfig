@@ -8,7 +8,7 @@
 PRODUCT_NAME = BleOta
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.vovagorodok.ble_ota_app
+PRODUCT_BUNDLE_IDENTIFIER = com.vovagorodok.BleOta
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.vovagorodok. All rights reserved.
