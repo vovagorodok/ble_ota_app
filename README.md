@@ -24,7 +24,7 @@ height="50"></picture>](https://vovagorodok.github.io/web/apps/ble_ota/)
 
 > **REMARK**: Application not released on `App Store` yet.
 > Apple corporation require `100$/year` developer fees even for free and open source applications.
-> If you want to support project, fill free to send me small amout or help with idea how to release app in `iOS` without developer fees.
+> If you want to support project, fill free to send me small amount or help with idea how to release app in `iOS` without developer fees.
 
 ## Peripheral device side
 Arduino library: https://github.com/vovagorodok/ArduinoBleOTA

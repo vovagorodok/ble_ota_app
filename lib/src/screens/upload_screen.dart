@@ -169,7 +169,7 @@ class UploadScreenState extends State<UploadScreen> {
     }
   }
 
-  Widget _buildPripheralInfoWidget() => Card.outlined(
+  Widget _buildPeripheralInfoWidget() => Card.outlined(
         child: ListTile(
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -402,7 +402,7 @@ class UploadScreenState extends State<UploadScreen> {
   Widget _buildPortrait() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildPripheralInfoWidget(),
+          _buildPeripheralInfoWidget(),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -421,7 +421,7 @@ class UploadScreenState extends State<UploadScreen> {
           Expanded(
             child: Column(
               children: [
-                _buildPripheralInfoWidget(),
+                _buildPeripheralInfoWidget(),
                 _buildSoftwareStatusWidget(),
               ],
             ),
